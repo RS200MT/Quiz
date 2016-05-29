@@ -1,10 +1,19 @@
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.swing.JRadioButton;
 
 public class MultipleChoiceQuestion {
 	private String correctAnswer = "";
-	private JRadioButton choices;
+	private List<String> choices;
 	
-	public MultipleChoiceQuestion(String answer){
-		choices = new JRadioButton();
+	
+	public MultipleChoiceQuestion(String answer, List<String> questions){
+		choices = new ArrayList<String>(questions);
+		correctAnswer = answer;
+	}
+	
+	public String getAnswer(){
+		return correctAnswer;
 	}
 }
