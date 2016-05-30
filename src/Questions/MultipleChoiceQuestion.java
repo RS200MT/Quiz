@@ -9,7 +9,7 @@ public class MultipleChoiceQuestion {
 	private String correctAnswer = "";
 	private List<String> choices;
 		
-	public MultipleChoiceQuestion(String question, String answer, List<String> questions){
+	public MultipleChoiceQuestion(String question, String answer, List<String> possibleAnswers){
 		this.question = question;
 		choices = new ArrayList<String>(questions);
 		correctAnswer = answer;
