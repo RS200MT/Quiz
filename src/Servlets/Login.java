@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import Models.DBObject;
+import Models.Password;
 
 /**
  * Servlet implementation class Login
@@ -56,15 +57,15 @@ public class Login extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String username = request.getParameter("username");
-		String password1 = getHash(request.getParameter("password"));
-		String password2 = "";
+		String password1 = request.getParameter("password");
+		String password_hashed = "";
 		DBObject obj = (DBObject)getServletContext().getAttribute("DB");
 		try {
-			password2 = obj.getPasswordHash(username);
+			password_hashed = obj.getPasswordHash(username);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		if(password1 == password2){
+		if(Password.passwordMatches(password_hashed, password1)){
 			request.getRequestDispatcher("welcome.jsp").forward(request, response);
 		} else {
 			request.getRequestDispatcher("incorrect.jsp").forward(request, response);

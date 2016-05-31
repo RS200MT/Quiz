@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import Models.DBObject;
+import Models.Password;
 
 /**
  * Servlet implementation class addUser
@@ -38,7 +39,7 @@ public class addUser extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String name = request.getParameter("username");
 		String email = request.getParameter("email");
-		String password = request.getParameter("password");
+		String password = Password.getHash(request.getParameter("password"));
 		DBObject obj = (DBObject) getServletContext().getAttribute("DB");
 		obj.addUser(name, email, password);
 	}

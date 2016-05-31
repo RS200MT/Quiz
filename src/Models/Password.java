@@ -27,7 +27,8 @@ public class Password {
 		return "";
 	}
 	
-	public static boolean passwordMatches(String pw1, String pw2) {
-		return pw1.equals(pw2);
+	public static boolean passwordMatches(String pw_hashed, String pw2) {
+		pw2 = getHash(pw2);
+		return pw_hashed.equals(pw2);
 	}
 }
