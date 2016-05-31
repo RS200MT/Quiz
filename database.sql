@@ -26,3 +26,23 @@ create table if not exists questions (
     
     key (quiz_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+create table if not exists multiple_choices (
+	id int auto_increment primary key,
+    question_id int not null,
+    answer tinytext,
+    
+    key (question_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+create table if not exists quiz_logs (
+	id int auto_increment primary key,
+    user_id int not null,
+    quiz_id int not null,
+    score int,
+    start_time timestamp,
+    end_time timestamp,
+    
+    key (user_id),
+    key (quiz_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
