@@ -84,6 +84,14 @@ public class DBObject {
 		closeConnection(conn);
 	}
 	
+	
+	public String getPasswordHash(String userName) throws SQLException {
+		String query = " Select * from users where user_name = \"" + userName + "\"";
+		ResultSet rs = getResultSet(query);
+		return rs.getString(4);
+
+	}
+	
 	private void example() {
 		Connection conn = getConnection();
 		
