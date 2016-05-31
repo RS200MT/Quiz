@@ -41,7 +41,11 @@ public class addUser extends HttpServlet {
 		String email = request.getParameter("email");
 		String password = Password.getHash(request.getParameter("password"));
 		DBObject obj = (DBObject) getServletContext().getAttribute("DB");
-		obj.addUser(name, email, password);
+		if(obj.addUser(name, email, password)){
+			request.getRequestDispatcher("welcome.jsp").forward(request, response);
+		} else {
+			request.getRequestDispatcher("tryAgain.jsp").forward(request, response);
+		}
 	}
 
 }
