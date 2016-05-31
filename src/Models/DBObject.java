@@ -65,7 +65,7 @@ public class DBObject {
 		closeConnection(conn);
 	}
 	
-	private void example() {
+	public void example() {
 		Connection conn = getConnection();
 		
 		closeConnection(conn);
