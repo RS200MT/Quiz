@@ -22,3 +22,10 @@ CREATE TABLE correct_answers(
     correct_answer text -- May need change of variable type
 );
 
+create table if not exists quizes (
+	id int auto_increment primary key,
+    title tinytext not null,
+    author varchar(60) not null,
+    create_time timestamp
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
