@@ -36,6 +36,6 @@ public class User {
 	}
 	
 	public void increaseQuizNumber() {
-		
+		this.quizNumber++;
 	}
 }

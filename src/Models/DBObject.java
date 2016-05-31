@@ -71,6 +71,7 @@ public class DBObject {
 		closeConnection(conn);
 	}
 	
+
 	/**
 	 * Adds new user into users table. Uses executeUpdate;
 	 * @param u
