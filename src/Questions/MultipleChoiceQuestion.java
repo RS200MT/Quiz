@@ -11,7 +11,7 @@ public class MultipleChoiceQuestion {
 		
 	public MultipleChoiceQuestion(String question, String answer, List<String> possibleAnswers){
 		this.question = question;
-		choices = new ArrayList<String>(questions);
+		choices = new ArrayList<String>();
 		correctAnswer = answer;
 	}
 	
