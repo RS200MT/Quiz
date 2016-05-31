@@ -1,16 +1,22 @@
 package Models;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+
+import javax.print.attribute.standard.DateTimeAtCompleted;
+
+import com.sun.jmx.snmp.Timestamp;
 
 public class DBObject {
 	public static final String MYSQL_USERNAME = DBInfo.MYSQL_USERNAME;
 	public static final String MYSQL_PASSWORD = DBInfo.MYSQL_PASSWORD;
 	public static final String MYSQL_DATABASE_SERVER = DBInfo.MYSQL_DATABASE_SERVER;
 	public static final String MYSQL_DATABASE_NAME = DBInfo.MYSQL_DATABASE_NAME;
+	public static final String TABLE_USERS = "users";
 	
 	public DBObject() {
 		try {
@@ -62,6 +68,19 @@ public class DBObject {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		closeConnection(conn);
+	}
+	
+	/**
+	 * Adds new user into users table. Uses executeUpdate;
+	 * @param u
+	 */
+	public void addUser(String name, String email, String password) {
+		Connection conn = getConnection();
+		java.util.Date date= new java.util.Date();
+		String query = "INSERT INTO " + TABLE_USERS + " VALUES " + 
+						"(" + name + ", "+email + ", " + password + ", " + new Timestamp(date.getTime()) +");";
+		executeUpdate(query);
 		closeConnection(conn);
 	}
 	
