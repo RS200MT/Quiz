@@ -44,3 +44,12 @@ create table if not exists question_images(
     image_url varchar(255),
     primary key(id)
 );
+
+create table if not exists questions (
+	id int auto_increment primary key,
+    quiz_id int not null,
+    question tinytext not null,
+    q_type int not null,
+    
+    key (quiz_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
