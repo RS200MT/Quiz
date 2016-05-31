@@ -58,7 +58,7 @@ public class Login extends HttpServlet {
 		String username = request.getParameter("username");
 		String password1 = getHash(request.getParameter("password"));
 		String password2 = "";
-		DBObject obj = new DBObject();
+		DBObject obj = (DBObject)getServletContext().getAttribute("DB");
 		try {
 			password2 = obj.getPasswordHash(username);
 		} catch (SQLException e) {
