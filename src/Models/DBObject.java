@@ -74,14 +74,8 @@ public class DBObject {
 	}
 
 	/**
-<<<<<<< HEAD
-	 * Executes update queries that is queries which cause changes in tables of
-	 * the database;
-	 * 
-=======
 	 * Executes update queries, that is queries
 	 * which cause changes in tables of the database;
->>>>>>> 34697c4dd140d1a4fb6dac472ce958f67ea5e2e3
 	 * @param query
 	 */
 	private void executeUpdate(String query) {
@@ -97,16 +91,10 @@ public class DBObject {
 	}
 
 	/**
-<<<<<<< HEAD
-	 * Adds new user into users table. Uses executeUpdate; Method receives
-	 * hashed password;
-	 * 
-=======
 	 * Checks if user with given name or email already exists;
-	 * Is so, returns false, if such a user doesn't exist,
+	 * If so, returns false, if such a user doesn't exist,
 	 * adds the new user into users table. Uses executeUpdate;
 	 * Method receives hashed password;
->>>>>>> 34697c4dd140d1a4fb6dac472ce958f67ea5e2e3
 	 * @param name
 	 * @param email
 	 * @param hashedPassword
