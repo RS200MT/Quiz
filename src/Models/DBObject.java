@@ -141,13 +141,19 @@ public class DBObject {
 	 * @return {@link String}
 	 * @throws SQLException
 	 */
-	public String getPasswordHash(String userName) throws SQLException {
-		String query = " Select * from " + TABLE_USERS + " where user_name = '" + userName + "'";
+	public String getPasswordHash(String userName){
+		String result = null;
 		Connection conn = getConnection();
+		String query = "Select * from " + TABLE_USERS + " where user_name = '" + userName + "'";
 		ResultSet rs = getResultSet(query, conn);
+		try {
+			if (rs.next()) 
+				result = rs.getString("password");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		closeConnection(conn);
-		return rs.getString(3);
-
+		return result;
 	}
 
 	private void example() {

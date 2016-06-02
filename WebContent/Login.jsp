@@ -8,8 +8,8 @@
 </head>
 <body>
 <form action="Login" method="post">
-<p> Username <input type="text" name="username">
-<p> Password <input type="password" name ="password">
+<p>Username: <input type="text" name="username">
+<p>Password: <input type="password" name ="password">
 <p> <input type="submit" value="Login">
 </form>
 <a href ="newAccount.jsp"> Create New Account</a>
