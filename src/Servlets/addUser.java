@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import Models.DBObject;
 import Models.Password;
+import Models.User;
 
 /**
  * Servlet implementation class addUser
@@ -46,6 +47,7 @@ public class addUser extends HttpServlet {
 			getServletContext().setAttribute("DB", obj);
 		}
 		if(obj.addUser(name, email, password)){
+			request.getSession().setAttribute(User.USER_ATTR, new User(name));
 			request.getRequestDispatcher("welcome.jsp").forward(request, response);
 		} else {
 			request.setAttribute("exists", 1);

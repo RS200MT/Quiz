@@ -1,9 +1,6 @@
 package Servlets;
 
 import java.io.IOException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.sql.SQLException;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -13,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import Models.DBObject;
 import Models.Password;
+import Models.User;
 
 /**
  * Servlet implementation class Login
@@ -29,29 +27,6 @@ public class Login extends HttpServlet {
 		// TODO Auto-generated constructor stub
 	}
 
-	public static String hexToString(byte[] bytes) {
-		StringBuffer buff = new StringBuffer();
-		for (int i = 0; i < bytes.length; i++) {
-			int val = bytes[i];
-			val = val & 0xff; // remove higher bits, sign
-			if (val < 16)
-				buff.append('0'); // leading 0
-			buff.append(Integer.toString(val, 16));
-		}
-		return buff.toString();
-	}
-
-	private String getHash(String word) {
-		try {
-			MessageDigest md = MessageDigest.getInstance("SHA");
-			md.update(word.getBytes());
-			return hexToString(md.digest());
-		} catch (NoSuchAlgorithmException e) {
-			e.printStackTrace();
-		}
-		return "";
-	}
-
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
 	 *      response)
@@ -65,6 +40,7 @@ public class Login extends HttpServlet {
 		if (db_password != null) {
 			if (Password.passwordMatches(db_password, passed_password)) {
 				System.out.println("LOGIN successfully");
+				request.getSession().setAttribute(User.USER_ATTR, new User(passed_username));
 				request.getRequestDispatcher("welcome.jsp").forward(request, response);
 			} else {
 				System.out.println("NOT LOGGED");

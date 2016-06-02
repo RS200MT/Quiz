@@ -1,13 +1,14 @@
 package Models;
 
 public class User {
+	public static final String USER_ATTR = "User_attr";
 	private int id;
 	private String userName;
 	private String email;
 	private String regDate;
 	private int quizNumber;
 
-	public User(int id, String userName, String email, String regDate, int quizNumber) {
+	public User(String userName) {
 		this.id = id;
 		this.userName = userName;
 		this.email = email;
@@ -39,29 +40,16 @@ public class User {
 		this.quizNumber++;
 	}
 
-
-	/* memogni es aq ar unda iyos;
-	public static String hexToString(byte[] bytes) {
-		StringBuffer buff = new StringBuffer();
-		for (int i = 0; i < bytes.length; i++) {
-			int val = bytes[i];
-			val = val & 0xff; // remove higher bits, sign
-			if (val < 16)
-				buff.append('0'); // leading 0
-			buff.append(Integer.toString(val, 16));
-		}
-		return buff.toString();
-	}
-
-	public static String getHash(String password) {
-		try {
-			MessageDigest md = MessageDigest.getInstance("SHA");
-			md.update(password.getBytes());
-			return hexToString(md.digest());
-		} catch (NoSuchAlgorithmException e) {
-			e.printStackTrace();
-		}
-		return "";
-	}
-	*/
+	/*
+	 * memogni es aq ar unda iyos; public static String hexToString(byte[]
+	 * bytes) { StringBuffer buff = new StringBuffer(); for (int i = 0; i <
+	 * bytes.length; i++) { int val = bytes[i]; val = val & 0xff; // remove
+	 * higher bits, sign if (val < 16) buff.append('0'); // leading 0
+	 * buff.append(Integer.toString(val, 16)); } return buff.toString(); }
+	 * 
+	 * public static String getHash(String password) { try { MessageDigest md =
+	 * MessageDigest.getInstance("SHA"); md.update(password.getBytes()); return
+	 * hexToString(md.digest()); } catch (NoSuchAlgorithmException e) {
+	 * e.printStackTrace(); } return ""; }
+	 */
 }
