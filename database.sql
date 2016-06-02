@@ -3,7 +3,7 @@ CREATE TABLE IF NOT EXISTS users (
     user_name varchar(60) not null,
     email varchar(45) not null,
     password char(40) not null, -- variable type ??
-    reg_date timestamp,
+    reg_date timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
     quizes_written int DEFAULT 0,
     
     key(user_name),
