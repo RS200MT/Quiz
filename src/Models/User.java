@@ -42,6 +42,7 @@ public class User {
 		this.quizNumber++;
 	}
 
+	/* memogni es aq ar unda iyos;
 	public static String hexToString(byte[] bytes) {
 		StringBuffer buff = new StringBuffer();
 		for (int i = 0; i < bytes.length; i++) {
@@ -64,4 +65,5 @@ public class User {
 		}
 		return "";
 	}
+	*/
 }

@@ -78,7 +78,7 @@ public class DBObject {
 	
 	
 	/**
-	 * Executes update queries that is queries
+	 * Executes update queries, that is queries
 	 * which cause changes in tables of the database;
 	 * @param query
 	 */
@@ -96,7 +96,9 @@ public class DBObject {
 	
 
 	/**
-	 * Adds new user into users table. Uses executeUpdate;
+	 * Checks if user with given name or email already exists;
+	 * Is so, returns false, if such a user doesn't exist,
+	 * adds the new user into users table. Uses executeUpdate;
 	 * Method receives hashed password;
 	 * @param name
 	 * @param email
@@ -148,7 +150,7 @@ public class DBObject {
 	 * @throws SQLException
 	 */
 	public String getPasswordHash(String userName) throws SQLException {
-		String query = " Select * from"+TABLE_USERS+" where user_name = \"" + userName + "\"";
+		String query = " Select * from "+TABLE_USERS+" where user_name = \"" + userName + "\"";
 		ResultSet rs = getResultSet(query);
 		return rs.getString(4);
 
