@@ -121,9 +121,12 @@ public class DBObject {
 	 * @param email
 	 * @return boolean
 	 */
+
+
 	private boolean userAlreadyExists(String name, String email, Connection conn) {
 		String query = "SELECT * FROM " + TABLE_USERS + " WHERE user_name = '" + name + "' or email = '" + email + "' limit 1;";
 		ResultSet r = getResultSet(query, conn);
+
 		try {
 			if (r.next())
 				return true;
