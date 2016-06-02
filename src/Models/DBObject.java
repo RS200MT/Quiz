@@ -129,14 +129,8 @@ public class DBObject {
 		String queryForEmail = "SELECT * FROM " + TABLE_USERS + " WHERE email like " + email + ";";
 		ResultSet r1 = getResultSet(queryForName);
 		ResultSet r2 = getResultSet(queryForEmail);
-		try {
-			if(!r1.next() || !r2.next()){
-				return false;
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} 
-		return true;
+		if(r1 == null) return true;
+		return false;
 	}
 
 	
@@ -149,13 +143,8 @@ public class DBObject {
 	public String getPasswordHash(String userName) throws SQLException {
 		String query = " Select * from "+TABLE_USERS+" where user_name = \"" + userName + "\"";
 		ResultSet rs = getResultSet(query);
-		return rs.getString(4);
+		return rs.getString(3);
 
 	}
 	
-	private void example() {
-		Connection conn = getConnection();
-		
-		closeConnection(conn);
-	}
 }
