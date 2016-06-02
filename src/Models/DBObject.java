@@ -89,13 +89,9 @@ public class DBObject {
 	}
 
 	/**
-	 * <<<<<<< HEAD Adds new user into users table. Uses executeUpdate; Method
-	 * receives hashed password;
-	 * 
-	 * ======= Checks if user with given name or email already exists; Is so,
+	 * Checks if user with given name or email already exists; Is so,
 	 * returns false, if such a user doesn't exist, adds the new user into users
-	 * table. Uses executeUpdate; Method receives hashed password; >>>>>>>
-	 * 34697c4dd140d1a4fb6dac472ce958f67ea5e2e3
+	 * table. Uses executeUpdate; Method receives hashed password; 
 	 * 
 	 * @param name
 	 * @param email
@@ -134,6 +130,7 @@ public class DBObject {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+
 		return false;
 	}
 
@@ -150,6 +147,7 @@ public class DBObject {
 		ResultSet rs = getResultSet(query, conn);
 		closeConnection(conn);
 		return rs.getString(3);
+
 	}
 
 	private void example() {
@@ -157,4 +155,5 @@ public class DBObject {
 
 		closeConnection(conn);
 	}
+
 }
