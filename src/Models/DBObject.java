@@ -138,8 +138,7 @@ public class DBObject {
 	private boolean userAlreadyExists(String name, String email) {
 
 
-		String query = "SELECT * FROM " + TABLE_USERS + " WHERE user_name = \"" + name + "\" or email = \"" + email
-				+ "\" limit 1;";
+		String query = "SELECT * FROM " + TABLE_USERS + " WHERE user_name = \"" + name + "\" limit 1;";
 		ResultSet r = getResultSet(query);
 		try {
 			if (r.next()) 
