@@ -48,7 +48,8 @@ public class addUser extends HttpServlet {
 		if(obj.addUser(name, email, password)){
 			request.getRequestDispatcher("welcome.jsp").forward(request, response);
 		} else {
-			request.getRequestDispatcher("tryAgain.jsp").forward(request, response);
+			request.setAttribute("exists", 1);
+			request.getRequestDispatcher("newAccount.jsp").forward(request, response);
 		}
 	}
 

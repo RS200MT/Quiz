@@ -8,6 +8,11 @@
 </head>
 <body>
 <form action="addUser" method="post">
+<%
+if (request.getAttribute("exists") != null)
+	out.println(request.getParameter("username") + " already exists!");
+
+%>
 <p>UserName: <input type="text" name="username"/>
 <p>Email: <input type="email"  name="email"/>
 <p>Password: <input type="password" name="password"/>

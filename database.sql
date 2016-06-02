@@ -5,6 +5,7 @@ CREATE TABLE IF NOT EXISTS users (
     password char(40) not null, -- variable type ??
     reg_date timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
     quizes_written int DEFAULT 0,
+	type int not null default 2,
     
     key(user_name),
     key(email)    
