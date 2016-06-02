@@ -6,8 +6,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import com.sun.jmx.snmp.Timestamp;
-
 public class DBObject {
 	public static final String MYSQL_USERNAME = DBInfo.MYSQL_USERNAME;
 	public static final String MYSQL_PASSWORD = DBInfo.MYSQL_PASSWORD;
@@ -59,9 +57,8 @@ public class DBObject {
 	 * @param query
 	 * @return {@link ResultSet}
 	 */
-	private ResultSet getResultSet(String query) {
+	private ResultSet getResultSet(String query, Connection conn) {
 		ResultSet result = null;
-		Connection conn = getConnection();
 		try {
 			Statement stmt = conn.createStatement();
 			stmt.executeQuery("USE " + MYSQL_DATABASE_NAME);
@@ -69,17 +66,16 @@ public class DBObject {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		closeConnection(conn);
 		return result;
 	}
 
 	/**
 	 * Executes update queries, that is queries
 	 * which cause changes in tables of the database;
+
 	 * @param query
 	 */
-	private void executeUpdate(String query) {
-		Connection conn = getConnection();
+	private void executeUpdate(String query, Connection conn) {
 		try {
 			Statement stmt = conn.createStatement();
 			stmt.executeQuery("USE " + MYSQL_DATABASE_NAME);
@@ -87,14 +83,15 @@ public class DBObject {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		closeConnection(conn);
 	}
 
 	/**
+
 	 * Checks if user with given name or email already exists;
 	 * If so, returns false, if such a user doesn't exist,
 	 * adds the new user into users table. Uses executeUpdate;
 	 * Method receives hashed password;
+	 *
 	 * @param name
 	 * @param email
 	 * @param hashedPassword
@@ -102,18 +99,18 @@ public class DBObject {
 	 */
 	public boolean addUser(String username, String email, String hashedPassword) {
 		Connection conn = getConnection();
-		if (userAlreadyExists(username, email)) {
+		if (userAlreadyExists(username, email, conn)) {
+			System.out.println("User already exists");
 			closeConnection(conn);
-			System.out.println("adduserCheck");
 			return false;
+		} else {
+			System.out.println("User added successfully");
+			String query = "INSERT INTO " + TABLE_USERS + " (user_name, email, password) VALUES " + "('" + username
+					+ "', '" + email + "', '" + hashedPassword + "');";
+			executeUpdate(query, conn);
+			closeConnection(conn);
+			return true;
 		}
-		System.out.println("1");
-		String query = "INSERT INTO " + TABLE_USERS + " (user_name, email, password) VALUES " + "(\"" + username
-				+ "\", \"" + email + "\", \"" + hashedPassword + "\");";
-		executeUpdate(query);
-		System.out.println("2");
-		closeConnection(conn);
-		return true;
 	}
 
 	/**
@@ -123,18 +120,16 @@ public class DBObject {
 	 * @param email
 	 * @return boolean
 	 */
-	private boolean userAlreadyExists(String name, String email) {
-		String query = "SELECT * FROM " + TABLE_USERS + " WHERE user_name = \"" + name + "\" or email = \"" + email
-				+ "\" limit 1;";
-		ResultSet r = getResultSet(query);
+	private boolean userAlreadyExists(String name, String email, Connection conn) {
+		String query = "SELECT * FROM " + TABLE_USERS + " WHERE user_name = '" + name + "' or email = '" + email + "' limit 1;";
+		ResultSet r = getResultSet(query, conn);
 		try {
-			if (r.next()) 
+			if (r.next())
 				return true;
-			else 
-				return false;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+
 		return false;
 	}
 
@@ -146,9 +141,12 @@ public class DBObject {
 	 * @throws SQLException
 	 */
 	public String getPasswordHash(String userName) throws SQLException {
-		String query = " Select * from " + TABLE_USERS + " where user_name = \"" + userName + "\"";
-		ResultSet rs = getResultSet(query);
+		String query = " Select * from " + TABLE_USERS + " where user_name = '" + userName + "'";
+		Connection conn = getConnection();
+		ResultSet rs = getResultSet(query, conn);
+		closeConnection(conn);
 		return rs.getString(3);
+
 	}
 
 	private void example() {
@@ -156,4 +154,5 @@ public class DBObject {
 
 		closeConnection(conn);
 	}
+
 }
