@@ -11,7 +11,7 @@
 <%
 User curUser = (User)request.getSession().getAttribute(User.USER_ATTR);
 if (curUser != null) {
-	out.println("You are already logged as: <b>" + curUser.getUserName() + "</b>");
+	out.println("You are already logged as: <b>" + curUser.getUserName() + "</b>" + "|" + curUser.getId() + "|" + curUser.getEmail() + "|" + curUser.getQuizNumber() + "|" + curUser.getRegDate() + "|" + curUser.getType());
 }
 %>
 <form action="Login" method="post">

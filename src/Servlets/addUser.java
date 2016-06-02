@@ -47,7 +47,7 @@ public class addUser extends HttpServlet {
 			getServletContext().setAttribute("DB", obj);
 		}
 		if(obj.addUser(name, email, password)){
-			request.getSession().setAttribute(User.USER_ATTR, new User(name));
+			request.getSession().setAttribute(User.USER_ATTR, new User(name, obj));
 			request.getRequestDispatcher("welcome.jsp").forward(request, response);
 		} else {
 			request.setAttribute("exists", 1);

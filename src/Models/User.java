@@ -1,5 +1,7 @@
 package Models;
 
+import java.util.HashMap;
+
 public class User {
 	public static final String USER_ATTR = "User_attr";
 	private int id;
@@ -7,13 +9,16 @@ public class User {
 	private String email;
 	private String regDate;
 	private int quizNumber;
+	private int type;
 
-	public User(String userName) {
-		this.id = id;
+	public User(String userName, DBObject db) {
 		this.userName = userName;
-		this.email = email;
-		this.regDate = regDate;
-		this.quizNumber = quizNumber;
+		HashMap<String, Object> userInfo = db.getUserInfo(this.userName, this.id, this.email, this.regDate, this.quizNumber, this.type);
+		this.id = (int)userInfo.get("id");
+		this.email = (String)userInfo.get("email");
+		this.regDate = (String)userInfo.get("reg_date");
+		this.quizNumber = (int)userInfo.get("quizes_written");
+		this.type = (int)userInfo.get("type");
 	}
 
 	public int getId() {
@@ -34,6 +39,10 @@ public class User {
 
 	public int getQuizNumber() {
 		return this.quizNumber;
+	}
+	
+	public int getType() {
+		return this.type;
 	}
 
 	public void increaseQuizNumber() {

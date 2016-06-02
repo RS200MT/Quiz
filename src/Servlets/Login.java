@@ -40,7 +40,7 @@ public class Login extends HttpServlet {
 		if (db_password != null) {
 			if (Password.passwordMatches(db_password, passed_password)) {
 				System.out.println("LOGIN successfully");
-				request.getSession().setAttribute(User.USER_ATTR, new User(passed_username));
+				request.getSession().setAttribute(User.USER_ATTR, new User(passed_username, obj));
 				request.getRequestDispatcher("welcome.jsp").forward(request, response);
 			} else {
 				System.out.println("NOT LOGGED");
