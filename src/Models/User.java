@@ -1,8 +1,5 @@
 package Models;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-
 public class User {
 	private int id;
 	private String userName;
@@ -41,6 +38,7 @@ public class User {
 	public void increaseQuizNumber() {
 		this.quizNumber++;
 	}
+
 
 	/* memogni es aq ar unda iyos;
 	public static String hexToString(byte[] bytes) {

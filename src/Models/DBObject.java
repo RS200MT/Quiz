@@ -1,15 +1,12 @@
 package Models;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
+
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import javax.print.attribute.standard.DateTimeAtCompleted;
 
 import com.sun.jmx.snmp.Timestamp;
 
