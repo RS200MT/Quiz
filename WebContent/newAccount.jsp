@@ -12,11 +12,11 @@
 <%
 Object exists = request.getAttribute("exists");
 if (exists != null && exists.toString().equals("1"))
-	out.println("UserName <b>" + request.getParameter("username") + "</b> or email <b>" + request.getParameter("email") +"</b> already exists!");
-else {
+	out.print("UserName <b>" + request.getParameter("username") + "</b> or email <b>" + request.getParameter("email") +"</b> already exists!");
+else {  // daloginebul users addNewAccout-ze shesvlis sashualebas tu ar mivcemt es albat ar dagvchirdeba;
 	User curUser = (User)request.getSession().getAttribute(User.USER_ATTR);
 	if (curUser != null)
-		out.println("You are already logged as: <b>" + curUser.getUserName() + "</b>");
+		out.print("You are already logged as: <b>" + curUser.getUserName() + "</b>");
 }
 %>
 <p>UserName: <input type="text" name="username"/>
