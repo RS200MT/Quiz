@@ -4,10 +4,13 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Register here</title>
+<title>Hello user</title>
 </head>
 <body>
 
-</form>
+<% 
+out.print(request.getParameter("username"));
+%>
+
 </body>
 </html>

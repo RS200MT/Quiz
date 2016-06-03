@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.HashMap;
 
 public class DBObject {
 	public static final String MYSQL_USERNAME = DBInfo.MYSQL_USERNAME;
@@ -78,7 +79,7 @@ public class DBObject {
 	private void executeUpdate(String query, Connection conn) {
 		try {
 			Statement stmt = conn.createStatement();
-			stmt.executeQuery("USE " + MYSQL_DATABASE_NAME);
+			stmt.executeQuery("USE " + MYSQL_DATABASE_NAME + ";");
 			stmt.executeUpdate(query);
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -86,12 +87,19 @@ public class DBObject {
 	}
 
 	/**
+<<<<<<< HEAD
 
 	 * Checks if user with given name or email already exists;
 	 * If so, returns false, if such a user doesn't exist,
 	 * adds the new user into users table. Uses executeUpdate;
 	 * Method receives hashed password;
 	 *
+=======
+	 * Checks if user with given name or email already exists; Is so, returns
+	 * false, if such a user doesn't exist, adds the new user into users table.
+	 * Uses executeUpdate; Method receives hashed password;
+	 * 
+>>>>>>> f042ebe08aae1506ef170d83571f76e95fff8096
 	 * @param name
 	 * @param email
 	 * @param hashedPassword
@@ -120,9 +128,12 @@ public class DBObject {
 	 * @param email
 	 * @return boolean
 	 */
+
 	private boolean userAlreadyExists(String name, String email, Connection conn) {
-		String query = "SELECT * FROM " + TABLE_USERS + " WHERE user_name = '" + name + "' or email = '" + email + "' limit 1;";
+		String query = "SELECT * FROM " + TABLE_USERS + " WHERE user_name = '" + name + "' or email = '" + email
+				+ "' limit 1;";
 		ResultSet r = getResultSet(query, conn);
+
 		try {
 			if (r.next())
 				return true;
@@ -140,18 +151,46 @@ public class DBObject {
 	 * @return {@link String}
 	 * @throws SQLException
 	 */
-	public String getPasswordHash(String userName) throws SQLException {
-		String query = " Select * from " + TABLE_USERS + " where user_name = '" + userName + "'";
+	public String getPasswordHash(String userName) {
+		String result = null;
 		Connection conn = getConnection();
+		String query = "Select * from " + TABLE_USERS + " where user_name = '" + userName + "';";
 		ResultSet rs = getResultSet(query, conn);
+		try {
+			if (rs.next())
+				result = rs.getString("password");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		closeConnection(conn);
-		return rs.getString(3);
+		return result;
+	}
 
+	public HashMap<String, Object> getUserInfo(String userName, int id, String email, String regDate, int quizNumber, int type) {
+		HashMap<String, Object> result = new HashMap<String, Object>();
+		Connection conn = getConnection();
+		String query = "Select * from " + TABLE_USERS + " where user_name = '" + userName + "';";
+		ResultSet rs = getResultSet(query, conn);
+		try {
+			if (rs.next()) {
+				result.put("id", rs.getInt("id"));
+				result.put("email", rs.getString("email"));
+				result.put("reg_date", rs.getString("reg_date"));
+				result.put("quizes_written", rs.getInt("quizes_written"));
+				result.put("type", rs.getInt("type"));
+			} else {
+				System.out.println("User was not found in database!");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		closeConnection(conn);
+		return result;
 	}
 
 	private void example() {
 		Connection conn = getConnection();
-
+		
 		closeConnection(conn);
 	}
 
