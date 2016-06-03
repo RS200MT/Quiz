@@ -14,7 +14,8 @@ public class DBObject {
 	public static final String MYSQL_DATABASE_NAME = DBInfo.MYSQL_DATABASE_NAME;
 
 	public static final String TABLE_USERS = "users";
-
+	public static final String TABLE_QUIZES = "quizes";
+	
 	public DBObject() {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
@@ -188,6 +189,21 @@ public class DBObject {
 		return result;
 	}
 
+	public void getPopularQuizes() throws SQLException{
+		Connection conn = getConnection();
+		Statement stm = conn.createStatement();
+		String query = "Select * from " + TABLE_QUIZES + "order by create_time desc limit 3";
+		ResultSet rs = getResultSet(query, conn);
+		while(rs.next()){
+			int id = rs.getInt(0);
+			String title = rs.getString(1);
+			String author = rs.getString(2);
+			String date = rs.getTimestamp(3).toString();
+		}
+		
+		
+	}
+	
 	private void example() {
 		Connection conn = getConnection();
 		
