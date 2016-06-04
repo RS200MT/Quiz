@@ -69,9 +69,3 @@ create table if not exists quiz_logs (
     key (quiz_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
-
-SELECT 'quiz_id', COUNT('user_id')
-FROM quiz_logs
-GROUP BY 'quiz_id'
-ORDER BY COUNT('user_id')
-LIMIT 3;
