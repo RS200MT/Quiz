@@ -189,7 +189,7 @@ public class DBObject {
 		return result;
 	}
 
-	public void getPopularQuizes() throws SQLException{
+	public void getRecentQuizes() throws SQLException{
 		Connection conn = getConnection();
 		Statement stm = conn.createStatement();
 		String query = "Select * from " + TABLE_QUIZES + "order by create_time desc limit 3";
@@ -199,9 +199,7 @@ public class DBObject {
 			String title = rs.getString(1);
 			String author = rs.getString(2);
 			String date = rs.getTimestamp(3).toString();
-		}
-		
-		
+		}	
 	}
 	
 	private void example() {
