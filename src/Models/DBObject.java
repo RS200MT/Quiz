@@ -194,7 +194,8 @@ public class DBObject {
 	}
 
 
-	public void getRecentQuizes(int numQuizes) throws SQLException{
+	public ArrayList<Quiz> getRecentQuizes(int numQuizes) throws SQLException{
+		ArrayList<Quiz> res = new ArrayList<Quiz>();
 		Connection conn = getConnection();
 		Statement stm = conn.createStatement();
 		String query = "Select * from " + TABLE_QUIZES + "order by create_time desc limit " + numQuizes;
@@ -204,8 +205,12 @@ public class DBObject {
 			String title = rs.getString(1);
 			String author = rs.getString(2);
 			String date = rs.getTimestamp(3).toString();
+			int timesWritten = rs.getInt(4);
+			ArrayList<Question> questions = getQuestionsForQuiz(id, conn);
+			Quiz q = new Quiz(id, author, questions, timesWritten);
+			res.add(q);
 		}
-		
+		return res;
 		
 	}
 	
