@@ -68,3 +68,4 @@ create table if not exists quiz_logs (
     key (user_id),
     key (quiz_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+

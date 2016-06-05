@@ -5,7 +5,10 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.HashMap;
+
+import Questions.Question;
 
 public class DBObject {
 	public static final String MYSQL_USERNAME = DBInfo.MYSQL_USERNAME;
@@ -15,6 +18,7 @@ public class DBObject {
 
 	public static final String TABLE_USERS = "users";
 	public static final String TABLE_QUIZES = "quizes";
+	public static final String TABLE_QUIZ_LOGS = "quiz_logs";
 	
 	public DBObject() {
 		try {
@@ -189,18 +193,71 @@ public class DBObject {
 		return result;
 	}
 
-	public void getRecentQuizes() throws SQLException{
+
+
+	public ArrayList<Quiz> getRecentQuizes(int numQuizes) throws SQLException{
+		ArrayList<Quiz> res = new ArrayList<Quiz>();
 		Connection conn = getConnection();
 		Statement stm = conn.createStatement();
-		String query = "Select * from " + TABLE_QUIZES + "order by create_time desc limit 3";
+		String query = "Select * from " + TABLE_QUIZES + "order by create_time desc limit " + numQuizes;
 		ResultSet rs = getResultSet(query, conn);
 		while(rs.next()){
 			int id = rs.getInt(0);
 			String title = rs.getString(1);
 			String author = rs.getString(2);
 			String date = rs.getTimestamp(3).toString();
-		}	
+
+			int timesWritten = rs.getInt(4);
+			ArrayList<Question> questions = getQuestionsForQuiz(id, conn);
+			Quiz q = new Quiz(id, author, questions, timesWritten);
+			res.add(q);
+		}
+		return res;
+		
 	}
+	
+	/**
+	 * Returns demanded amount of most popular quizes
+	 * @param numQuizes
+	 * @throws SQLException
+	 */
+	public ArrayList<Quiz> getPopularQuizes(int numQuizes) throws SQLException {
+		ArrayList<Quiz> res = new ArrayList<Quiz>();
+		Connection conn = getConnection();
+		Statement stm = conn.createStatement();
+//		String query = "SELECT * FROM " + TABLE_QUIZ_LOGS + 
+//						"GROUP BY 'quiz_id' ORDER BY COUNT('user_id') LIMIT " + numQuizes + ";";
+		
+		String query = "SELECT 'quiz_id' FROM "+TABLE_QUIZES+" ORDER BY 'times_written' DESC LIMIT " + numQuizes;
+		ResultSet rs = getResultSet(query, conn);
+		while(rs.next()){
+			int id = rs.getInt(0);
+			String title = rs.getString(1);
+			String author = rs.getString(2);
+			String date = rs.getTimestamp(3).toString();
+			int timesWritten = rs.getInt(4);
+			ArrayList<Question> questions = getQuestionsForQuiz(id, conn);
+			Quiz q = new Quiz(id, author, questions, timesWritten);
+			res.add(q);
+		}
+		closeConnection(conn);
+		return res;
+	}
+	
+	
+	
+	private ArrayList<Question> getQuestionsForQuiz(int id, Connection conn) {
+		try {
+			Statement stm = conn.createStatement();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return null;
+	}
+
+	
 	
 	private void example() {
 		Connection conn = getConnection();
