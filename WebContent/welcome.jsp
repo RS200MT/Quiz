@@ -13,15 +13,15 @@
 	<% 
 		out.print(request.getParameter("username"));
 		//ES YVELAFERI JER AR IMUSHAVEBS :D
-// 		DBObject db = (DBObject)getServletContext().getAttribute("DB");
-// 		ArrayList<Quiz> popular = db.getPopularQuizes(3);
-// 		for(Quiz q: popular) {
-// 			out.println("<li><a href=\"QuizPage.jsp?id=" + q.getID()+ "\">" + q.getAuthor()+ "</a></li>");
-// 		}
-// 		ArrayList<Quiz> recent = db.getRecentQuizes(3);
-// 		for(Quiz q: recent) {
-// 			out.println("<li><a href=\"QuizPage.jsp?id=" + q.getID()+ "\">" + q.getAuthor()+ "</a></li>");
-// 		}
+		DBObject db = (DBObject)getServletContext().getAttribute("DB");
+		ArrayList<Quiz> popular = db.getPopularQuizes(3);
+		for(Quiz q: popular) {
+			out.println("<li><a href=\"QuizPage.jsp?id=" + q.getID()+ "\">" + q.getAuthor()+ "</a></li>");
+		}
+		ArrayList<Quiz> recent = db.getRecentQuizes(3);
+		for(Quiz q: recent) {
+			out.println("<li><a href=\"QuizPage.jsp?id=" + q.getID()+ "\">" + q.getAuthor()+ "</a></li>");
+		}
 	%>
 </body>
 </html>

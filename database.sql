@@ -1,3 +1,13 @@
+drop table if exists users;
+drop table if exists correct_answers;
+drop table if exists quiz_logs;
+drop table if exists quizes;
+drop table if exists multiple_choices;
+drop table if exists question_images;
+drop table if exists friends;
+drop table if exists questions;
+
+
 CREATE TABLE IF NOT EXISTS users (
 	id int not null auto_increment primary key, -- Could use varchar
     user_name varchar(60) not null,
@@ -29,7 +39,8 @@ create table if not exists quizes (
 	id int auto_increment primary key,
     title tinytext not null,
     author varchar(60) not null,
-    create_time timestamp
+    create_time timestamp,
+    times_written int DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 

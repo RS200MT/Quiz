@@ -4,9 +4,17 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Insert title here</title>
+<title>Oops</title>
+<style>
+	h1 {
+		text-align: center;
+		color: red;
+	}
+</style>
 </head>
 <body>
-
+	<h1>User with given name could not be found.</h1>
+	<a href=Login.jsp> Try Again</a>
+	<br><a href=newAccount.jsp>Add New Account</a>
 </body>
 </html>
