@@ -25,7 +25,7 @@ public class ContextListener implements ServletContextListener {
      */
     public void contextInitialized(ServletContextEvent arg0)  { 
          DBObject obj = new DBObject();
-         arg0.getServletContext().setAttribute("DB", obj);
+         arg0.getServletContext().setAttribute(DBObject.ATTR_DB, obj);
     }
 
 	/**

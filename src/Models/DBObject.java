@@ -11,6 +11,7 @@ import java.util.HashMap;
 import Questions.Question;
 
 public class DBObject {
+	public static final String ATTR_DB = "ATTR_DB";
 	public static final String MYSQL_USERNAME = DBInfo.MYSQL_USERNAME;
 	public static final String MYSQL_PASSWORD = DBInfo.MYSQL_PASSWORD;
 	public static final String MYSQL_DATABASE_SERVER = DBInfo.MYSQL_DATABASE_SERVER;

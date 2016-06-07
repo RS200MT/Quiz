@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import Models.Constants;
 import Models.DBObject;
 import Models.Password;
 import Models.User;
@@ -38,20 +39,20 @@ public class addUser extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String name = request.getParameter("username");
-		String email = request.getParameter("email");
-		String password = Password.getHash(request.getParameter("password"));
-		DBObject obj = (DBObject) getServletContext().getAttribute("DB");
+		String name = request.getParameter(Constants.REGISTER_USERNAME);
+		String email = request.getParameter(Constants.REGISTER_EMAIL);
+		String password = Password.getHash(request.getParameter(Constants.REGISTER_PASSWORD));
+		DBObject obj = (DBObject) getServletContext().getAttribute(DBObject.ATTR_DB);
 		if (obj == null) {
 			obj = new DBObject();
-			getServletContext().setAttribute("DB", obj);
+			getServletContext().setAttribute(DBObject.ATTR_DB, obj);
 		}
 		if(obj.addUser(name, email, password)){
-			request.getSession().setAttribute(User.USER_ATTR, new User(name, obj));
-			request.getRequestDispatcher("welcome.jsp").forward(request, response);
+			request.getSession().setAttribute(Models.Constants.ATTR_USER, new User(name, obj));
+			request.getRequestDispatcher(Models.Constants.P_HOMEPAGE).forward(request, response);
 		} else {
-			request.setAttribute("exists", 1);
-			request.getRequestDispatcher("newAccount.jsp").forward(request, response);
+			request.setAttribute(Constants.ATTR_USERNAME_EXISTS, Constants.REGISTER_USERNAME_EXISTS);
+			request.getRequestDispatcher(Models.Constants.P_NEW_ACCOUNT).forward(request, response);
 		}
 	}
 

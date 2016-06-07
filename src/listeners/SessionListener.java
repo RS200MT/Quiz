@@ -4,7 +4,7 @@ import javax.servlet.annotation.WebListener;
 import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
 
-import Models.User;
+import Models.Constants;
 
 /**
  * Application Lifecycle Listener implementation class SessionListener
@@ -24,7 +24,7 @@ public class SessionListener implements HttpSessionListener {
      * @see HttpSessionListener#sessionCreated(HttpSessionEvent)
      */
     public void sessionCreated(HttpSessionEvent arg0)  { 
-    	arg0.getSession().setAttribute(User.USER_ATTR, null);
+    	arg0.getSession().setAttribute(Constants.ATTR_USER, null);
     }
 
 	/**

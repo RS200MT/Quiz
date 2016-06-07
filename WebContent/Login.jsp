@@ -1,4 +1,4 @@
-<%@page import="Servlets.Login"%>
+<%@page import="Models.Constants"%>
 <%@page import="Models.User"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
@@ -10,24 +10,24 @@
 </head>
 <body>
 	<%
-		String incorrectLogin = (String)request.getAttribute(Login.ATTR_FAILED_LOGIN);
-		User curUser = (User) request.getSession().getAttribute(User.USER_ATTR);
+		String incorrectLogin = (String)request.getAttribute(Constants.ATTR_FAILED_LOGIN);
+		User curUser = (User) request.getSession().getAttribute(Constants.ATTR_USER);
 		if (curUser == null) {
 			if (incorrectLogin != null)
 				out.println(incorrectLogin);
 	%>
-	<form action="Login" method="post">
+	<form action="<% out.print(Constants.S_LOGIN); %>" method="post">
 		<p>
-			Username: <input type="text" name="username">
+			Username: <input type="text" required="required" name="<% out.print(Constants.LOGIN_USERNAME); %>" id="<% out.print(Constants.LOGIN_USERNAME); %>" />
 		<p>
-			Password: <input type="password" name="password">
+			Password: <input type="password" required="required" name="<% out.print(Constants.LOGIN_PASSWORD); %>" id="<% out.print(Constants.LOGIN_PASSWORD); %>" />
 		<p>
-			<input type="submit" value="Login">
+			<input type="submit" value="<% out.print(Constants.B_LOGIN); %>">
 	</form>
-	<a href="newAccount.jsp"> Create New Account</a>
+	<a href="<% out.print(Constants.P_REGISTER); %>"> Create New Account</a>
 	<%
 		} else {
-			request.getRequestDispatcher("index.jsp").forward(request, response);
+			request.getRequestDispatcher(Constants.P_HOMEPAGE).forward(request, response);
 		}
 	%>
 </body>

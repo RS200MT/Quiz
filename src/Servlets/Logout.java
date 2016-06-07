@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import Models.User;
+import Models.Constants;
 
 /**
  * Servlet implementation class Logout
@@ -30,8 +30,8 @@ public class Logout extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		request.getSession().setAttribute(User.USER_ATTR, null);
-		request.getRequestDispatcher("index.jsp").forward(request, response);
+		request.getSession().setAttribute(Constants.ATTR_USER, null);
+		request.getRequestDispatcher(Constants.P_HOMEPAGE).forward(request, response);
 	}
 
 }
