@@ -18,7 +18,7 @@ import Models.User;
 @WebServlet("/Login")
 public class Login extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-
+	public static final String ATTR_FAILED_LOGIN = "failedLogin";
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
@@ -41,13 +41,16 @@ public class Login extends HttpServlet {
 			if (Password.passwordMatches(db_password, passed_password)) {
 				System.out.println("LOGIN successfully");
 				request.getSession().setAttribute(User.USER_ATTR, new User(passed_username, obj));
-				request.getRequestDispatcher("welcome.jsp").forward(request, response);
+				request.getRequestDispatcher("index.jsp").forward(request, response);
 			} else {
 				System.out.println("NOT LOGGED");
-				request.getRequestDispatcher("incorrect.jsp").forward(request, response);
+				request.setAttribute(ATTR_FAILED_LOGIN, "The password for username <b>" + passed_username + "</b> was incorrect!");
+				request.getRequestDispatcher("Login.jsp").forward(request, response);
 			}
 		} else {
 			System.out.println("User not found!");
+			request.setAttribute(ATTR_FAILED_LOGIN, "The username <b>" + passed_username + "</b> was not found!");
+			request.getRequestDispatcher("Login.jsp").forward(request, response);
 		}
 	}
 

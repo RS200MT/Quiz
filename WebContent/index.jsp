@@ -1,5 +1,6 @@
+<%@page import="Models.User"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
+	pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -7,6 +8,18 @@
 <title>Insert title here</title>
 </head>
 <body>
-test123
+	<%
+		User curUser = (User) request.getSession().getAttribute(User.USER_ATTR);
+		if (curUser == null) {
+			request.getRequestDispatcher("Login.jsp").forward(request, response);
+		} else {
+	%>
+	HOMEPAGE HERE
+	<form action="Logout" method="post">
+		<input type="submit" value="Logout" />
+	</form>
+	<%
+		}
+	%>
 </body>
 </html>
