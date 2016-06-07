@@ -20,7 +20,7 @@ public class DBObject {
 	public static final String TABLE_USERS = "users";
 	public static final String TABLE_QUIZES = "quizes";
 	public static final String TABLE_QUIZ_LOGS = "quiz_logs";
-	
+
 	public DBObject() {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
@@ -77,9 +77,9 @@ public class DBObject {
 	}
 
 	/**
-	 * Executes update queries, that is queries
-	 * which cause changes in tables of the database;
-
+	 * Executes update queries, that is queries which cause changes in tables of
+	 * the database;
+	 * 
 	 * @param query
 	 */
 	private void executeUpdate(String query, Connection conn) {
@@ -93,19 +93,18 @@ public class DBObject {
 	}
 
 	/**
-<<<<<<< HEAD
-
-	 * Checks if user with given name or email already exists;
-	 * If so, returns false, if such a user doesn't exist,
-	 * adds the new user into users table. Uses executeUpdate;
-	 * Method receives hashed password;
-	 *
-=======
-	 * Checks if user with given name or email already exists; Is so, returns
+	 * <<<<<<< HEAD
+	 * 
+	 * Checks if user with given name or email already exists; If so, returns
 	 * false, if such a user doesn't exist, adds the new user into users table.
 	 * Uses executeUpdate; Method receives hashed password;
+	 *
+	 * ======= Checks if user with given name or email already exists; Is so,
+	 * returns false, if such a user doesn't exist, adds the new user into users
+	 * table. Uses executeUpdate; Method receives hashed password;
 	 * 
->>>>>>> f042ebe08aae1506ef170d83571f76e95fff8096
+	 * >>>>>>> f042ebe08aae1506ef170d83571f76e95fff8096
+	 * 
 	 * @param name
 	 * @param email
 	 * @param hashedPassword
@@ -172,7 +171,8 @@ public class DBObject {
 		return result;
 	}
 
-	public HashMap<String, Object> getUserInfo(String userName, int id, String email, String regDate, int quizNumber, int type) {
+	public HashMap<String, Object> getUserInfo(String userName, int id, String email, String regDate, int quizNumber,
+			int type) {
 		HashMap<String, Object> result = new HashMap<String, Object>();
 		Connection conn = getConnection();
 		String query = "Select * from " + TABLE_USERS + " where user_name = '" + userName + "';";
@@ -194,14 +194,13 @@ public class DBObject {
 		return result;
 	}
 
-
-	public ArrayList<Quiz> getRecentQuizes(int numQuizes) throws SQLException{
+	public ArrayList<Quiz> getRecentQuizes(int numQuizes) throws SQLException {
 		ArrayList<Quiz> res = new ArrayList<Quiz>();
 		Connection conn = getConnection();
 		Statement stm = conn.createStatement();
 		String query = "Select * from " + TABLE_QUIZES + "order by create_time desc limit " + numQuizes;
 		ResultSet rs = getResultSet(query, conn);
-		while(rs.next()){
+		while (rs.next()) {
 			int id = rs.getInt(0);
 			String title = rs.getString(1);
 			String author = rs.getString(2);
@@ -212,11 +211,12 @@ public class DBObject {
 			res.add(q);
 		}
 		return res;
-		
+
 	}
-	
+
 	/**
 	 * Returns demanded amount of most popular quizes
+	 * 
 	 * @param numQuizes
 	 * @throws SQLException
 	 */
@@ -224,12 +224,13 @@ public class DBObject {
 		ArrayList<Quiz> res = new ArrayList<Quiz>();
 		Connection conn = getConnection();
 		Statement stm = conn.createStatement();
-//		String query = "SELECT * FROM " + TABLE_QUIZ_LOGS + 
-//						"GROUP BY 'quiz_id' ORDER BY COUNT('user_id') LIMIT " + numQuizes + ";";
-		
-		String query = "SELECT 'quiz_id' FROM "+TABLE_QUIZES+" ORDER BY 'times_written' DESC LIMIT " + numQuizes;
+		// String query = "SELECT * FROM " + TABLE_QUIZ_LOGS +
+		// "GROUP BY 'quiz_id' ORDER BY COUNT('user_id') LIMIT " + numQuizes +
+		// ";";
+
+		String query = "SELECT 'quiz_id' FROM " + TABLE_QUIZES + " ORDER BY 'times_written' DESC LIMIT " + numQuizes;
 		ResultSet rs = getResultSet(query, conn);
-		while(rs.next()){
+		while (rs.next()) {
 			int id = rs.getInt(0);
 			String title = rs.getString(1);
 			String author = rs.getString(2);
@@ -242,9 +243,7 @@ public class DBObject {
 		closeConnection(conn);
 		return res;
 	}
-	
-	
-	
+
 	private ArrayList<Question> getQuestionsForQuiz(int id, Connection conn) {
 		try {
 			Statement stm = conn.createStatement();
@@ -256,11 +255,17 @@ public class DBObject {
 		return null;
 	}
 
-	
-	
+	// This function insert quiz in database
+	public void addQuiz(String title, int id) {
+		Connection conn = getConnection();
+		String query = "INSERT INTO " + TABLE_QUIZES + " (title, author) VALUES ('" + title + "', '" + id + "');";
+		executeUpdate(query, conn);
+		closeConnection(conn);
+	}
+
 	private void example() {
 		Connection conn = getConnection();
-		
+
 		closeConnection(conn);
 	}
 

@@ -1,3 +1,5 @@
+<%@page import="java.util.ArrayList"%>
+<%@page import="Questions.Question"%>
 <%@page import="Models.Constants"%>
 <%@page import="Models.User"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
@@ -16,7 +18,12 @@
 		} else {
 	%>
 	<form action="addQuiz" method="post">
-		<input type="text" required="required" name="q_title" id="q_title" />
+		<p>
+			Quiz title: <input type="text" required="required"
+				name="<%out.print(Constants.ADD_QUIZ_TITLE);%>"
+				id="<%out.print(Constants.ADD_QUIZ_TITLE);%>" />
+		</p>
+		<input type="submit" value="<%out.print(Constants.B_ADD_QUIZ);%>" />
 	</form>
 	<%
 		}

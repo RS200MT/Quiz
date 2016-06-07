@@ -38,7 +38,7 @@ create table if not exists friends(
 create table if not exists quizes (
 	id int auto_increment primary key,
     title tinytext not null,
-    author varchar(60) not null,
+    author int not null,
     create_time timestamp,
     times_written int DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
