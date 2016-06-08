@@ -1,3 +1,5 @@
+<%@page import="java.util.ArrayList"%>
+<%@page import="Questions.Question"%>
 <%@page import="Models.Constants"%>
 <%@page import="Models.User"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
@@ -6,22 +8,26 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Insert title here</title>
+<title>Add new Quiz</title>
 </head>
 <body>
 	<%
 		User curUser = (User) request.getSession().getAttribute(Constants.ATTR_USER);
 		if (curUser == null) {
-			request.getRequestDispatcher(Constants.P_LOGIN).forward(request, response);
+			request.getRequestDispatcher(Constants.P_HOMEPAGE).forward(request, response);
 		} else {
-			out.print(curUser.getUserName());
 	%>
-	: Hello Homepage Here 
-	<form action="<% out.print(Constants.S_LOGOUT); %>" method="post">
-		<input type="submit" value="<% out.print(Constants.B_LOGOUT); %>" />
+	<form action="addQuiz" method="post">
+		<p>
+			Quiz title: <input type="text" required="required"
+				name="<%out.print(Constants.ADD_QUIZ_TITLE);%>"
+				id="<%out.print(Constants.ADD_QUIZ_TITLE);%>" />
+		</p>
+		<input type="submit" value="<%out.print(Constants.B_ADD_QUIZ);%>" />
 	</form>
 	<%
 		}
 	%>
+
 </body>
 </html>

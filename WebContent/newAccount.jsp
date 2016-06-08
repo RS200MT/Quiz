@@ -1,6 +1,7 @@
+<%@page import="Models.Constants"%>
 <%@page import="Models.User"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
+	pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -8,21 +9,35 @@
 <title>Insert title here</title>
 </head>
 <body>
-<form action="addUser" method="post">
-<%
-Object exists = request.getAttribute("exists");
-if (exists != null && exists.toString().equals("1"))
-	out.print("UserName <b>" + request.getParameter("username") + "</b> or email <b>" + request.getParameter("email") +"</b> already exists!");
-else {  // daloginebul users addNewAccout-ze shesvlis sashualebas tu ar mivcemt es albat ar dagvchirdeba;
-	User curUser = (User)request.getSession().getAttribute(User.USER_ATTR);
-	if (curUser != null)
-		out.print("You are already logged as: <b>" + curUser.getUserName() + "</b>");
-}
-%>
-<p>UserName: <input type="text" name="username"/>
-<p>Email: <input type="email"  name="email"/>
-<p>Password: <input type="password" name="password"/>
-<p> <input type="submit" value="Sign Up"/>
-</form>
+	<%
+		String alreadyExists = (String) request.getAttribute(Constants.ATTR_USERNAME_EXISTS);
+		User curUser = (User) request.getSession().getAttribute(Constants.ATTR_USER);
+		if (curUser == null) {
+			if (alreadyExists != null)
+				out.println(alreadyExists);
+	%>
+	<form action="<%out.print(Constants.S_REGISTER);%>" method="post">
+		<p>
+			UserName: <input type="text" required="required"
+				name="<%out.print(Constants.REGISTER_USERNAME);%>"
+				id="<%out.print(Constants.REGISTER_USERNAME);%>" />
+		<p>
+			Email: <input type="email" required="required"
+				name="<%out.print(Constants.REGISTER_EMAIL);%>"
+				id="<%out.print(Constants.REGISTER_EMAIL);%>" />
+		<p>
+			Password: <input type="password" required="required"
+				name="<%out.print(Constants.REGISTER_PASSWORD);%>"
+				id="<%out.print(Constants.REGISTER_PASSWORD);%>" />
+		</p>
+		<p>
+			<input type="submit" value="<%out.print(Constants.B_REGISTER);%>" />
+		</p>
+	</form>
+	<%
+		} else {
+			request.getRequestDispatcher(Constants.P_HOMEPAGE).forward(request, response);
+		}
+	%>
 </body>
 </html>

@@ -3,7 +3,6 @@ package Models;
 import java.util.HashMap;
 
 public class User {
-	public static final String USER_ATTR = "User_attr";
 	private int id;
 	private String userName;
 	private String email;
