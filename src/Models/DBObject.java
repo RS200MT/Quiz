@@ -81,15 +81,23 @@ public class DBObject {
 	 * the database;
 	 * 
 	 * @param query
+	 * @throws SQLException 
 	 */
-	private void executeUpdate(String query, Connection conn) {
+	private int executeUpdate(String query, Connection conn){
+		int id = 0;
 		try {
-			Statement stmt = conn.createStatement();
-			stmt.executeQuery("USE " + MYSQL_DATABASE_NAME + ";");
-			stmt.executeUpdate(query);
+			Statement stmt1;
+			stmt1 = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+			stmt1.executeUpdate(query, Statement.RETURN_GENERATED_KEYS);
+			ResultSet rs = stmt1.getGeneratedKeys();
+			if (rs.next()){
+			   id = rs.getInt(1);
+			}
 		} catch (SQLException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		return id;
 	}
 
 	/**
@@ -256,11 +264,12 @@ public class DBObject {
 	}
 
 	// This function insert quiz in database
-	public void addQuiz(String title, int id) {
+	public int addQuiz(String title, int authorId) {
 		Connection conn = getConnection();
-		String query = "INSERT INTO " + TABLE_QUIZES + " (title, author) VALUES ('" + title + "', '" + id + "');";
-		executeUpdate(query, conn);
+		String query = "INSERT INTO " + TABLE_QUIZES + " (title, author) VALUES ('" + title + "', '" + authorId + "');";
+		int quizId = executeUpdate(query, conn);
 		closeConnection(conn);
+		return quizId;
 	}
 
 	private void example() {

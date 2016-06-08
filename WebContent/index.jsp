@@ -19,6 +19,9 @@
 	: Hello Homepage Here 
 	<form action="<% out.print(Constants.S_LOGOUT); %>" method="post">
 		<input type="submit" value="<% out.print(Constants.B_LOGOUT); %>" />
+	</form> 
+	<form action="<% out.print(Constants.P_ADD_QUIZ); %>" method="post">
+		<input type="submit" value="<% out.print(Constants.B_ADD_QUIZ); %>" />
 	</form>
 	<%
 		}
