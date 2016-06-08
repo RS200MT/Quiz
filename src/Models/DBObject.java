@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import Questions.Question;
+import Questions.Question.QuestionType;
 
 public class DBObject {
 	public static final String ATTR_DB = "ATTR_DB";
@@ -20,6 +21,9 @@ public class DBObject {
 	public static final String TABLE_USERS = "users";
 	public static final String TABLE_QUIZES = "quizes";
 	public static final String TABLE_QUIZ_LOGS = "quiz_logs";
+	public static final String TABLE_CORRECT_ANSWERS = "correct_answers";
+	public static final String TABLE_QUESTION_IMAGES = "question_images";
+	public static final String TABLE_MULTIPLE_CHOICES = "multiple_choices";
 
 	public DBObject() {
 		try {
@@ -81,17 +85,17 @@ public class DBObject {
 	 * the database;
 	 * 
 	 * @param query
-	 * @throws SQLException 
+	 * @throws SQLException
 	 */
-	private int executeUpdate(String query, Connection conn){
+	private int executeUpdate(String query, Connection conn) {
 		int id = 0;
 		try {
 			Statement stmt1;
 			stmt1 = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 			stmt1.executeUpdate(query, Statement.RETURN_GENERATED_KEYS);
 			ResultSet rs = stmt1.getGeneratedKeys();
-			if (rs.next()){
-			   id = rs.getInt(1);
+			if (rs.next()) {
+				id = rs.getInt(1);
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -270,6 +274,30 @@ public class DBObject {
 		int quizId = executeUpdate(query, conn);
 		closeConnection(conn);
 		return quizId;
+	}
+
+	// This function gets quizId and question and inserts this question in
+	// database for the quiz
+	public void addQuestionToQuiz(int quizId, Question question) {
+		Connection conn = getConnection();
+		Question.QuestionType type = question.getType();
+		String quest = question.getQuestion();
+		ArrayList<String> answers = question.getAnswer();
+		int questionId = executeUpdate("INSERT INTO " + TABLE_QUIZES + " (quiz_id, question, q_type) VALUES ('" + quizId
+				+ "', '" + quest + "', '" + type + "');", conn);
+		for (int i = 0; i < answers.size(); i++)
+			executeUpdate("INSERT INTO " + TABLE_CORRECT_ANSWERS + " (question_id, correct_answer) VALUES ('"
+					+ questionId + "', '" + answers.get(i) + "');", conn);
+		if (type == Question.QuestionType.MultipleChoice) {
+			ArrayList<String> multiple_ch = question.getPossibleAnswers();
+			for (int i = 0; i < multiple_ch.size(); i++)
+				executeUpdate("INSERT INTO " + TABLE_MULTIPLE_CHOICES + " (question_id, answer) VALUES ('" + questionId
+						+ "', '" + multiple_ch.get(i) + "');", conn);
+		}
+		if (type == Question.QuestionType.PictureResponse)
+			executeUpdate("INSERT INTO " + TABLE_QUESTION_IMAGES + " (question_id, image_url) VALUES ('" + questionId
+					+ "', '" + question.getImageURL() + "');", conn);
+		closeConnection(conn);
 	}
 
 	private void example() {
