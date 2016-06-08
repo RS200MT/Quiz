@@ -278,7 +278,7 @@ public class DBObject {
 
 	// This function gets quizId and question and inserts this question in
 	// database for the quiz
-	public void addQuestionToQuiz(int quizId, Question question) {
+	public int addQuestionToQuiz(int quizId, Question question) {
 		Connection conn = getConnection();
 		Question.QuestionType type = question.getType();
 		String quest = question.getQuestion();
@@ -298,6 +298,7 @@ public class DBObject {
 			executeUpdate("INSERT INTO " + TABLE_QUESTION_IMAGES + " (question_id, image_url) VALUES ('" + questionId
 					+ "', '" + question.getImageURL() + "');", conn);
 		closeConnection(conn);
+		return questionId;
 	}
 
 	private void example() {
