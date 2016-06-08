@@ -27,6 +27,11 @@ public class Constants {
 	public static final String REGISTER_EMAIL = "register_email";
 	public static final String REGISTER_PASSWORD = "register_password";
 	public static final String ADD_QUIZ_TITLE = "quiz_title";
+	public static final String ADD_QUESTION_QUESTION = "question";
+	public static final String ADD_QUESTION_ANSWER = "answer";
+	public static final String ADD_QUESTION_TYPE = "type";
+	public static final String ADD_QUESTION_IMAGE = "image";
+	public static final String ADD_QUESTION_POSSIBLE_ANSWER = "possibleAnswer";
 	
 	// Errors and descriptions
 	public static final String LOGIN_USER_NOT_FOUND = "The username was not found!";
