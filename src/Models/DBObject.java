@@ -20,6 +20,7 @@ public class DBObject {
 
 	public static final String TABLE_USERS = "users";
 	public static final String TABLE_QUIZES = "quizes";
+	public static final String TABLE_QUESTIONS = "questions";
 	public static final String TABLE_QUIZ_LOGS = "quiz_logs";
 	public static final String TABLE_CORRECT_ANSWERS = "correct_answers";
 	public static final String TABLE_QUESTION_IMAGES = "question_images";
@@ -282,21 +283,21 @@ public class DBObject {
 	// database for the quiz
 	public int addQuestionToQuiz(int quizId, Question question) {
 		Connection conn = getConnection();
-		Question.QuestionType type = question.getType();
+		int type = question.getType().getType();
 		String quest = question.getQuestion();
 		ArrayList<String> answers = question.getAnswer();
-		int questionId = executeUpdate("INSERT INTO " + TABLE_QUIZES + " (quiz_id, question, q_type) VALUES ('" + quizId
+		int questionId = executeUpdate("INSERT INTO " + TABLE_QUESTIONS + " (quiz_id, question, q_type) VALUES ('" + quizId
 				+ "', '" + quest + "', '" + type + "');", conn);
 		for (int i = 0; i < answers.size(); i++)
 			executeUpdate("INSERT INTO " + TABLE_CORRECT_ANSWERS + " (question_id, correct_answer) VALUES ('"
 					+ questionId + "', '" + answers.get(i) + "');", conn);
-		if (type == Question.QuestionType.MultipleChoice) {
+		if (type == Question.QuestionType.MultipleChoice.getType()) {
 			ArrayList<String> multiple_ch = question.getPossibleAnswers();
 			for (int i = 0; i < multiple_ch.size(); i++)
 				executeUpdate("INSERT INTO " + TABLE_MULTIPLE_CHOICES + " (question_id, answer) VALUES ('" + questionId
 						+ "', '" + multiple_ch.get(i) + "');", conn);
 		}
-		if (type == Question.QuestionType.PictureResponse)
+		if (type == Question.QuestionType.PictureResponse.getType())
 			executeUpdate("INSERT INTO " + TABLE_QUESTION_IMAGES + " (question_id, image_url) VALUES ('" + questionId
 					+ "', '" + question.getImageURL() + "');", conn);
 		closeConnection(conn);

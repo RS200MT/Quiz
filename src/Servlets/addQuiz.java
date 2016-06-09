@@ -41,7 +41,8 @@ public class addQuiz extends HttpServlet {
 		DBObject obj = (DBObject) getServletContext().getAttribute(DBObject.ATTR_DB);
 		User user = (User)request.getSession().getAttribute(Constants.ATTR_USER);
 		int quizId = obj.addQuiz(title, user.getId());
-		request.getRequestDispatcher(Constants.P_HOMEPAGE).forward(request, response);
+		request.setAttribute(Constants.ATTR_QUIZ_ID_FOR_QUESTION, quizId);
+		request.getRequestDispatcher(Constants.P_ADD_QUESTION).forward(request, response);
 	}
 
 }
