@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.apache.catalina.tribes.util.Arrays;
 
-import com.sun.javafx.iio.ImageStorage.ImageType;
+
 
 public class Question {
 	public enum QuestionType {
