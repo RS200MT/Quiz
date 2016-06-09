@@ -37,7 +37,7 @@ public class Question {
 		};
 		
 		public int getType(){
-			return 1;
+			return 0;
 		}
 	}
 
@@ -54,8 +54,10 @@ public class Question {
 		switch (qType) {
 		case MultipleChoice:
 			this.possibleAnswers = new ArrayList<String>((ArrayList<String>) questionInfo.get(2));
+			break;
 		case PictureResponse:
 			this.imageUrl = (String) questionInfo.get(2);
+			break;
 		default:
 			try {
 				throw new Exception();

@@ -7,6 +7,7 @@ public class Constants {
 	public static final String P_LOGIN = "Login.jsp"; 
 	public static final String P_REGISTER = "newAccount.jsp";
 	public static final String P_ADD_QUIZ = "addQuiz.jsp";
+	public static final String P_ADD_QUESTION = "addQuestion.jsp";
 	
 	// Servlets
 	public static final String S_LOGOUT = "Logout";
@@ -32,6 +33,7 @@ public class Constants {
 	public static final String ADD_QUESTION_QUESTION = "question";
 	public static final String ADD_QUESTION_ANSWER = "answer";
 	public static final String ADD_QUESTION_TYPE = "type";
+	public static final String ADD_QUESTION_QUIZ_ID = "quizId";
 	public static final String ADD_QUESTION_IMAGE = "image";
 	public static final String ADD_QUESTION_POSSIBLE_ANSWER = "possibleAnswer";
 	public static final String ADD_QUESTION_DONE_QUIZ = "doneQuiz";
@@ -46,4 +48,5 @@ public class Constants {
 	public static final String ATTR_FAILED_LOGIN = "FAILED_LOGIN";
 	public static final String ATTR_USERNAME_EXISTS = "USERENAME_EXISTS";
 	public static final String ATTR_USER = "USER";
+	public static final String ATTR_QUIZ_ID_FOR_QUESTION = "quizId";
 }
