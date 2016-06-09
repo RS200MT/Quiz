@@ -57,18 +57,17 @@ public class addQuestion extends HttpServlet {
  		questionInfo.add(question);
  		questionInfo.add(answers);
  		Question q = null;
- 		if(img_url != null) questionInfo.add(img_url);
-		DBObject obj = (DBObject) getServletContext().getAttribute(DBObject.ATTR_DB);
- 		switch(type){
-	 		case 1 : q = new Question(QuestionType.QuestionResponse,questionInfo);
-	 				break;
-	 		case 2 : q = new Question(QuestionType.FillInBlank,questionInfo);
-	 				break;
-	 		case 3 : q = new Question(QuestionType.MultipleChoice,questionInfo);
-	 				break;
-	 		case 4: q = new Question(QuestionType.PictureResponse,questionInfo);
-	 				break;
+ 		if(type == QuestionType.PictureResponse.getType()){
+ 			questionInfo.add(img_url);
+ 		} else if(type == QuestionType.MultipleChoice.getType()){
+ 			ArrayList<String> arr = new ArrayList<String>();
+ 			for(int j=1; j <=4 ; j++){
+ 				arr.add(request.getParameter(Constants.ADD_QUESTION_POSSIBLE_ANSWER + i));
+ 			}
+ 			questionInfo.add(arr);
  		}
+		DBObject obj = (DBObject) getServletContext().getAttribute(DBObject.ATTR_DB);
+ 		q = new Question(QuestionType.values()[type],questionInfo);
  		obj.addQuestionToQuiz(quizId, q);
  		
 	}
