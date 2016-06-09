@@ -44,7 +44,6 @@ public class addQuestion extends HttpServlet {
 		int quizId = Integer.parseInt(request.getParameter("quiz_id"));
 		String question = request.getParameter(Constants.ADD_QUESTION_QUESTION);
  		int type = Integer.parseInt(request.getParameter(Constants.ADD_QUESTION_TYPE));
- 		String img_url = request.getParameter(Constants.ADD_QUESTION_IMAGE);
  		ArrayList<String> answers = new ArrayList<String>();
  		int i = 1;
  		while(true){
@@ -58,7 +57,7 @@ public class addQuestion extends HttpServlet {
  		questionInfo.add(answers);
  		Question q = null;
  		if(type == QuestionType.PictureResponse.getType()){
- 			questionInfo.add(img_url);
+ 			questionInfo.add(request.getParameter(Constants.ADD_QUESTION_IMAGE));
  		} else if(type == QuestionType.MultipleChoice.getType()){
  			ArrayList<String> arr = new ArrayList<String>();
  			for(int j=1; j <=4 ; j++){
