@@ -10,7 +10,35 @@ import org.apache.catalina.tribes.util.Arrays;
 
 public class Question {
 	public static enum QuestionType {
-		NULL, QuestionResponse, FillInBlank, MultipleChoice, PictureResponse
+		NULL, 
+		QuestionResponse{
+			@Override
+			public int getType(){
+				return 1;
+			}
+		}, 
+		FillInBlank{
+			@Override
+			public int getType(){
+				return 2;
+			}
+		},
+		MultipleChoice{
+			@Override
+			public int getType(){
+				return 3;
+			}
+		}, 
+		PictureResponse{
+			@Override
+			public int getType(){
+				return 4;
+			}
+		};
+		
+		public int getType(){
+			return 1;
+		}
 	}
 
 	private QuestionType qType;

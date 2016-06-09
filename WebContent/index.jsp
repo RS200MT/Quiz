@@ -10,6 +10,7 @@
 </head>
 <body>
 	<%
+		
 		User curUser = (User) request.getSession().getAttribute(Constants.ATTR_USER);
 		if (curUser == null) {
 			request.getRequestDispatcher(Constants.P_LOGIN).forward(request, response);
