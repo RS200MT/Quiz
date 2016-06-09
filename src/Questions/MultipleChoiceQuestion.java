@@ -2,8 +2,6 @@ package Questions;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.JRadioButton;
-
 public class MultipleChoiceQuestion {
 	private String question = "";
 	private String correctAnswer = "";

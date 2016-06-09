@@ -6,11 +6,13 @@ public class Constants {
 	public static final String P_NEW_ACCOUNT = "newAccount.jsp";
 	public static final String P_LOGIN = "Login.jsp"; 
 	public static final String P_REGISTER = "newAccount.jsp";
+	public static final String P_ADD_QUIZ = "addQuiz.jsp";
 	
 	// Servlets
 	public static final String S_LOGOUT = "Logout";
 	public static final String S_LOGIN = "Login";
 	public static final String S_REGISTER = "addUser";
+	public static final String S_ADD_QUIZ = "addQuiz";
 	
 	// 
 	
@@ -27,6 +29,11 @@ public class Constants {
 	public static final String REGISTER_EMAIL = "register_email";
 	public static final String REGISTER_PASSWORD = "register_password";
 	public static final String ADD_QUIZ_TITLE = "quiz_title";
+	public static final String ADD_QUESTION_QUESTION = "question";
+	public static final String ADD_QUESTION_ANSWER = "answer";
+	public static final String ADD_QUESTION_TYPE = "type";
+	public static final String ADD_QUESTION_IMAGE = "image";
+	public static final String ADD_QUESTION_POSSIBLE_ANSWER = "possibleAnswer";
 	
 	// Errors and descriptions
 	public static final String LOGIN_USER_NOT_FOUND = "The username was not found!";

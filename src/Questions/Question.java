@@ -1,14 +1,15 @@
 package Questions;
 
 import java.util.ArrayList;
-import java.util.List;
+
 
 import org.apache.catalina.tribes.util.Arrays;
 
 
 
+
 public class Question {
-	public enum QuestionType {
+	public static enum QuestionType {
 		NULL, QuestionResponse, FillInBlank, MultipleChoice, PictureResponse
 	}
 
@@ -21,18 +22,11 @@ public class Question {
 	public Question(QuestionType t, ArrayList<Object> questionInfo) {
 		this.qType = t;
 		this.question = (String) questionInfo.get(0);
+		this.answers = new ArrayList<String>((ArrayList<String>) questionInfo.get(1));
 		switch (qType) {
-		case QuestionResponse:
-			this.answers = new ArrayList<String>((ArrayList<String>) questionInfo.get(1));
-			break;
-		case FillInBlank:
-			this.answers = new ArrayList<String>((ArrayList<String>) questionInfo.get(1));
-			break;
 		case MultipleChoice:
-			this.answers = new ArrayList<String>((ArrayList<String>) questionInfo.get(1));
 			this.possibleAnswers = new ArrayList<String>((ArrayList<String>) questionInfo.get(2));
 		case PictureResponse:
-			this.answers = new ArrayList<String>((ArrayList<String>) questionInfo.get(1));
 			this.imageUrl = (String) questionInfo.get(2);
 		default:
 			try {
@@ -67,6 +61,10 @@ public class Question {
 		if (this.qType == QuestionType.PictureResponse)
 			return this.imageUrl;
 		return null;
+	}
+
+	public QuestionType getType() {
+		return this.qType;
 	}
 
 }

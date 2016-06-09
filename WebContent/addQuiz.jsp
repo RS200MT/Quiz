@@ -17,7 +17,7 @@
 			request.getRequestDispatcher(Constants.P_HOMEPAGE).forward(request, response);
 		} else {
 	%>
-	<form action="addQuiz" method="post">
+	<form action="<% out.print(Constants.S_ADD_QUIZ); %>" method="post">
 		<p>
 			Quiz title: <input type="text" required="required"
 				name="<%out.print(Constants.ADD_QUIZ_TITLE);%>"
