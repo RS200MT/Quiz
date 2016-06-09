@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<%@page import="Questions.Question"%>
 <%@page import="Questions.Question.QuestionType"%>
 <%@page import="Models.Constants"%>
 <html>
@@ -51,69 +52,110 @@
 </head>
 <body>
 	<script>
-		function displayForm(id) {
-			for (var i = 1; i < 5; i++) {
+		function displayForm(object, id) {
+			for (var i = 1; i < <% out.print(Question.QuestionType.values().length); %>; i++) { // 5 constantad unda gavitanot
 				if (i == id) {
 					document.getElementById("type" + i).style.display = "block";
-					document.getElementById("ADDQUESTION_TYPE").value = id;
+					document.getElementById('<% out.print(Constants.ADD_QUESTION_TYPE); %>').value = id;
 				} else
 					document.getElementById("type" + i).style.display = "none";
 			}
+			document.getElementById("question_type").innerHTML = object.innerHTML;
+		}
+		
+		var correctAnswersNum = 1;
+		function addCorrectAnswer(){
+			document.getElementById("removeFieldButton").style.display = "inline";
+		     document.getElementById('<%out.print(Constants.ADD_QUESTION_ANSWER);%>').innerHTML += '<p id="<%out.print(Constants.ADD_QUESTION_ANSWER);%>' + ++correctAnswersNum + '">Correct answer ' + correctAnswersNum + ': <input type="text" required="required" name="<%out.print(Constants.ADD_QUESTION_ANSWER);%>' + correctAnswersNum + '"/></p>';
+		}
+		
+		function removeAnswersField() {
+			document.getElementById('<%out.print(Constants.ADD_QUESTION_ANSWER);%>' + correctAnswersNum).remove();
+			correctAnswersNum--;
+			if(correctAnswersNum == 1)
+				document.getElementById("removeFieldButton").style.display = "none";
 		}
 	</script>
-	
-	
+
+
 	<h2>Create new question</h2>
 	<p>Click on the button to choose question type.</p>
 
 	<div class="dropdown">
-		<button onclick="myFunction()" class="dropbtn">Question Type</button>
+		<button onclick="myFunction()" class="dropbtn" id="question_type">Question-response</button>
 		<div id="myDropdown" class="dropdown-content">
-			<a href="#1" onClick="displayForm('1')">Question-response</a> <a
-				href="#2" onClick="displayForm('2')">Fill in blank</a> <a href="#3"
-				onClick="displayForm('3')">Multiple choice question</a> <a href="#4"
-				onClick="displayForm('4')">Picture question</a>
+			<a href="#1" onClick="displayForm(this, '1')">Question-response</a> <a
+				href="#2" onClick="displayForm(this, '2')">Fill in blank</a> <a
+				href="#3" onClick="displayForm(this, '3')">Multiple choice
+				question</a> <a href="#4" onClick="displayForm(this, '4')">Picture
+				question</a>
 		</div>
 	</div>
 
 
 	<form action="addQuestion" method="post">
-		<div id="type1" style="display: none">
-			<p>Question:<input type="text" required="required" name=<%out.print(Constants.ADD_QUESTION_QUESTION);%>></p>
-			<p>Correct answer:<input type="text" required="required" name=<%out.print(Constants.ADD_QUESTION_ANSWER);%>></p>
-			<p><input type="submit" value="Done"> </p>
-			<p><input type="submit" value="Next Question"> </p>
-		</div>
-		
-		<div id="type2" style="display: none">
-			<p>Question:<input type="text" required="required" name=<%out.print(Constants.ADD_QUESTION_QUESTION);%>></p>
-			<p>Correct answer:<input type="text" required="required" name=<%out.print(Constants.ADD_QUESTION_ANSWER);%>></p>
-			<p><input type="submit" value="Done"> </p>
-			<p><input type="submit" value="Next Question"> </p>
-		</div>
-		
+		<p>
+			Question: <input type="text" required="required"
+				name="<%out.print(Constants.ADD_QUESTION_QUESTION);%>"
+				id="<%out.print(Constants.ADD_QUESTION_QUESTION);%>" />
+		</p>
+		<div id="type1"></div>
+		<div id="type2" style="display: none"></div>
 		<div id="type3" style="display: none">
-			<p>Question:<input type="text" required="required" name=<%out.print(Constants.ADD_QUESTION_QUESTION);%>></p>
-			<p>Possible Answer 1:<input type="text" required="required" name=<%out.print(Constants.ADD_QUESTION_ANSWER+"1");%>> </p>
-			<p>Possible Answer 2:<input type="text" required="required" name=<%out.print(Constants.ADD_QUESTION_ANSWER+"2");%>> </p>
-			<p>Possible Answer 3:<input type="text" required="required" name=<%out.print(Constants.ADD_QUESTION_ANSWER+"3");%>> </p>
-			<p>Possible Answer 4:<input type="text" required="required" name=<%out.print(Constants.ADD_QUESTION_ANSWER+"4");%>> </p>
-			<p>Correct answer:<input type="text" required="required" name=<%out.print(Constants.ADD_QUESTION_ANSWER);%>></p>
-			<p><input type="submit" value="Done"> </p>
-			<p><input type="submit" value="Next Question"> </p>
+			<p>
+				Possible Answer 1: <input type="text" required="required"
+					name="<%out.print(Constants.ADD_QUESTION_POSSIBLE_ANSWER + "1");%>"
+					id="<%out.print(Constants.ADD_QUESTION_POSSIBLE_ANSWER + "1");%>" />
+			</p>
+			<p>
+				Possible Answer 2: <input type="text" required="required"
+					name="<%out.print(Constants.ADD_QUESTION_POSSIBLE_ANSWER + "2");%>"
+					id="<%out.print(Constants.ADD_QUESTION_POSSIBLE_ANSWER + "2");%>" />
+			</p>
+			<p>
+				Possible Answer 3: <input type="text" required="required"
+					name="<%out.print(Constants.ADD_QUESTION_POSSIBLE_ANSWER + "3");%>"
+					id="<%out.print(Constants.ADD_QUESTION_POSSIBLE_ANSWER + "3");%>" />
+			</p>
+			<p>
+				Possible Answer 4: <input type="text" required="required"
+					name="<%out.print(Constants.ADD_QUESTION_POSSIBLE_ANSWER + "4");%>"
+					id="<%out.print(Constants.ADD_QUESTION_POSSIBLE_ANSWER + "4");%>" />
+			</p>
 		</div>
-		
 		<div id="type4" style="display: none">
-			<p>Question:<input type="text" required="required" name=<%out.print(Constants.ADD_QUESTION_QUESTION);%>></p>
-			<p>Correct answer:<input type="text" required="required" name=<%out.print(Constants.ADD_QUESTION_ANSWER);%>></p>
-			<p>Image URL:<input type="text" required="required" name=<%out.print(Constants.ADD_QUESTION_IMAGE); %>></p>
-			<p><input type="submit" value="Done"> </p>
-			<p><input type="submit" value="Next Question"> </p>
+			<p>
+				Image URL: <input type="text" required="required"
+					name="<%out.print(Constants.ADD_QUESTION_IMAGE);%>"
+					id="<%out.print(Constants.ADD_QUESTION_IMAGE);%>" />
+			</p>
 		</div>
-		<input type="hidden" required="required" name="ADDQUESTION_TYPE"
-			id="ADDQUESTION_TYPE" readonly />
+
+		<p id="<%out.print(Constants.ADD_QUESTION_ANSWER);%>">
+			Correct answer 1: <input type="text" required="required"
+				name="<%out.print(Constants.ADD_QUESTION_ANSWER);%>"
+				id="<%out.print(Constants.ADD_QUESTION_ANSWER + 1);%>" />
+		</p>
+		<input type="hidden" required="required"
+			name="<%out.print(Constants.ADD_QUESTION_TYPE);%>"
+			id="<%out.print(Constants.ADD_QUESTION_TYPE);%>" readonly />
+		<p>
+			<input type="submit" value="Done"
+				name="<%out.print(Constants.ADD_QUESTION_DONE_QUIZ);%>"
+				id="<%out.print(Constants.ADD_QUESTION_DONE_QUIZ);%>" />
+		</p>
+		<p>
+			<input type="submit" value="Next Question"
+				name="<%out.print(Constants.ADD_QUESTION_NEXT_QUESTION);%>"
+				id="<%out.print(Constants.ADD_QUESTION_NEXT_QUESTION);%>" />
+		</p>
 	</form>
+		<button onClick="addCorrectAnswer()">Add another correct
+			answer</button>
+		<button onClick="removeAnswersField()" id="removeFieldButton" style="display:none">remove</button>
 	<script>
+
+		document.getElementById('<% out.print(Constants.ADD_QUESTION_TYPE); %>').value = 1;
 		/* When the user clicks on the button, 
 		 toggle between hiding and showing the dropdown content */
 		function myFunction() {

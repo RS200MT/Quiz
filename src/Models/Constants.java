@@ -34,6 +34,8 @@ public class Constants {
 	public static final String ADD_QUESTION_TYPE = "type";
 	public static final String ADD_QUESTION_IMAGE = "image";
 	public static final String ADD_QUESTION_POSSIBLE_ANSWER = "possibleAnswer";
+	public static final String ADD_QUESTION_DONE_QUIZ = "doneQuiz";
+	public static final String ADD_QUESTION_NEXT_QUESTION = "nextQuestion";
 	
 	// Errors and descriptions
 	public static final String LOGIN_USER_NOT_FOUND = "The username was not found!";
