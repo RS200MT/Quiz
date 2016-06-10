@@ -37,8 +37,8 @@ public class nextQuestion extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		Quiz q = (Quiz)request.getSession().getAttribute("A");
-		if(q.isSingleQuestion){
-			q.setAnswer(q.getCurrentIndex,(String)request.getParameter(""));
+		if(q.isSingleQuestion()){
+			q.setAnswer(q.getCurrentIndex(),(String)request.getParameter(""));
 		} else {
 			
 		}
