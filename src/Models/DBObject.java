@@ -283,7 +283,7 @@ public class DBObject {
 	// database for the quiz
 	public int addQuestionToQuiz(int quizId, Question question) {
 		Connection conn = getConnection();
-		int type = question.getType().getType();
+		int type = question.getType().ordinal();
 		String quest = question.getQuestion();
 		ArrayList<String> answers = question.getAnswer();
 		int questionId = executeUpdate("INSERT INTO " + TABLE_QUESTIONS + " (quiz_id, question, q_type) VALUES ('" + quizId
@@ -291,13 +291,13 @@ public class DBObject {
 		for (int i = 0; i < answers.size(); i++)
 			executeUpdate("INSERT INTO " + TABLE_CORRECT_ANSWERS + " (question_id, correct_answer) VALUES ('"
 					+ questionId + "', '" + answers.get(i) + "');", conn);
-		if (type == Question.QuestionType.MultipleChoice.getType()) {
+		if (type == Question.QuestionType.MultipleChoice.ordinal()) {
 			ArrayList<String> multiple_ch = question.getPossibleAnswers();
 			for (int i = 0; i < multiple_ch.size(); i++)
 				executeUpdate("INSERT INTO " + TABLE_MULTIPLE_CHOICES + " (question_id, answer) VALUES ('" + questionId
 						+ "', '" + multiple_ch.get(i) + "');", conn);
 		}
-		if (type == Question.QuestionType.PictureResponse.getType())
+		if (type == Question.QuestionType.PictureResponse.ordinal())
 			executeUpdate("INSERT INTO " + TABLE_QUESTION_IMAGES + " (question_id, image_url) VALUES ('" + questionId
 					+ "', '" + question.getImageURL() + "');", conn);
 		closeConnection(conn);

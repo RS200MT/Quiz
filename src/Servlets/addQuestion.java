@@ -61,9 +61,9 @@ public class addQuestion extends HttpServlet {
 		questionInfo.add(question);
 		questionInfo.add(answers);
 		Question q = null;
-		if (type == QuestionType.PictureResponse.getType()) {
+		if (type == QuestionType.PictureResponse.ordinal()) {
 			questionInfo.add(request.getParameter(Constants.ADD_QUESTION_IMAGE));
-		} else if (type == QuestionType.MultipleChoice.getType()) {
+		} else if (type == QuestionType.MultipleChoice.ordinal()) {
 			ArrayList<String> arr = new ArrayList<String>();
 			for (int j = 1; j <= 4; j++) {
 				arr.add(request.getParameter(Constants.ADD_QUESTION_POSSIBLE_ANSWER + j));

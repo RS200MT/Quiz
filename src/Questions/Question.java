@@ -11,34 +11,10 @@ import org.apache.catalina.tribes.util.Arrays;
 public class Question {
 	public static enum QuestionType {
 		NULL, 
-		QuestionResponse{
-			@Override
-			public int getType(){
-				return 1;
-			}
-		}, 
-		FillInBlank{
-			@Override
-			public int getType(){
-				return 2;
-			}
-		},
-		MultipleChoice{
-			@Override
-			public int getType(){
-				return 3;
-			}
-		}, 
-		PictureResponse{
-			@Override
-			public int getType(){
-				return 4;
-			}
-		};
-		
-		public int getType(){
-			return 0;
-		}
+		QuestionResponse, 
+		FillInBlank,
+		MultipleChoice, 
+		PictureResponse
 	}
 
 	private QuestionType qType;
@@ -59,11 +35,6 @@ public class Question {
 			this.imageUrl = (String) questionInfo.get(2);
 			break;
 		default:
-			try {
-				throw new Exception();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
 			break;
 		}
 	}
