@@ -208,26 +208,26 @@ public class DBObject {
 	}
 
 
-	public ArrayList<Quiz> getRecentQuizes(int numQuizes) throws SQLException {
-		ArrayList<Quiz> res = new ArrayList<Quiz>();
-		Connection conn = getConnection();
-		Statement stm = conn.createStatement();
-		String query = "Select * from " + TABLE_QUIZES + "order by create_time desc limit " + numQuizes;
-		ResultSet rs = getResultSet(query, conn);
-		while (rs.next()) {
-			int id = rs.getInt(0);
-			String title = rs.getString(1);
-			String author = rs.getString(2);
-			String date = rs.getTimestamp(3).toString();
-
-			int timesWritten = rs.getInt(4);
-			ArrayList<Question> questions = getQuestionsForQuiz(id, conn);
-			Quiz q = new Quiz(id, author, questions, timesWritten);
-			res.add(q);
-		}
-		return res;
-
-	}
+//	public ArrayList<Quiz> getRecentQuizes(int numQuizes) throws SQLException {
+//		ArrayList<Quiz> res = new ArrayList<Quiz>();
+//		Connection conn = getConnection();
+//		Statement stm = conn.createStatement();
+//		String query = "Select * from " + TABLE_QUIZES + "order by create_time desc limit " + numQuizes;
+//		ResultSet rs = getResultSet(query, conn);
+//		while (rs.next()) {
+//			int id = rs.getInt(0);
+//			String title = rs.getString(1);
+//			String author = rs.getString(2);
+//			String date = rs.getTimestamp(3).toString();
+//
+//			int timesWritten = rs.getInt(4);
+//			ArrayList<Question> questions = getQuestionsForQuiz(id, conn);
+//			Quiz q = new Quiz(id, author, questions, timesWritten);
+//			res.add(q);
+//		}
+//		return res;
+//
+//	}
 
 	/**
 	 * Returns demanded amount of most popular quizes
@@ -235,29 +235,29 @@ public class DBObject {
 	 * @param numQuizes
 	 * @throws SQLException
 	 */
-	public ArrayList<Quiz> getPopularQuizes(int numQuizes) throws SQLException {
-		ArrayList<Quiz> res = new ArrayList<Quiz>();
-		Connection conn = getConnection();
-		Statement stm = conn.createStatement();
-		// String query = "SELECT * FROM " + TABLE_QUIZ_LOGS +
-		// "GROUP BY 'quiz_id' ORDER BY COUNT('user_id') LIMIT " + numQuizes +
-		// ";";
-
-		String query = "SELECT 'quiz_id' FROM " + TABLE_QUIZES + " ORDER BY 'times_written' DESC LIMIT " + numQuizes;
-		ResultSet rs = getResultSet(query, conn);
-		while (rs.next()) {
-			int id = rs.getInt(0);
-			String title = rs.getString(1);
-			String author = rs.getString(2);
-			String date = rs.getTimestamp(3).toString();
-			int timesWritten = rs.getInt(4);
-			ArrayList<Question> questions = getQuestionsForQuiz(id, conn);
-			Quiz q = new Quiz(id, author, questions, timesWritten);
-			res.add(q);
-		}
-		closeConnection(conn);
-		return res;
-	}
+//	public ArrayList<Quiz> getPopularQuizes(int numQuizes) throws SQLException {
+//		ArrayList<Quiz> res = new ArrayList<Quiz>();
+//		Connection conn = getConnection();
+//		Statement stm = conn.createStatement();
+//		// String query = "SELECT * FROM " + TABLE_QUIZ_LOGS +
+//		// "GROUP BY 'quiz_id' ORDER BY COUNT('user_id') LIMIT " + numQuizes +
+//		// ";";
+//
+//		String query = "SELECT 'quiz_id' FROM " + TABLE_QUIZES + " ORDER BY 'times_written' DESC LIMIT " + numQuizes;
+//		ResultSet rs = getResultSet(query, conn);
+//		while (rs.next()) {
+//			int id = rs.getInt(0);
+//			String title = rs.getString(1);
+//			String author = rs.getString(2);
+//			String date = rs.getTimestamp(3).toString();
+//			int timesWritten = rs.getInt(4);
+//			ArrayList<Question> questions = getQuestionsForQuiz(id, conn);
+//			Quiz q = new Quiz(id, author, questions, timesWritten);
+//			res.add(q);
+//		}
+//		closeConnection(conn);
+//		return res;
+//	}
 
 	private ArrayList<Question> getQuestionsForQuiz(int id, Connection conn) {
 		try {

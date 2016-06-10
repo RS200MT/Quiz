@@ -1,37 +1,32 @@
 package Models;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import Questions.Question;
 
 public class Quiz {
 	private int id;
-	private String author; // User author?
+	private String author;
 	private List<Question> questions;
+	private HashMap<Integer, String> userAnswers;
 	private int timesWritten;
+	private int currentQuestion;
+	private boolean singleQuestion;
 	
-	public Quiz(int id, String author) {
+	public Quiz(int id, String author, int timesWritten) {
 		this.id = id;
 		this.author = author;
-		this.questions = new ArrayList<Question>();
-		this.timesWritten = 0;
-	}
-	
-	public Quiz(int id, String author, List<Question> questions, int timesWritten) {
-		this.id = id;
-		this.author = author;
-		this.questions = questions;
 		this.timesWritten = timesWritten;
+		this.questions = new ArrayList<Question>();
+		this.userAnswers = new HashMap<Integer, String>();
+		this.currentQuestion = 0;
+		this.singleQuestion = true;
 	}
-	
 	
 	public void addQuestion(Question q) {
 		this.questions.add(q);
-	}
-	
-	public void IncreaseTimesWrittenBy(int num) {
-		this.timesWritten += num;
 	}
 	
 	public int getID() {
@@ -49,4 +44,35 @@ public class Quiz {
 	public int getTimesWritten() {
 		return this.timesWritten;
 	}
+	
+	public int getCurrentIndex(){
+		return currentQuestion;
+	}
+	
+	public void setAnswer(int questionIndex, String answer) {
+		userAnswers.put(questionIndex, answer);
+	}
+	
+	public boolean hasMoreQuestions() {
+		return currentQuestion < questions.size();
+	}
+	
+	public Question getQuestion() {
+		return questions.get(currentQuestion++);
+	}
+	
+	public void randomizeQuestions() {
+		//TODO
+	}
+	
+	public boolean isSingleQuestion() {
+		return this.singleQuestion;
+	}
+	
+	public void allQuestionsOnPage() {
+		this.singleQuestion = false;
+	}
+	
+	
+	
 }
