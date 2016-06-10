@@ -13,6 +13,7 @@ public class Quiz {
 	private HashMap<Integer, String> userAnswers;
 	private int timesWritten;
 	private int currentQuestion;
+	private boolean singleQuestion;
 	
 	public Quiz(int id, String author, int timesWritten) {
 		this.id = id;
@@ -21,6 +22,7 @@ public class Quiz {
 		this.questions = new ArrayList<Question>();
 		this.userAnswers = new HashMap<Integer, String>();
 		this.currentQuestion = 0;
+		this.singleQuestion = true;
 	}
 	
 	public void addQuestion(Question q) {
@@ -61,6 +63,14 @@ public class Quiz {
 	
 	public void randomizeQuestions() {
 		//TODO
+	}
+	
+	public boolean isSingleQuestion() {
+		return this.singleQuestion;
+	}
+	
+	public void allQuestionsOnPage() {
+		this.singleQuestion = false;
 	}
 	
 	
