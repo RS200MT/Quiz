@@ -304,6 +304,19 @@ public class DBObject {
 		return questionId;
 	}
 
+	public Quiz getQuizById(int id) throws SQLException {
+		Connection conn = getConnection();
+		String query = "SELECT * FROM "+TABLE_QUIZES+" WHERE 'id'=" + id + ";";
+		ResultSet rs = getResultSet(query, conn);
+		String author= rs.getString("author");
+		Quiz q = new Quiz(id, author);
+		closeConnection(conn);
+		
+		return null;
+		
+	}
+	
+	
 	private void example() {
 		Connection conn = getConnection();
 

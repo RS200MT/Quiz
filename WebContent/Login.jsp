@@ -7,6 +7,27 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Log in</title>
+
+<style>
+
+body {
+	background-color: #eeffcc;
+	
+}
+p {
+	text-align:center;
+	font-family: Arial;
+}
+
+a {
+	text-align:center;
+
+}
+
+
+
+</style>
+
 </head>
 <body>
 	<%
@@ -24,7 +45,7 @@
 		<p>
 			<input type="submit" value="<% out.print(Constants.B_LOGIN); %>">
 	</form>
-	<a href="<% out.print(Constants.P_REGISTER); %>"> Create New Account</a>
+	<center><a href="<% out.print(Constants.P_REGISTER); %>"> Create New Account</a></center>
 	<%
 		} else {
 			request.getRequestDispatcher(Constants.P_HOMEPAGE).forward(request, response);
