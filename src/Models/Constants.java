@@ -38,6 +38,8 @@ public class Constants {
 	public static final String ADD_QUESTION_POSSIBLE_ANSWER = "possibleAnswer";
 	public static final String ADD_QUESTION_DONE_QUIZ = "doneQuiz";
 	public static final String ADD_QUESTION_NEXT_QUESTION = "nextQuestion";
+	public static final String QUIZ_PAGE_ID = "id";
+	public static final String QUIZ_PAGE_SINGLE_QUESTION = "singleQuestion";
 	
 	// Errors and descriptions
 	public static final String LOGIN_USER_NOT_FOUND = "The username was not found!";
@@ -49,4 +51,5 @@ public class Constants {
 	public static final String ATTR_USERNAME_EXISTS = "USERENAME_EXISTS";
 	public static final String ATTR_USER = "USER";
 	public static final String ATTR_QUIZ_ID_FOR_QUESTION = "quizId";
+	public static final String ATTR_SESSION_QUIZ = "quizAttr";
 }
