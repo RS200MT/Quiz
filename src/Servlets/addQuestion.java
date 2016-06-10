@@ -60,10 +60,9 @@ public class addQuestion extends HttpServlet {
 		ArrayList<Object> questionInfo = new ArrayList<Object>();
 		questionInfo.add(question);
 		questionInfo.add(answers);
-		Question q = null;
-		if (type == QuestionType.PictureResponse.getType()) {
+		if (type == QuestionType.PictureResponse.ordinal()) {
 			questionInfo.add(request.getParameter(Constants.ADD_QUESTION_IMAGE));
-		} else if (type == QuestionType.MultipleChoice.getType()) {
+		} else if (type == QuestionType.MultipleChoice.ordinal()) {
 			ArrayList<String> arr = new ArrayList<String>();
 			for (int j = 1; j <= 4; j++) {
 				arr.add(request.getParameter(Constants.ADD_QUESTION_POSSIBLE_ANSWER + j));
@@ -71,7 +70,7 @@ public class addQuestion extends HttpServlet {
 			questionInfo.add(arr);
 		}
 		DBObject obj = (DBObject) getServletContext().getAttribute(DBObject.ATTR_DB);
-		q = new Question(QuestionType.values()[type], questionInfo);
+		Question q = new Question(QuestionType.values()[type], questionInfo);
 		obj.addQuestionToQuiz(quizId, q);
 		if (request.getParameter(Constants.ADD_QUESTION_NEXT_QUESTION) != null) {
 			request.setAttribute(Constants.ATTR_QUIZ_ID_FOR_QUESTION, quizId);

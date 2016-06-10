@@ -106,17 +106,10 @@ public class DBObject {
 	}
 
 	/**
-	 * <<<<<<< HEAD
 	 * 
 	 * Checks if user with given name or email already exists; If so, returns
 	 * false, if such a user doesn't exist, adds the new user into users table.
 	 * Uses executeUpdate; Method receives hashed password;
-	 *
-	 * ======= Checks if user with given name or email already exists; Is so,
-	 * returns false, if such a user doesn't exist, adds the new user into users
-	 * table. Uses executeUpdate; Method receives hashed password;
-	 * 
-	 * >>>>>>> f042ebe08aae1506ef170d83571f76e95fff8096
 	 * 
 	 * @param name
 	 * @param email
@@ -208,26 +201,26 @@ public class DBObject {
 	}
 
 
-	public ArrayList<Quiz> getRecentQuizes(int numQuizes) throws SQLException {
-		ArrayList<Quiz> res = new ArrayList<Quiz>();
-		Connection conn = getConnection();
-		Statement stm = conn.createStatement();
-		String query = "Select * from " + TABLE_QUIZES + "order by create_time desc limit " + numQuizes;
-		ResultSet rs = getResultSet(query, conn);
-		while (rs.next()) {
-			int id = rs.getInt(0);
-			String title = rs.getString(1);
-			String author = rs.getString(2);
-			String date = rs.getTimestamp(3).toString();
-
-			int timesWritten = rs.getInt(4);
-			ArrayList<Question> questions = getQuestionsForQuiz(id, conn);
-			Quiz q = new Quiz(id, author, questions, timesWritten);
-			res.add(q);
-		}
-		return res;
-
-	}
+//	public ArrayList<Quiz> getRecentQuizes(int numQuizes) throws SQLException {
+//		ArrayList<Quiz> res = new ArrayList<Quiz>();
+//		Connection conn = getConnection();
+//		Statement stm = conn.createStatement();
+//		String query = "Select * from " + TABLE_QUIZES + "order by create_time desc limit " + numQuizes;
+//		ResultSet rs = getResultSet(query, conn);
+//		while (rs.next()) {
+//			int id = rs.getInt(0);
+//			String title = rs.getString(1);
+//			String author = rs.getString(2);
+//			String date = rs.getTimestamp(3).toString();
+//
+//			int timesWritten = rs.getInt(4);
+//			ArrayList<Question> questions = getQuestionsForQuiz(id, conn);
+//			Quiz q = new Quiz(id, author, questions, timesWritten);
+//			res.add(q);
+//		}
+//		return res;
+//
+//	}
 
 	/**
 	 * Returns demanded amount of most popular quizes
@@ -235,39 +228,122 @@ public class DBObject {
 	 * @param numQuizes
 	 * @throws SQLException
 	 */
-	public ArrayList<Quiz> getPopularQuizes(int numQuizes) throws SQLException {
-		ArrayList<Quiz> res = new ArrayList<Quiz>();
-		Connection conn = getConnection();
-		Statement stm = conn.createStatement();
-		// String query = "SELECT * FROM " + TABLE_QUIZ_LOGS +
-		// "GROUP BY 'quiz_id' ORDER BY COUNT('user_id') LIMIT " + numQuizes +
-		// ";";
+//	public ArrayList<Quiz> getPopularQuizes(int numQuizes) throws SQLException {
+//		ArrayList<Quiz> res = new ArrayList<Quiz>();
+//		Connection conn = getConnection();
+//		Statement stm = conn.createStatement();
+//		// String query = "SELECT * FROM " + TABLE_QUIZ_LOGS +
+//		// "GROUP BY 'quiz_id' ORDER BY COUNT('user_id') LIMIT " + numQuizes +
+//		// ";";
+//
+//		String query = "SELECT 'quiz_id' FROM " + TABLE_QUIZES + " ORDER BY 'times_written' DESC LIMIT " + numQuizes;
+//		ResultSet rs = getResultSet(query, conn);
+//		while (rs.next()) {
+//			int id = rs.getInt(0);
+//			String title = rs.getString(1);
+//			String author = rs.getString(2);
+//			String date = rs.getTimestamp(3).toString();
+//			int timesWritten = rs.getInt(4);
+//			ArrayList<Question> questions = getQuestionsForQuiz(id, conn);
+//			Quiz q = new Quiz(id, author, questions, timesWritten);
+//			res.add(q);
+//		}
+//		closeConnection(conn);
+//		return res;
+//	}
 
-		String query = "SELECT 'quiz_id' FROM " + TABLE_QUIZES + " ORDER BY 'times_written' DESC LIMIT " + numQuizes;
+	
+
+	/**
+	 * Gets quiz with given id from database and return it;
+	 * @param id
+	 * @return Quiz
+	 * @throws SQLException
+	 */
+	public Quiz getQuizById(int id) throws SQLException {
+		Connection conn = getConnection();
+		String query = "SELECT * FROM "+TABLE_QUIZES+" WHERE id = " + id + ";";
 		ResultSet rs = getResultSet(query, conn);
-		while (rs.next()) {
-			int id = rs.getInt(0);
-			String title = rs.getString(1);
-			String author = rs.getString(2);
-			String date = rs.getTimestamp(3).toString();
-			int timesWritten = rs.getInt(4);
-			ArrayList<Question> questions = getQuestionsForQuiz(id, conn);
-			Quiz q = new Quiz(id, author, questions, timesWritten);
-			res.add(q);
+		int timesWritten=0;
+		int authorId=0;
+		if(rs.next()) {
+			authorId= rs.getInt("author");
+			timesWritten = rs.getInt("times_written");
+		}
+		ResultSet getAuthorName = getResultSet("SELECT * FROM "+TABLE_USERS+" WHERE id = "+authorId+";", conn);
+		String authorName = "";
+		if(getAuthorName.next()) {
+			authorName =getAuthorName.getString("user_name");
+		}
+		Quiz quiz = new Quiz(id, authorName, timesWritten);
+		ArrayList<Question> questions = getQuestionsForQuiz(id, conn);
+		for (Question q : questions) {
+			quiz.addQuestion(q);
+		
 		}
 		closeConnection(conn);
+		return quiz;
+	}
+	
+	
+	
+	/**
+	 * Get questions for quiz with given id; Assembles question infos 
+	 * from different tables depending on type of the question;
+	 * @param id
+	 * @param conn
+	 * @return
+	 * @throws SQLException 
+	 */
+	private ArrayList<Question> getQuestionsForQuiz(int id, Connection conn) throws SQLException {
+		ArrayList<Question> res = new ArrayList<Question>();
+		String query="SELECT * FROM "+TABLE_QUESTIONS+" WHERE quiz_id = "+id+";";
+		ResultSet rs = getResultSet(query, conn);
+		while(rs.next()) {
+			int qType = rs.getInt("q_type");
+			int qId = rs.getInt("id");
+			ArrayList<Object> qInfo = new ArrayList<Object>();
+			qInfo.add(rs.getString("question"));
+			getSpecificQuestionInfo(qInfo, qId, qType);
+			Question q = new Question(QuestionType.values()[qType], qInfo); //???????? QuestionType.values()[qType] sworia? TODO
+			res.add(q);
+		}
 		return res;
 	}
-
-	private ArrayList<Question> getQuestionsForQuiz(int id, Connection conn) {
-		try {
-			Statement stm = conn.createStatement();
-
-		} catch (SQLException e) {
-			e.printStackTrace();
+	
+	
+	/**
+	 * Gets correct answers and specific info for different types of questions;
+	 * @param info
+	 * @param qId
+	 * @param qType
+	 * @throws SQLException
+	 */
+	private void getSpecificQuestionInfo(ArrayList<Object> info, int qId, int qType) throws SQLException {
+		Connection conn = getConnection();
+		String getCorrectAnswers = "SELECT * FROM " + TABLE_CORRECT_ANSWERS + " WHERE question_id = "+qId+";"; 
+		ResultSet correctAnswers = getResultSet(getCorrectAnswers, conn);
+		ArrayList<String> corrAnswersForThisQuestion = new ArrayList<String>();
+		while(correctAnswers.next()) {
+			String nextAnswer = correctAnswers.getString("correct_answer");
+			corrAnswersForThisQuestion.add(nextAnswer);
 		}
-
-		return null;
+		info.add(1, corrAnswersForThisQuestion);
+		if(qType == QuestionType.MultipleChoice.ordinal()) {
+			String getPossibleAnswers = "SELECT * FROM "+TABLE_MULTIPLE_CHOICES+" WHERE question_id = "+qId+";";
+			ResultSet possibleAnswers = getResultSet(getPossibleAnswers, conn);
+			ArrayList<String> possibleAnswersList = new ArrayList<String>();
+			while(possibleAnswers.next()) {
+				String nextPossAnswer = possibleAnswers.getString("answer");
+				possibleAnswersList.add(nextPossAnswer);
+			}
+			info.add(2, possibleAnswersList);
+		} else if(qType == QuestionType.PictureResponse.ordinal()) {
+			String imageURL="SELECT * FROM "+TABLE_QUESTION_IMAGES+" WHERE question_id = "+qId+";";
+			ResultSet url = getResultSet(imageURL, conn);
+			info.add(2, url.getString("image_url"));
+		}
+		conn.close();
 	}
 
 	// This function insert quiz in database
@@ -283,7 +359,7 @@ public class DBObject {
 	// database for the quiz
 	public int addQuestionToQuiz(int quizId, Question question) {
 		Connection conn = getConnection();
-		int type = question.getType().getType();
+		int type = question.getType().ordinal();
 		String quest = question.getQuestion();
 		ArrayList<String> answers = question.getAnswer();
 		int questionId = executeUpdate("INSERT INTO " + TABLE_QUESTIONS + " (quiz_id, question, q_type) VALUES ('" + quizId
@@ -291,30 +367,19 @@ public class DBObject {
 		for (int i = 0; i < answers.size(); i++)
 			executeUpdate("INSERT INTO " + TABLE_CORRECT_ANSWERS + " (question_id, correct_answer) VALUES ('"
 					+ questionId + "', '" + answers.get(i) + "');", conn);
-		if (type == Question.QuestionType.MultipleChoice.getType()) {
+		if (type == Question.QuestionType.MultipleChoice.ordinal()) {
 			ArrayList<String> multiple_ch = question.getPossibleAnswers();
 			for (int i = 0; i < multiple_ch.size(); i++)
 				executeUpdate("INSERT INTO " + TABLE_MULTIPLE_CHOICES + " (question_id, answer) VALUES ('" + questionId
 						+ "', '" + multiple_ch.get(i) + "');", conn);
 		}
-		if (type == Question.QuestionType.PictureResponse.getType())
+		if (type == Question.QuestionType.PictureResponse.ordinal())
 			executeUpdate("INSERT INTO " + TABLE_QUESTION_IMAGES + " (question_id, image_url) VALUES ('" + questionId
 					+ "', '" + question.getImageURL() + "');", conn);
 		closeConnection(conn);
 		return questionId;
 	}
 
-	public Quiz getQuizById(int id) throws SQLException {
-		Connection conn = getConnection();
-		String query = "SELECT * FROM "+TABLE_QUIZES+" WHERE 'id'=" + id + ";";
-		ResultSet rs = getResultSet(query, conn);
-		String author= rs.getString("author");
-		Quiz q = new Quiz(id, author);
-		closeConnection(conn);
-		
-		return null;
-		
-	}
 	
 	
 	private void example() {
