@@ -67,5 +67,9 @@ public class Question {
 	public QuestionType getType() {
 		return this.qType;
 	}
+	
+	public String toHTML() {
+		return "QUESTION: " + getQuestion() + " | TYPE:" + getType().ordinal();
+	}
 
 }
