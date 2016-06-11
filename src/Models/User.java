@@ -12,7 +12,7 @@ public class User {
 
 	public User(String userName, DBObject db) {
 		this.userName = userName;
-		HashMap<String, Object> userInfo = db.getUserInfo(this.userName, this.id, this.email, this.regDate, this.quizNumber, this.type);
+		HashMap<String, Object> userInfo = db.getUserInfo(this.userName);
 		this.id = (int)userInfo.get("id");
 		this.email = (String)userInfo.get("email");
 		this.regDate = (String)userInfo.get("reg_date");
