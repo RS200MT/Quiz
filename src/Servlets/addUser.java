@@ -31,7 +31,7 @@ public class addUser extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		request.getRequestDispatcher(Models.Constants.P_HOMEPAGE).forward(request, response);
+		request.getRequestDispatcher(Models.Constants.INDEX).forward(request, response);
 	}
 
 	/**
@@ -48,10 +48,10 @@ public class addUser extends HttpServlet {
 		}
 		if(obj.addUser(name, email, password)){
 			request.getSession().setAttribute(Models.Constants.ATTR_USER, new User(name, obj));
-			request.getRequestDispatcher(Models.Constants.P_HOMEPAGE).forward(request, response);
+			request.getRequestDispatcher(Models.Constants.INDEX).forward(request, response);
 		} else {
 			request.setAttribute(Constants.ATTR_USERNAME_EXISTS, Constants.REGISTER_USERNAME_EXISTS);
-			request.getRequestDispatcher(Models.Constants.P_NEW_ACCOUNT).forward(request, response);
+			request.getRequestDispatcher(Constants.getAction(Constants.INDEX_DO_REGISTER)).forward(request, response);
 		}
 	}
 
