@@ -14,6 +14,7 @@ public class Constants {
 	public static final String S_LOGIN = "Login";
 	public static final String S_REGISTER = "addUser";
 	public static final String S_ADD_QUIZ = "addQuiz";
+	public static final String S_QUIZING = "Quizing";
 	
 	// 
 	
@@ -39,8 +40,8 @@ public class Constants {
 	public static final String ADD_QUESTION_POSSIBLE_ANSWER = "possibleAnswer";
 	public static final String ADD_QUESTION_DONE_QUIZ = "doneQuiz";
 	public static final String ADD_QUESTION_NEXT_QUESTION = "nextQuestion";
-	public static final String QUIZ_PAGE_ID = "id";
-	public static final String QUIZ_PAGE_SINGLE_QUESTION = "singleQuestion";
+	public static final String QUIZINT_ID = "id";
+	public static final String QUIZINT_SINGLE_QUESTION = "singleQuestion";
 	
 	// Errors and descriptions
 	public static final String LOGIN_USER_NOT_FOUND = "The username was not found!";
@@ -74,9 +75,12 @@ public class Constants {
 	public static final String INDEX_DO_ADD_QUIZ_TITLE = "Create new quiz";
 	public static final String INDEX_DO_ADD_QUESTION = "addQuestion";
 	public static final String INDEX_DO_ADD_QUESTION_TITLE = "Add question";
-	
+
 	public static final String INDEX_DO_MY_QUIZES = "myQuizes";
 	public static final String INDEX_DO_MY_QUIZES_TITLE = "my Quizes";
+
+	public static final String INDEX_DO_QUIZ_PAGE = "QuizPage";
+	public static final String INDEX_DO_QUIZ_PAGE_TITLE = "Quiz page";
 	
 	
 	

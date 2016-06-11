@@ -318,10 +318,7 @@ public class DBObject {
 			qInfo.add(rs.getString("question"));
 			getCorrectAnswers(qInfo, qId);
 			getSpecificQuestionInfo(qInfo, qId, qType);
-			Question q = new Question(QuestionType.values()[qType], qInfo); // ????????
-																			// QuestionType.values()[qType]
-																			// sworia?
-																			// TODO
+			Question q = new Question(QuestionType.values()[qType], qInfo); 
 			res.add(q);
 		}
 		return res;
