@@ -50,7 +50,7 @@ public class Question {
 		return false;
 	}
 
-	public ArrayList<String> getAnswer() {
+	public ArrayList<String> getAnswers() {
 		return this.answers;
 	}
 

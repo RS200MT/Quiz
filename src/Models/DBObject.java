@@ -81,6 +81,7 @@ public class DBObject {
 		return result;
 	}
 
+	
 	/**
 	 * Executes update queries, that is queries which cause changes in tables of
 	 * the database;
@@ -99,7 +100,6 @@ public class DBObject {
 				id = rs.getInt(1);
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return id;
@@ -132,6 +132,7 @@ public class DBObject {
 		}
 	}
 
+	
 	/**
 	 * Checks if user with given name or email already exists;
 	 * 
@@ -139,7 +140,6 @@ public class DBObject {
 	 * @param email
 	 * @return boolean
 	 */
-
 	private boolean userAlreadyExists(String name, String email, Connection conn) {
 		String query = "SELECT * FROM " + TABLE_USERS + " WHERE user_name = '" + name + "' or email = '" + email
 				+ "' limit 1;";
@@ -155,6 +155,7 @@ public class DBObject {
 		return false;
 	}
 
+	
 	/**
 	 * Get hashed password for user with given name;
 	 * 
@@ -177,8 +178,12 @@ public class DBObject {
 		return result;
 	}
 
-	public HashMap<String, Object> getUserInfo(String userName, int id, String email, String regDate, int quizNumber,
-			int type) {
+	/**
+	 * Gets info of the user with given name
+	 * @param userName
+	 * @return {@link HashMap}
+	 */
+	public HashMap<String, Object> getUserInfo(String userName) {
 		HashMap<String, Object> result = new HashMap<String, Object>();
 		Connection conn = getConnection();
 		String query = "Select * from " + TABLE_USERS + " where user_name = '" + userName + "';";
@@ -256,6 +261,7 @@ public class DBObject {
 
 	/**
 	 * Gets quiz with given id from database and return it;
+	 * Returns null if quiz with given id was not found;
 	 * @param id
 	 * @return Quiz
 	 * @throws SQLException
@@ -269,6 +275,8 @@ public class DBObject {
 		if(rs.next()) {
 			authorId= rs.getInt("author");
 			timesWritten = rs.getInt("times_written");
+		} else {
+			return null;
 		}
 		ResultSet getAuthorName = getResultSet("SELECT * FROM "+TABLE_USERS+" WHERE id = "+authorId+";", conn);
 		String authorName = "";
@@ -279,7 +287,6 @@ public class DBObject {
 		ArrayList<Question> questions = getQuestionsForQuiz(id, conn);
 		for (Question q : questions) {
 			quiz.addQuestion(q);
-		
 		}
 		closeConnection(conn);
 		return quiz;
@@ -304,6 +311,7 @@ public class DBObject {
 			int qId = rs.getInt("id");
 			ArrayList<Object> qInfo = new ArrayList<Object>();
 			qInfo.add(rs.getString("question"));
+			getCorrectAnswers(qInfo, qId);
 			getSpecificQuestionInfo(qInfo, qId, qType);
 			Question q = new Question(QuestionType.values()[qType], qInfo); //???????? QuestionType.values()[qType] sworia? TODO
 			res.add(q);
@@ -312,6 +320,10 @@ public class DBObject {
 	}
 	
 	
+	private void getCorrectAnswers(ArrayList<Object> qInfo, int qId) {
+		
+	}
+
 	/**
 	 * Gets correct answers and specific info for different types of questions;
 	 * @param info
@@ -361,7 +373,7 @@ public class DBObject {
 		Connection conn = getConnection();
 		int type = question.getType().ordinal();
 		String quest = question.getQuestion();
-		ArrayList<String> answers = question.getAnswer();
+		ArrayList<String> answers = question.getAnswers();
 		int questionId = executeUpdate("INSERT INTO " + TABLE_QUESTIONS + " (quiz_id, question, q_type) VALUES ('" + quizId
 				+ "', '" + quest + "', '" + type + "');", conn);
 		for (int i = 0; i < answers.size(); i++)
