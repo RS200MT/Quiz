@@ -22,6 +22,7 @@ public class Constants {
 	public static final String B_LOGIN = "Log in";
 	public static final String B_REGISTER = "Register";
 	public static final String B_ADD_QUIZ = "Create Quiz";
+	public static final String B_MY_QUIZES = "My quizes";
 	
 	// Parameter names and IDs
 	public static final String LOGIN_USERNAME = "login_username";
@@ -66,13 +67,18 @@ public class Constants {
 	public static final String INDEX_DO_HOMEPAGE = "homePage";	
 	public static final String INDEX_DO_HOMEPAGE_TITLE = "Home Page";	
 	public static final String INDEX_DO_PROFILE_INFO = "profileInfo";	
-	public static final String INDEX_DO_PROFILE_INFO_TITLE = "Profile info";
+	public static final String INDEX_DO_PROFILE_INFO_TITLE = "Log in";
 	public static final String INDEX_DO_REGISTER = "newAccount";	
 	public static final String INDEX_DO_REGISTER_TITLE = "Register new account";
 	public static final String INDEX_DO_ADD_QUIZ = "addQuiz";
 	public static final String INDEX_DO_ADD_QUIZ_TITLE = "Create new quiz";
 	public static final String INDEX_DO_ADD_QUESTION = "addQuestion";
 	public static final String INDEX_DO_ADD_QUESTION_TITLE = "Add question";
+	
+	public static final String INDEX_DO_MY_QUIZES = "myQuizes";
+	public static final String INDEX_DO_MY_QUIZES_TITLE = "my Quizes";
+	
+	
 	
 	public static String getAction(String action) {
 		return INDEX + "?" + INDEX_DO + "=" + action;

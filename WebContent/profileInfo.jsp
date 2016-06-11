@@ -30,6 +30,7 @@
 </form>
 
 <a href="<%=Constants.getAction(Constants.INDEX_DO_ADD_QUIZ)%>"><%=Constants.B_ADD_QUIZ%></a>
+<a href="<%=Constants.getAction(Constants.INDEX_DO_MY_QUIZES)%>"><%=Constants.B_MY_QUIZES%></a>
 <%
 	}
 %>
