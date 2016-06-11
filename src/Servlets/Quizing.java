@@ -66,8 +66,9 @@ public class Quizing extends HttpServlet {
 						.getParameter(Constants.INDEX_DO_QUIZ_QUESTION_ANSWER + (curQuiz.getCurrentIndex() - 1)));
 				System.out.println("2");
 				if (!curQuiz.hasMoreQuestions()) {
-					request.getSession().setAttribute(Constants.INDEX_DO_QUIZ_ATTR_RESULT_SCORE, curQuiz.getScore());
-					request.getSession().setAttribute(Constants.INDEX_DO_QUIZ_ATTR_FINISHED, 1);
+					request.setAttribute(Constants.INDEX_DO_QUIZ_ATTR_RESULT_SCORE, curQuiz.getScore());
+					request.setAttribute(Constants.INDEX_DO_QUIZ_ATTR_FINISHED, 1);
+					curQuiz.restart();
 					System.out.println("3");
 				}
 			}
@@ -83,6 +84,7 @@ public class Quizing extends HttpServlet {
 		int score = curQuiz.getScore();
 		request.setAttribute(Constants.INDEX_DO_QUIZ_ATTR_FINISHED, 1);
 		request.setAttribute(Constants.INDEX_DO_QUIZ_ATTR_RESULT_SCORE, score);
+		curQuiz.restart();
 	}
 
 	private void redirectToQuizPage(Quiz curQuiz, HttpServletRequest request, HttpServletResponse response) {
