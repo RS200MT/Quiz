@@ -52,4 +52,29 @@ public class Constants {
 	public static final String ATTR_USER = "USER";
 	public static final String ATTR_QUIZ_ID_FOR_QUESTION = "quizId";
 	public static final String ATTR_SESSION_QUIZ = "quizAttr";
+	
+	
+	
+	
+	// WASKA's constants new;
+	public static final String SITE_URL = "http://localhost:8080/QuizWebsite";
+	
+	public static final String INDEX = "index.jsp";
+	public static final String INDEX_DO = "do";	//index.jsp parameter
+	public static final String INDEX_HASHMAP = "pagesHashMap";	//hashmap attr in servlet context
+	// hashSet pages for index.jsp?do=??
+	public static final String INDEX_DO_HOMEPAGE = "homePage";	
+	public static final String INDEX_DO_HOMEPAGE_TITLE = "Home Page";	
+	public static final String INDEX_DO_PROFILE_INFO = "profileInfo";	
+	public static final String INDEX_DO_PROFILE_INFO_TITLE = "Profile info";
+	public static final String INDEX_DO_REGISTER = "newAccount";	
+	public static final String INDEX_DO_REGISTER_TITLE = "Register new account";
+	public static final String INDEX_DO_ADD_QUIZ = "addQuiz";
+	public static final String INDEX_DO_ADD_QUIZ_TITLE = "Create new quiz";
+	public static final String INDEX_DO_ADD_QUESTION = "addQuestion";
+	public static final String INDEX_DO_ADD_QUESTION_TITLE = "Add question";
+	
+	public static String getAction(String action) {
+		return INDEX + "?" + INDEX_DO + "=" + action;
+	}
 }

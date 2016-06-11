@@ -31,7 +31,7 @@ public class Login extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		request.getRequestDispatcher(Models.Constants.P_HOMEPAGE).forward(request, response);
+		request.getRequestDispatcher(Models.Constants.INDEX).forward(request, response);
 	}
 
 	/**
@@ -47,15 +47,13 @@ public class Login extends HttpServlet {
 		if (db_password != null) {
 			if (Password.passwordMatches(db_password, passed_password)) {
 				request.getSession().setAttribute(Constants.ATTR_USER, new User(passed_username, obj));
-				request.getRequestDispatcher(Constants.P_HOMEPAGE).forward(request, response);
 			} else {
 				request.setAttribute(Constants.ATTR_FAILED_LOGIN, Constants.LOGIN_INCORRECT_PASSWORD);
-				request.getRequestDispatcher(Constants.P_LOGIN).forward(request, response);
 			}
 		} else {
 			request.setAttribute(Constants.ATTR_FAILED_LOGIN, Constants.LOGIN_USER_NOT_FOUND);
-			request.getRequestDispatcher(Constants.P_LOGIN).forward(request, response);
 		}
+		request.getRequestDispatcher(Constants.INDEX).forward(request, response);
 	}
 
 }
