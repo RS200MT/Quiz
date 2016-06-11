@@ -35,6 +35,7 @@ public class ContextListener implements ServletContextListener {
          map.put(Constants.INDEX_DO_REGISTER, Constants.INDEX_DO_REGISTER_TITLE);
          map.put(Constants.INDEX_DO_ADD_QUIZ, Constants.INDEX_DO_ADD_QUIZ_TITLE);
          map.put(Constants.INDEX_DO_ADD_QUESTION, Constants.INDEX_DO_ADD_QUESTION_TITLE);
+         map.put(Constants.INDEX_DO_MY_QUIZES, Constants.INDEX_DO_MY_QUIZES_TITLE);
          
          arg0.getServletContext().setAttribute(Constants.INDEX_HASHMAP, map);
          arg0.getServletContext().setAttribute(DBObject.ATTR_DB, obj);

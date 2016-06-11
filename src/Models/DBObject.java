@@ -10,6 +10,7 @@ import java.util.HashMap;
 
 import Questions.Question;
 import Questions.Question.QuestionType;
+import javafx.util.Pair;
 
 public class DBObject {
 	public static final String ATTR_DB = "ATTR_DB";
@@ -200,27 +201,28 @@ public class DBObject {
 		return result;
 	}
 
-
-//	public ArrayList<Quiz> getRecentQuizes(int numQuizes) throws SQLException {
-//		ArrayList<Quiz> res = new ArrayList<Quiz>();
-//		Connection conn = getConnection();
-//		Statement stm = conn.createStatement();
-//		String query = "Select * from " + TABLE_QUIZES + "order by create_time desc limit " + numQuizes;
-//		ResultSet rs = getResultSet(query, conn);
-//		while (rs.next()) {
-//			int id = rs.getInt(0);
-//			String title = rs.getString(1);
-//			String author = rs.getString(2);
-//			String date = rs.getTimestamp(3).toString();
-//
-//			int timesWritten = rs.getInt(4);
-//			ArrayList<Question> questions = getQuestionsForQuiz(id, conn);
-//			Quiz q = new Quiz(id, author, questions, timesWritten);
-//			res.add(q);
-//		}
-//		return res;
-//
-//	}
+	// public ArrayList<Quiz> getRecentQuizes(int numQuizes) throws SQLException
+	// {
+	// ArrayList<Quiz> res = new ArrayList<Quiz>();
+	// Connection conn = getConnection();
+	// Statement stm = conn.createStatement();
+	// String query = "Select * from " + TABLE_QUIZES + "order by create_time
+	// desc limit " + numQuizes;
+	// ResultSet rs = getResultSet(query, conn);
+	// while (rs.next()) {
+	// int id = rs.getInt(0);
+	// String title = rs.getString(1);
+	// String author = rs.getString(2);
+	// String date = rs.getTimestamp(3).toString();
+	//
+	// int timesWritten = rs.getInt(4);
+	// ArrayList<Question> questions = getQuestionsForQuiz(id, conn);
+	// Quiz q = new Quiz(id, author, questions, timesWritten);
+	// res.add(q);
+	// }
+	// return res;
+	//
+	// }
 
 	/**
 	 * Returns demanded amount of most popular quizes
@@ -228,92 +230,95 @@ public class DBObject {
 	 * @param numQuizes
 	 * @throws SQLException
 	 */
-//	public ArrayList<Quiz> getPopularQuizes(int numQuizes) throws SQLException {
-//		ArrayList<Quiz> res = new ArrayList<Quiz>();
-//		Connection conn = getConnection();
-//		Statement stm = conn.createStatement();
-//		// String query = "SELECT * FROM " + TABLE_QUIZ_LOGS +
-//		// "GROUP BY 'quiz_id' ORDER BY COUNT('user_id') LIMIT " + numQuizes +
-//		// ";";
-//
-//		String query = "SELECT 'quiz_id' FROM " + TABLE_QUIZES + " ORDER BY 'times_written' DESC LIMIT " + numQuizes;
-//		ResultSet rs = getResultSet(query, conn);
-//		while (rs.next()) {
-//			int id = rs.getInt(0);
-//			String title = rs.getString(1);
-//			String author = rs.getString(2);
-//			String date = rs.getTimestamp(3).toString();
-//			int timesWritten = rs.getInt(4);
-//			ArrayList<Question> questions = getQuestionsForQuiz(id, conn);
-//			Quiz q = new Quiz(id, author, questions, timesWritten);
-//			res.add(q);
-//		}
-//		closeConnection(conn);
-//		return res;
-//	}
-
-	
+	// public ArrayList<Quiz> getPopularQuizes(int numQuizes) throws
+	// SQLException {
+	// ArrayList<Quiz> res = new ArrayList<Quiz>();
+	// Connection conn = getConnection();
+	// Statement stm = conn.createStatement();
+	// // String query = "SELECT * FROM " + TABLE_QUIZ_LOGS +
+	// // "GROUP BY 'quiz_id' ORDER BY COUNT('user_id') LIMIT " + numQuizes +
+	// // ";";
+	//
+	// String query = "SELECT 'quiz_id' FROM " + TABLE_QUIZES + " ORDER BY
+	// 'times_written' DESC LIMIT " + numQuizes;
+	// ResultSet rs = getResultSet(query, conn);
+	// while (rs.next()) {
+	// int id = rs.getInt(0);
+	// String title = rs.getString(1);
+	// String author = rs.getString(2);
+	// String date = rs.getTimestamp(3).toString();
+	// int timesWritten = rs.getInt(4);
+	// ArrayList<Question> questions = getQuestionsForQuiz(id, conn);
+	// Quiz q = new Quiz(id, author, questions, timesWritten);
+	// res.add(q);
+	// }
+	// closeConnection(conn);
+	// return res;
+	// }
 
 	/**
 	 * Gets quiz with given id from database and return it;
+	 * 
 	 * @param id
 	 * @return Quiz
 	 * @throws SQLException
 	 */
 	public Quiz getQuizById(int id) throws SQLException {
 		Connection conn = getConnection();
-		String query = "SELECT * FROM "+TABLE_QUIZES+" WHERE id = " + id + ";";
+		String query = "SELECT * FROM " + TABLE_QUIZES + " WHERE id = " + id + ";";
 		ResultSet rs = getResultSet(query, conn);
-		int timesWritten=0;
-		int authorId=0;
-		if(rs.next()) {
-			authorId= rs.getInt("author");
+		int timesWritten = 0;
+		int authorId = 0;
+		if (rs.next()) {
+			authorId = rs.getInt("author");
 			timesWritten = rs.getInt("times_written");
 		}
-		ResultSet getAuthorName = getResultSet("SELECT * FROM "+TABLE_USERS+" WHERE id = "+authorId+";", conn);
+		ResultSet getAuthorName = getResultSet("SELECT * FROM " + TABLE_USERS + " WHERE id = " + authorId + ";", conn);
 		String authorName = "";
-		if(getAuthorName.next()) {
-			authorName =getAuthorName.getString("user_name");
+		if (getAuthorName.next()) {
+			authorName = getAuthorName.getString("user_name");
 		}
 		Quiz quiz = new Quiz(id, authorName, timesWritten);
 		ArrayList<Question> questions = getQuestionsForQuiz(id, conn);
 		for (Question q : questions) {
 			quiz.addQuestion(q);
-		
+
 		}
 		closeConnection(conn);
 		return quiz;
 	}
-	
-	
-	
+
 	/**
-	 * Get questions for quiz with given id; Assembles question infos 
-	 * from different tables depending on type of the question;
+	 * Get questions for quiz with given id; Assembles question infos from
+	 * different tables depending on type of the question;
+	 * 
 	 * @param id
 	 * @param conn
 	 * @return
-	 * @throws SQLException 
+	 * @throws SQLException
 	 */
 	private ArrayList<Question> getQuestionsForQuiz(int id, Connection conn) throws SQLException {
 		ArrayList<Question> res = new ArrayList<Question>();
-		String query="SELECT * FROM "+TABLE_QUESTIONS+" WHERE quiz_id = "+id+";";
+		String query = "SELECT * FROM " + TABLE_QUESTIONS + " WHERE quiz_id = " + id + ";";
 		ResultSet rs = getResultSet(query, conn);
-		while(rs.next()) {
+		while (rs.next()) {
 			int qType = rs.getInt("q_type");
 			int qId = rs.getInt("id");
 			ArrayList<Object> qInfo = new ArrayList<Object>();
 			qInfo.add(rs.getString("question"));
 			getSpecificQuestionInfo(qInfo, qId, qType);
-			Question q = new Question(QuestionType.values()[qType], qInfo); //???????? QuestionType.values()[qType] sworia? TODO
+			Question q = new Question(QuestionType.values()[qType], qInfo); // ????????
+																			// QuestionType.values()[qType]
+																			// sworia?
+																			// TODO
 			res.add(q);
 		}
 		return res;
 	}
-	
-	
+
 	/**
 	 * Gets correct answers and specific info for different types of questions;
+	 * 
 	 * @param info
 	 * @param qId
 	 * @param qType
@@ -321,25 +326,25 @@ public class DBObject {
 	 */
 	private void getSpecificQuestionInfo(ArrayList<Object> info, int qId, int qType) throws SQLException {
 		Connection conn = getConnection();
-		String getCorrectAnswers = "SELECT * FROM " + TABLE_CORRECT_ANSWERS + " WHERE question_id = "+qId+";"; 
+		String getCorrectAnswers = "SELECT * FROM " + TABLE_CORRECT_ANSWERS + " WHERE question_id = " + qId + ";";
 		ResultSet correctAnswers = getResultSet(getCorrectAnswers, conn);
 		ArrayList<String> corrAnswersForThisQuestion = new ArrayList<String>();
-		while(correctAnswers.next()) {
+		while (correctAnswers.next()) {
 			String nextAnswer = correctAnswers.getString("correct_answer");
 			corrAnswersForThisQuestion.add(nextAnswer);
 		}
 		info.add(1, corrAnswersForThisQuestion);
-		if(qType == QuestionType.MultipleChoice.ordinal()) {
-			String getPossibleAnswers = "SELECT * FROM "+TABLE_MULTIPLE_CHOICES+" WHERE question_id = "+qId+";";
+		if (qType == QuestionType.MultipleChoice.ordinal()) {
+			String getPossibleAnswers = "SELECT * FROM " + TABLE_MULTIPLE_CHOICES + " WHERE question_id = " + qId + ";";
 			ResultSet possibleAnswers = getResultSet(getPossibleAnswers, conn);
 			ArrayList<String> possibleAnswersList = new ArrayList<String>();
-			while(possibleAnswers.next()) {
+			while (possibleAnswers.next()) {
 				String nextPossAnswer = possibleAnswers.getString("answer");
 				possibleAnswersList.add(nextPossAnswer);
 			}
 			info.add(2, possibleAnswersList);
-		} else if(qType == QuestionType.PictureResponse.ordinal()) {
-			String imageURL="SELECT * FROM "+TABLE_QUESTION_IMAGES+" WHERE question_id = "+qId+";";
+		} else if (qType == QuestionType.PictureResponse.ordinal()) {
+			String imageURL = "SELECT * FROM " + TABLE_QUESTION_IMAGES + " WHERE question_id = " + qId + ";";
 			ResultSet url = getResultSet(imageURL, conn);
 			info.add(2, url.getString("image_url"));
 		}
@@ -362,8 +367,8 @@ public class DBObject {
 		int type = question.getType().ordinal();
 		String quest = question.getQuestion();
 		ArrayList<String> answers = question.getAnswer();
-		int questionId = executeUpdate("INSERT INTO " + TABLE_QUESTIONS + " (quiz_id, question, q_type) VALUES ('" + quizId
-				+ "', '" + quest + "', '" + type + "');", conn);
+		int questionId = executeUpdate("INSERT INTO " + TABLE_QUESTIONS + " (quiz_id, question, q_type) VALUES ('"
+				+ quizId + "', '" + quest + "', '" + type + "');", conn);
 		for (int i = 0; i < answers.size(); i++)
 			executeUpdate("INSERT INTO " + TABLE_CORRECT_ANSWERS + " (question_id, correct_answer) VALUES ('"
 					+ questionId + "', '" + answers.get(i) + "');", conn);
@@ -380,8 +385,25 @@ public class DBObject {
 		return questionId;
 	}
 
-	
-	
+	public ArrayList<Pair<String, Integer>> getQuizesListForUser(int userId) {
+		ArrayList<Pair<String, Integer>> res = new ArrayList<Pair<String, Integer>>();
+		Connection conn = getConnection();
+		String getUserQuizes = "SELECT * FROM " + TABLE_QUIZES + " where author = " + userId + ";";
+		ResultSet userQuizes = getResultSet(getUserQuizes, conn);
+		try {
+			while (userQuizes.next()) {
+				String quizTitle = userQuizes.getString("title");
+				int quizId = userQuizes.getInt("id");
+				res.add(new Pair<String, Integer>(quizTitle, quizId));
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		closeConnection(conn);
+		return res;
+	}
+
 	private void example() {
 		Connection conn = getConnection();
 
