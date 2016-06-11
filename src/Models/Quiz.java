@@ -50,19 +50,35 @@ public class Quiz {
 	}
 
 	public void setAnswer(int questionIndex, String answer) {
-		userAnswers.put(questionIndex, answer);
+		this.userAnswers.put(questionIndex, answer);
+	}
+	
+	public HashMap<Integer, String> getUserAnswers() {
+		return this.userAnswers;
 	}
 
 	public boolean hasMoreQuestions() {
-		return currentQuestion < questions.size();
+		return this.currentQuestion < this.questions.size();
 	}
 
 	public Question getQuestion() {
-		return questions.get(currentQuestion++);
+		return this.questions.get(this.currentQuestion++);
 	}
 
 	public void randomizeQuestions() {
 		// TODO
+	}
+	
+	public int getScore() {
+		int result = 0;
+		for (int i = 0; i < getQuestions().size(); i++) {
+			if (getUserAnswers().containsKey(i)) {
+				String userAnswer = getUserAnswers().get(i);
+				if (getQuestions().get(i).checkAnswer(userAnswer))
+					result++;
+			}
+		}
+		return result;
 	}
 
 	public boolean isSingleQuestion() {
@@ -81,7 +97,7 @@ public class Quiz {
 	}
 
 	public String toHTMLsingle() {
-		String res = getQuestion().toHTML(currentQuestion - 1);
+		String res = getQuestion().toHTML(getCurrentIndex() - 1);
 		return res;
 	}
 

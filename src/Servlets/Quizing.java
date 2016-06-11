@@ -43,11 +43,12 @@ public class Quizing extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		Quiz curQuiz = null;
 		if (request.getParameter(Constants.QUIZINT_SINGLE_QUESTION) != null) {
 			int singleQuestion = Integer.parseInt(request.getParameter(Constants.QUIZINT_SINGLE_QUESTION));
 			int quizId = Integer.parseInt(request.getParameter(Constants.ATTR_QUIZ_ID_FOR_QUESTION));
 			DBObject obj = (DBObject) getServletContext().getAttribute(DBObject.ATTR_DB);
-			Quiz curQuiz = null;
+			curQuiz = null;
 			try {
 				curQuiz = obj.getQuizById(quizId);
 			} catch (SQLException e) {
@@ -55,19 +56,42 @@ public class Quizing extends HttpServlet {
 			}
 			if (singleQuestion == 2)
 				curQuiz.allQuestionsOnPage();
-			request.getSession().setAttribute(Constants.ATTR_SESSION_QUIZ, curQuiz);
-			request.getRequestDispatcher(Constants.getAction(Constants.INDEX_DO_QUIZ_PAGE)).forward(request, response);
 		} else {
-			Quiz curQuiz = (Quiz) request.getSession().getAttribute(Constants.ATTR_SESSION_QUIZ);
+			curQuiz = (Quiz) request.getSession().getAttribute(Constants.ATTR_SESSION_QUIZ);
 			if (!curQuiz.isSingleQuestion()) {
-				// ertianad unda shevamowmot chavyarot curQuiz is pasuxebshi pasuxebi
+				getAnswersAndCheck(curQuiz, request, response);
+				System.out.println("1");
 			} else {
-				
+				curQuiz.setAnswer(curQuiz.getCurrentIndex() - 1, request
+						.getParameter(Constants.INDEX_DO_QUIZ_QUESTION_ANSWER + (curQuiz.getCurrentIndex() - 1)));
+				System.out.println("2");
+				if (!curQuiz.hasMoreQuestions()) {
+					request.getSession().setAttribute(Constants.INDEX_DO_QUIZ_ATTR_RESULT_SCORE, curQuiz.getScore());
+					request.getSession().setAttribute(Constants.INDEX_DO_QUIZ_ATTR_FINISHED, 1);
+					System.out.println("3");
+				}
 			}
-			request.getSession().setAttribute(Constants.ATTR_SESSION_QUIZ, curQuiz);
-			request.getRequestDispatcher(Constants.getAction(Constants.INDEX_DO_QUIZ_PAGE)).forward(request, response);
 		}
-		request.getRequestDispatcher(Constants.getAction(Constants.INDEX)).forward(request, response);
+		redirectToQuizPage(curQuiz, request, response);
+	}
+
+	private void getAnswersAndCheck(Quiz curQuiz, HttpServletRequest request, HttpServletResponse response) {
+		for (int i = 0; i < curQuiz.getQuestions().size(); i++) {
+			String answer = request.getParameter(Constants.INDEX_DO_QUIZ_QUESTION_ANSWER + i);
+			curQuiz.setAnswer(i, answer);
+		}
+		int score = curQuiz.getScore();
+		request.setAttribute(Constants.INDEX_DO_QUIZ_ATTR_FINISHED, 1);
+		request.setAttribute(Constants.INDEX_DO_QUIZ_ATTR_RESULT_SCORE, score);
+	}
+
+	private void redirectToQuizPage(Quiz curQuiz, HttpServletRequest request, HttpServletResponse response) {
+		try {
+			request.getSession().setAttribute(Constants.ATTR_SESSION_QUIZ, curQuiz);
+			request.getRequestDispatcher(Constants.getQuizURL(curQuiz.getID())).forward(request, response);
+		} catch (ServletException | IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 }
