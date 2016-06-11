@@ -8,7 +8,6 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import com.mysql.fabric.xmlrpc.base.Array;
 
 import Questions.Question;
 import Questions.Question.QuestionType;

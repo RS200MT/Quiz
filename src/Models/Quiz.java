@@ -14,7 +14,7 @@ public class Quiz {
 	private int timesWritten;
 	private int currentQuestion;
 	private boolean singleQuestion;
-	
+
 	public Quiz(int id, String author, int timesWritten) {
 		this.id = id;
 		this.author = author;
@@ -24,55 +24,65 @@ public class Quiz {
 		this.currentQuestion = 0;
 		this.singleQuestion = true;
 	}
-	
+
 	public void addQuestion(Question q) {
 		this.questions.add(q);
 	}
-	
+
 	public int getID() {
 		return this.id;
 	}
-	
+
 	public List<Question> getQuestions() {
 		return this.questions;
 	}
-	
+
 	public String getAuthor() {
 		return this.author;
 	}
-	
+
 	public int getTimesWritten() {
 		return this.timesWritten;
 	}
-	
-	public int getCurrentIndex(){
+
+	public int getCurrentIndex() {
 		return currentQuestion;
 	}
-	
+
 	public void setAnswer(int questionIndex, String answer) {
 		userAnswers.put(questionIndex, answer);
 	}
-	
+
 	public boolean hasMoreQuestions() {
 		return currentQuestion < questions.size();
 	}
-	
+
 	public Question getQuestion() {
 		return questions.get(currentQuestion++);
 	}
-	
+
 	public void randomizeQuestions() {
-		//TODO
+		// TODO
 	}
-	
+
 	public boolean isSingleQuestion() {
 		return this.singleQuestion;
 	}
-	
+
 	public void allQuestionsOnPage() {
 		this.singleQuestion = false;
 	}
-	
-	
-	
+
+	public String toHTMLall() {
+		String res = "";
+		for (int i = 0; i < getQuestions().size(); i++)
+			res += getQuestions().get(i).toHTML(i) + "<HR>";
+		return res;
+	}
+
+	public String toHTMLsingle() {
+		String res = getQuestion().toHTML(currentQuestion - 1);
+		return res;
+	}
+
 }
