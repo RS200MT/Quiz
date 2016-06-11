@@ -106,17 +106,10 @@ public class DBObject {
 	}
 
 	/**
-	 * <<<<<<< HEAD
 	 * 
 	 * Checks if user with given name or email already exists; If so, returns
 	 * false, if such a user doesn't exist, adds the new user into users table.
 	 * Uses executeUpdate; Method receives hashed password;
-	 *
-	 * ======= Checks if user with given name or email already exists; Is so,
-	 * returns false, if such a user doesn't exist, adds the new user into users
-	 * table. Uses executeUpdate; Method receives hashed password;
-	 * 
-	 * >>>>>>> f042ebe08aae1506ef170d83571f76e95fff8096
 	 * 
 	 * @param name
 	 * @param email
@@ -259,15 +252,98 @@ public class DBObject {
 //		return res;
 //	}
 
-	private ArrayList<Question> getQuestionsForQuiz(int id, Connection conn) {
-		try {
-			Statement stm = conn.createStatement();
+	
 
-		} catch (SQLException e) {
-			e.printStackTrace();
+	/**
+	 * Gets quiz with given id from database and return it;
+	 * @param id
+	 * @return Quiz
+	 * @throws SQLException
+	 */
+	public Quiz getQuizById(int id) throws SQLException {
+		Connection conn = getConnection();
+		String query = "SELECT * FROM "+TABLE_QUIZES+" WHERE id = " + id + ";";
+		ResultSet rs = getResultSet(query, conn);
+		int timesWritten=0;
+		int authorId=0;
+		if(rs.next()) {
+			authorId= rs.getInt("author");
+			timesWritten = rs.getInt("times_written");
 		}
-
-		return null;
+		ResultSet getAuthorName = getResultSet("SELECT * FROM "+TABLE_USERS+" WHERE id = "+authorId+";", conn);
+		String authorName = "";
+		if(getAuthorName.next()) {
+			authorName =getAuthorName.getString("user_name");
+		}
+		Quiz quiz = new Quiz(id, authorName, timesWritten);
+		ArrayList<Question> questions = getQuestionsForQuiz(id, conn);
+		for (Question q : questions) {
+			quiz.addQuestion(q);
+		
+		}
+		closeConnection(conn);
+		return quiz;
+	}
+	
+	
+	
+	/**
+	 * Get questions for quiz with given id; Assembles question infos 
+	 * from different tables depending on type of the question;
+	 * @param id
+	 * @param conn
+	 * @return
+	 * @throws SQLException 
+	 */
+	private ArrayList<Question> getQuestionsForQuiz(int id, Connection conn) throws SQLException {
+		ArrayList<Question> res = new ArrayList<Question>();
+		String query="SELECT * FROM "+TABLE_QUESTIONS+" WHERE quiz_id = "+id+";";
+		ResultSet rs = getResultSet(query, conn);
+		while(rs.next()) {
+			int qType = rs.getInt("q_type");
+			int qId = rs.getInt("id");
+			ArrayList<Object> qInfo = new ArrayList<Object>();
+			qInfo.add(rs.getString("question"));
+			getSpecificQuestionInfo(qInfo, qId, qType);
+			Question q = new Question(QuestionType.values()[qType], qInfo); //???????? QuestionType.values()[qType] sworia? TODO
+			res.add(q);
+		}
+		return res;
+	}
+	
+	
+	/**
+	 * Gets correct answers and specific info for different types of questions;
+	 * @param info
+	 * @param qId
+	 * @param qType
+	 * @throws SQLException
+	 */
+	private void getSpecificQuestionInfo(ArrayList<Object> info, int qId, int qType) throws SQLException {
+		Connection conn = getConnection();
+		String getCorrectAnswers = "SELECT * FROM " + TABLE_CORRECT_ANSWERS + " WHERE question_id = "+qId+";"; 
+		ResultSet correctAnswers = getResultSet(getCorrectAnswers, conn);
+		ArrayList<String> corrAnswersForThisQuestion = new ArrayList<String>();
+		while(correctAnswers.next()) {
+			String nextAnswer = correctAnswers.getString("correct_answer");
+			corrAnswersForThisQuestion.add(nextAnswer);
+		}
+		info.add(1, corrAnswersForThisQuestion);
+		if(qType == QuestionType.MultipleChoice.ordinal()) {
+			String getPossibleAnswers = "SELECT * FROM "+TABLE_MULTIPLE_CHOICES+" WHERE question_id = "+qId+";";
+			ResultSet possibleAnswers = getResultSet(getPossibleAnswers, conn);
+			ArrayList<String> possibleAnswersList = new ArrayList<String>();
+			while(possibleAnswers.next()) {
+				String nextPossAnswer = possibleAnswers.getString("answer");
+				possibleAnswersList.add(nextPossAnswer);
+			}
+			info.add(2, possibleAnswersList);
+		} else if(qType == QuestionType.PictureResponse.ordinal()) {
+			String imageURL="SELECT * FROM "+TABLE_QUESTION_IMAGES+" WHERE question_id = "+qId+";";
+			ResultSet url = getResultSet(imageURL, conn);
+			info.add(2, url.getString("image_url"));
+		}
+		conn.close();
 	}
 
 	// This function insert quiz in database
@@ -304,6 +380,8 @@ public class DBObject {
 		return questionId;
 	}
 
+	
+	
 	private void example() {
 		Connection conn = getConnection();
 
