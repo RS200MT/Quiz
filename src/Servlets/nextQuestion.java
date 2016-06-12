@@ -1,6 +1,8 @@
 package Servlets;
 
 import java.io.IOException;
+import java.util.Enumeration;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -40,8 +42,15 @@ public class nextQuestion extends HttpServlet {
 		if(q.isSingleQuestion()){
 			q.setAnswer(q.getCurrentIndex(),(String)request.getParameter(""));
 		} else {
+			Enumeration<String> answers = request.getParameterNames();
+			int i = 0;
+			while(answers.hasMoreElements()){
+				q.setAnswer(i++, answers.nextElement());
+			}
 			
 		}
 	}
+	
+	
 
 }
