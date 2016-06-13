@@ -28,7 +28,7 @@ public class Logout extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		request.getRequestDispatcher(Models.Constants.P_HOMEPAGE).forward(request, response);
+		request.getRequestDispatcher(Models.Constants.INDEX).forward(request, response);
 	}
 
 	/**
@@ -38,7 +38,7 @@ public class Logout extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		request.getSession().setAttribute(Constants.ATTR_USER, null);
-		request.getRequestDispatcher(Constants.P_HOMEPAGE).forward(request, response);
+		request.getRequestDispatcher(Constants.INDEX).forward(request, response);
 	}
 
 }

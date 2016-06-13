@@ -2,19 +2,13 @@ package Questions;
 
 import java.util.ArrayList;
 
-
 import org.apache.catalina.tribes.util.Arrays;
 
-
-
+import Models.Constants;
 
 public class Question {
 	public static enum QuestionType {
-		NULL, 
-		QuestionResponse, 
-		FillInBlank,
-		MultipleChoice, 
-		PictureResponse
+		NULL, QuestionResponse, FillInBlank, MultipleChoice, PictureResponse
 	}
 
 	private QuestionType qType;
@@ -50,7 +44,7 @@ public class Question {
 		return false;
 	}
 
-	public ArrayList<String> getAnswer() {
+	public ArrayList<String> getAnswers() {
 		return this.answers;
 	}
 
@@ -66,6 +60,27 @@ public class Question {
 
 	public QuestionType getType() {
 		return this.qType;
+	}
+
+	public String toHTML(int index) {
+		String result = "Question: <b>" + getQuestion() + "</b><BR>";
+		if (getType() == QuestionType.PictureResponse)
+			result += "<img src='" + getImageURL() + "' width='350' height='200'/><BR>";
+		if (getType() == QuestionType.MultipleChoice)
+			result += getMultipleChoiceHTML(index);
+		else
+			result += "Answer: <input type='text' required='required' name='" + Constants.INDEX_DO_QUIZ_QUESTION_ANSWER + index
+					+ "' id='" + Constants.INDEX_DO_QUIZ_QUESTION_ANSWER + index + "' />";
+		return result;
+	}
+
+	private String getMultipleChoiceHTML(int index) {
+		String result = "Select correct answer: <BR>";
+		for (int i = 0; i < getPossibleAnswers().size(); i++) {
+			result += "<input type='radio' required='required' name='" + Constants.INDEX_DO_QUIZ_QUESTION_ANSWER + index
+					+ "' id='" + Constants.INDEX_DO_QUIZ_QUESTION_ANSWER + index + "' value='" + getPossibleAnswers().get(i) +"' /> " + getPossibleAnswers().get(i) + "<BR>" ;
+		}
+		return result;
 	}
 
 }

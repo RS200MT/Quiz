@@ -4,30 +4,22 @@
 <%@page import="Models.User"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Add new Quiz</title>
-</head>
-<body>
-	<%
-		User curUser = (User) request.getSession().getAttribute(Constants.ATTR_USER);
-		if (curUser == null) {
-			request.getRequestDispatcher(Constants.P_HOMEPAGE).forward(request, response);
-		} else {
-	%>
-	<form action="<% out.print(Constants.S_ADD_QUIZ); %>" method="post">
-		<p>
-			Quiz title: <input type="text" required="required"
-				name="<%out.print(Constants.ADD_QUIZ_TITLE);%>"
-				id="<%out.print(Constants.ADD_QUIZ_TITLE);%>" />
-		</p>
-		<input type="submit" value="<%out.print(Constants.B_ADD_QUIZ);%>" />
-	</form>
-	<%
-		}
-	%>
-
-</body>
-</html>
+<%
+	User curUser = (User) request.getSession().getAttribute(Constants.ATTR_USER);
+	if (curUser != null) {
+%>
+<form action="<%=Constants.S_ADD_QUIZ%>" method="post">
+	<p>
+		Quiz title: <input type="text" required="required"
+			name="<%=Constants.ADD_QUIZ_TITLE%>"
+			id="<%=Constants.ADD_QUIZ_TITLE%>" />
+	</p>
+	<input type="submit" value="<%=Constants.B_ADD_QUIZ%>" />
+</form>
+<%
+	} else {
+%>
+	Please log in to create a quiz!
+<%
+	}
+%>

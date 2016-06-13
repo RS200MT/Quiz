@@ -35,7 +35,7 @@ public class addQuestion extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+		request.getRequestDispatcher(Models.Constants.INDEX).forward(request, response);
 	}
 
 	/**
@@ -74,9 +74,9 @@ public class addQuestion extends HttpServlet {
 		obj.addQuestionToQuiz(quizId, q);
 		if (request.getParameter(Constants.ADD_QUESTION_NEXT_QUESTION) != null) {
 			request.setAttribute(Constants.ATTR_QUIZ_ID_FOR_QUESTION, quizId);
-			request.getRequestDispatcher(Constants.P_ADD_QUESTION).forward(request, response);
+			request.getRequestDispatcher(Constants.getAction(Constants.INDEX_DO_ADD_QUESTION)).forward(request, response);
 		} else
-			request.getRequestDispatcher(Constants.P_HOMEPAGE).forward(request, response);
+			request.getRequestDispatcher(Constants.INDEX).forward(request, response);
 
 	}
 
