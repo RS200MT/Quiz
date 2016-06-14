@@ -100,5 +100,9 @@ public class Quiz {
 		String res = getQuestion().toHTML(getCurrentIndex() - 1);
 		return res;
 	}
+	
+	public void restart() {
+		this.currentQuestion = 0;
+	}
 
 }
