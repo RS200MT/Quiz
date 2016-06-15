@@ -15,11 +15,15 @@ CREATE TABLE IF NOT EXISTS users (
     password char(40) not null, -- variable type ??
     reg_date timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
     quizes_written int DEFAULT 0,
-	type int not null default 2,
-    
+	type int not null default 2,    
     key(user_name),
     key(email)    
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8 COLLATE=utf8_bin;
+
+create table if not exists achievements(
+    user_id int not null, 
+    type int    
+);
 
 CREATE TABLE IF NOT EXISTS correct_answers(
 	id int not null auto_increment primary key,
@@ -30,17 +34,24 @@ CREATE TABLE IF NOT EXISTS correct_answers(
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8 COLLATE=utf8_bin;
 
 create table if not exists friends(
+	id int not null primary key,
 	user1_id int,
     user2_id int,
-    status varchar(50)
+    status int not null
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+
 
 create table if not exists quizes (
 	id int auto_increment primary key,
     title tinytext not null,
     author int not null,
     create_time timestamp,
-    times_written int DEFAULT 0
+    times_written int DEFAULT 0,
+    randomize int default 0,
+    immediate_correction int default 0,
+    practice_mode int default 0,
+    description text not null
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 
@@ -79,4 +90,15 @@ create table if not exists quiz_logs (
     key (user_id),
     key (quiz_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+
+create table if not exists messages (
+	id int primary key,
+    sender int not null, 
+    recipient int not null,
+    type int not null,
+    message_text text,
+    seen int default 0,
+    receive_time timestamp not null
+);
 
