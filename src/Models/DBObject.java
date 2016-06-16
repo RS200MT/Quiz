@@ -7,11 +7,10 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
-
+import javafx.util.Pair;
 
 import Questions.Question;
 import Questions.Question.QuestionType;
-import javafx.util.Pair;
 
 public class DBObject {
 	public static final String ATTR_DB = "ATTR_DB";
@@ -220,10 +219,13 @@ public class DBObject {
 		ResultSet rs = getResultSet(query, conn);
 		int timesWritten = 0;
 		int authorId = 0;
+		String title = "";
 		if (rs.next()) {
 			authorId = rs.getInt("author");
 			timesWritten = rs.getInt("times_written");
+			title = rs.getString("title");
 		} else {
+			System.out.println("asdasd");
 			return null;
 		}
 		ResultSet getAuthorName = getResultSet("SELECT * FROM " + TABLE_USERS + " WHERE id = " + authorId + ";", conn);
@@ -231,7 +233,7 @@ public class DBObject {
 		if (getAuthorName.next()) {
 			authorName = getAuthorName.getString("user_name");
 		}
-		Quiz quiz = new Quiz(id, authorName, timesWritten);
+		Quiz quiz = new Quiz(id, authorName, timesWritten,title);
 		ArrayList<Question> questions = getQuestionsForQuiz(id, conn);
 		if(questions != null) {
 			for (Question q : questions) {
@@ -337,14 +339,29 @@ public class DBObject {
 		Connection conn = getConnection();
 		String query="SELECT * FROM "+TABLE_QUIZES+" ORDER BY times_written DESC LIMIT "+n+";";
 		ResultSet rs = getResultSet(query, conn);
-		if(!rs.isBeforeFirst()){
+		if(!rs.isBeforeFirst())
 			return null;
-		}
 		while(rs.next()) {
 			popularQuizes.add(getQuizById(rs.getInt("id")));
 		}
 		closeConnection(conn);
 		return popularQuizes;
+	}
+	
+	
+	public ArrayList<Quiz> getRecentQuizesForUser(int userID, int n) throws SQLException{
+		ArrayList<Quiz> recentQuizesForUser = new ArrayList<Quiz>();
+		Connection conn = getConnection();
+		String query = "select * from " + TABLE_QUIZ_LOGS + " where user_id = " + userID + " order by end_time limit " + n +";";
+		ResultSet rs = getResultSet(query, conn);
+		if(!rs.isBeforeFirst())
+			return null;
+		while(rs.next()) {
+			recentQuizesForUser.add(getQuizById(rs.getInt("id")));
+		}
+		closeConnection(conn);
+		System.out.println(recentQuizesForUser.size());
+		return recentQuizesForUser;
 	}
 	
 	/**
@@ -360,9 +377,8 @@ public class DBObject {
 		Connection conn = getConnection();
 		String query="SELECT * FROM "+TABLE_QUIZES+" ORDER BY create_time DESC LIMIT "+n+";";
 		ResultSet rs = getResultSet(query, conn);
-		if(!rs.isBeforeFirst()) {
+		if(!rs.isBeforeFirst())
 			return null;
-		}
 		while(rs.next()) {
 			recentQuizes.add(getQuizById(rs.getInt("id")));
 		}
@@ -423,10 +439,6 @@ public class DBObject {
 		return res;
 	}
 
-	private void example() {
-		Connection conn = getConnection();
-
-		closeConnection(conn);
-	}
+	
 
 }

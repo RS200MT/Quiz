@@ -60,16 +60,13 @@ public class Quizing extends HttpServlet {
 			curQuiz = (Quiz) request.getSession().getAttribute(Constants.ATTR_SESSION_QUIZ);
 			if (!curQuiz.isSingleQuestion()) {
 				getAnswersAndCheck(curQuiz, request, response);
-				System.out.println("1");
 			} else {
 				curQuiz.setAnswer(curQuiz.getCurrentIndex() - 1, request
 						.getParameter(Constants.INDEX_DO_QUIZ_QUESTION_ANSWER + (curQuiz.getCurrentIndex() - 1)));
-				System.out.println("2");
 				if (!curQuiz.hasMoreQuestions()) {
 					request.setAttribute(Constants.INDEX_DO_QUIZ_ATTR_RESULT_SCORE, curQuiz.getScore());
 					request.setAttribute(Constants.INDEX_DO_QUIZ_ATTR_FINISHED, 1);
 					curQuiz.restart();
-					System.out.println("3");
 				}
 			}
 		}

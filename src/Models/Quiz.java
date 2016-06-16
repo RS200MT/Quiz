@@ -14,8 +14,9 @@ public class Quiz {
 	private int timesWritten;
 	private int currentQuestion;
 	private boolean singleQuestion;
+	private String title;
 
-	public Quiz(int id, String author, int timesWritten) {
+	public Quiz(int id, String author, int timesWritten, String title) {
 		this.id = id;
 		this.author = author;
 		this.timesWritten = timesWritten;
@@ -23,6 +24,7 @@ public class Quiz {
 		this.userAnswers = new HashMap<Integer, String>();
 		this.currentQuestion = 0;
 		this.singleQuestion = true;
+		this.title = title;
 	}
 
 	public void addQuestion(Question q) {
@@ -33,6 +35,9 @@ public class Quiz {
 		return this.id;
 	}
 
+	public String getTitle(){
+		return this.title;
+	}
 	public List<Question> getQuestions() {
 		return this.questions;
 	}
@@ -48,6 +53,10 @@ public class Quiz {
 	public int getCurrentIndex() {
 		return currentQuestion;
 	}
+	
+	public int increaseQuestionIndex() {
+		return ++currentQuestion;
+	}
 
 	public void setAnswer(int questionIndex, String answer) {
 		this.userAnswers.put(questionIndex, answer);
@@ -62,6 +71,8 @@ public class Quiz {
 	}
 
 	public Question getQuestion() {
+		if (!hasMoreQuestions())
+			restart();
 		return this.questions.get(this.currentQuestion++);
 	}
 
@@ -95,7 +106,6 @@ public class Quiz {
 			res += getQuestions().get(i).toHTML(i) + "<HR>";
 		return res;
 	}
-
 	public String toHTMLsingle() {
 		String res = getQuestion().toHTML(getCurrentIndex() - 1);
 		return res;
