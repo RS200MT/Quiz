@@ -205,7 +205,7 @@ public class DBObject {
 		return result;
 	}
 
-
+	
 
 	/**
 	 * Gets quiz with given id from database and return it;
@@ -337,6 +337,9 @@ public class DBObject {
 		Connection conn = getConnection();
 		String query="SELECT * FROM "+TABLE_QUIZES+" ORDER BY times_written DESC LIMIT "+n+";";
 		ResultSet rs = getResultSet(query, conn);
+		if(!rs.isBeforeFirst()){
+			return null;
+		}
 		while(rs.next()) {
 			popularQuizes.add(getQuizById(rs.getInt("id")));
 		}
@@ -357,6 +360,9 @@ public class DBObject {
 		Connection conn = getConnection();
 		String query="SELECT * FROM "+TABLE_QUIZES+" ORDER BY create_time DESC LIMIT "+n+";";
 		ResultSet rs = getResultSet(query, conn);
+		if(!rs.isBeforeFirst()) {
+			return null;
+		}
 		while(rs.next()) {
 			recentQuizes.add(getQuizById(rs.getInt("id")));
 		}

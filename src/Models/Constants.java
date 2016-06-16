@@ -85,6 +85,9 @@ public class Constants {
 	public static final String INDEX_DO_QUIZ_ATTR_RESULT_SCORE = "score";
 	public static final String INDEX_DO_QUIZ_ATTR_FINISHED = "finished";
 
+	public static final String INDEX_DO_GET_PROFILE = "getProfile";
+	public static final String INDEX_DO_GET_PROFILE_TITLE = "Profile info";
+	
 	public static String getAction(String action) {
 		return INDEX + "?" + INDEX_DO + "=" + action;
 	}

@@ -43,6 +43,7 @@ public class ContextListener implements ServletContextListener {
         map.put(Constants.INDEX_DO_ADD_QUESTION, Constants.INDEX_DO_ADD_QUESTION_TITLE);
         map.put(Constants.INDEX_DO_MY_QUIZES, Constants.INDEX_DO_MY_QUIZES_TITLE);
         map.put(Constants.INDEX_DO_QUIZ_PAGE, Constants.INDEX_DO_QUIZ_PAGE_TITLE);
+        map.put(Constants.INDEX_DO_GET_PROFILE, Constants.INDEX_DO_GET_PROFILE_TITLE);
 	}
 
 	/**
