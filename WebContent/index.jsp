@@ -6,10 +6,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <%
-boolean isOwnReferer = request.getHeader("referer") != null
-&& request.getHeader("referer").indexOf(Constants.SITE_URL) > -1;
-
-
 	HashMap<String, String> pages = (HashMap<String, String>) getServletContext()
 			.getAttribute(Constants.INDEX_HASHMAP);
 	boolean loggedIn = ((User) request.getSession().getAttribute(Constants.ATTR_USER)) != null;
@@ -34,6 +30,7 @@ boolean isOwnReferer = request.getHeader("referer") != null
 <title><%=pageTitle%></title>
 </head>
 <body>
+
 	<style>
 .leftSidebar {
 	float: left;

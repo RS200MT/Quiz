@@ -48,6 +48,10 @@ public class Quiz {
 	public int getCurrentIndex() {
 		return currentQuestion;
 	}
+	
+	public int increaseQuestionIndex() {
+		return ++currentQuestion;
+	}
 
 	public void setAnswer(int questionIndex, String answer) {
 		this.userAnswers.put(questionIndex, answer);
@@ -62,6 +66,8 @@ public class Quiz {
 	}
 
 	public Question getQuestion() {
+		if (!hasMoreQuestions())
+			restart();
 		return this.questions.get(this.currentQuestion++);
 	}
 
@@ -95,7 +101,6 @@ public class Quiz {
 			res += getQuestions().get(i).toHTML(i) + "<HR>";
 		return res;
 	}
-
 	public String toHTMLsingle() {
 		String res = getQuestion().toHTML(getCurrentIndex() - 1);
 		return res;

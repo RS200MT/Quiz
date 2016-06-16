@@ -223,6 +223,7 @@ public class DBObject {
 			authorId = rs.getInt("author");
 			timesWritten = rs.getInt("times_written");
 		} else {
+			System.out.println("asdasd");
 			return null;
 		}
 		ResultSet getAuthorName = getResultSet("SELECT * FROM " + TABLE_USERS + " WHERE id = " + authorId + ";", conn);
@@ -336,6 +337,8 @@ public class DBObject {
 		Connection conn = getConnection();
 		String query="SELECT * FROM "+TABLE_QUIZES+" ORDER BY times_written DESC LIMIT "+n+";";
 		ResultSet rs = getResultSet(query, conn);
+		if(!rs.isBeforeFirst())
+			return null;
 		while(rs.next()) {
 			popularQuizes.add(getQuizById(rs.getInt("id")));
 		}
@@ -356,6 +359,8 @@ public class DBObject {
 		Connection conn = getConnection();
 		String query="SELECT * FROM "+TABLE_QUIZES+" ORDER BY create_time DESC LIMIT "+n+";";
 		ResultSet rs = getResultSet(query, conn);
+		if(!rs.isBeforeFirst())
+			return null;
 		while(rs.next()) {
 			recentQuizes.add(getQuizById(rs.getInt("id")));
 		}
