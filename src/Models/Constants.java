@@ -88,6 +88,9 @@ public class Constants {
 	public static final String INDEX_DO_GET_PROFILE = "getProfile";
 	public static final String INDEX_DO_GET_PROFILE_TITLE = "Profile info";
 	
+	public static final String INDEX_DO_QUIZ_RESULT = "QuizResult";
+	public static final String INDEX_DO_QUIZ_RESULT_TITLE = "Result";
+	
 	public static String getAction(String action) {
 		return INDEX + "?" + INDEX_DO + "=" + action;
 	}
@@ -95,4 +98,13 @@ public class Constants {
 	public static String getQuizURL(int id) {
 		return INDEX + "?" + INDEX_DO + "=" + INDEX_DO_QUIZ_PAGE + "&" + ATTR_QUIZ_ID_FOR_QUESTION + "=" + id;
 	}
+	
+	
+	
+	
+	public static final String QUIZINIG_DONE = "doneQuiz";
+	public static final String QUIZINIG_NEXT = "nextQuestion";
+	public static final String QUIZINIG_CHECK = "checkAnswer";
+	public static final String QUIZINIG_CHECK_RESULT_NEXT_QUESTION = "checkResult";
+	
 }

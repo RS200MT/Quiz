@@ -1,6 +1,9 @@
 package Models;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+
+import javafx.util.Pair;
 
 public class User {
 	private int id;
@@ -9,15 +12,16 @@ public class User {
 	private String regDate;
 	private int quizNumber;
 	private int type;
+	private ArrayList<Pair<Integer, String>> friends;
 
-	public User(String userName, DBObject db) {
+	public User(int id, String userName, String email, String regDate, int quizNumber, int type, ArrayList<Pair<Integer, String>> friends) {
+		this.id = id;
 		this.userName = userName;
-		HashMap<String, Object> userInfo = db.getUserInfo(this.userName);
-		this.id = (int)userInfo.get("id");
-		this.email = (String)userInfo.get("email");
-		this.regDate = (String)userInfo.get("reg_date");
-		this.quizNumber = (int)userInfo.get("quizes_written");
-		this.type = (int)userInfo.get("type");
+		this.email = email;
+		this.regDate = regDate;
+		this.quizNumber = quizNumber;
+		this.type = type;
+		this.friends = friends;
 	}
 
 	public int getId() {
@@ -39,7 +43,7 @@ public class User {
 	public int getQuizNumber() {
 		return this.quizNumber;
 	}
-	
+
 	public int getType() {
 		return this.type;
 	}
@@ -47,17 +51,12 @@ public class User {
 	public void increaseQuizNumber() {
 		this.quizNumber++;
 	}
-
-	/*
-	 * memogni es aq ar unda iyos; public static String hexToString(byte[]
-	 * bytes) { StringBuffer buff = new StringBuffer(); for (int i = 0; i <
-	 * bytes.length; i++) { int val = bytes[i]; val = val & 0xff; // remove
-	 * higher bits, sign if (val < 16) buff.append('0'); // leading 0
-	 * buff.append(Integer.toString(val, 16)); } return buff.toString(); }
-	 * 
-	 * public static String getHash(String password) { try { MessageDigest md =
-	 * MessageDigest.getInstance("SHA"); md.update(password.getBytes()); return
-	 * hexToString(md.digest()); } catch (NoSuchAlgorithmException e) {
-	 * e.printStackTrace(); } return ""; }
-	 */
+	 
+	public boolean hasFriendById(int friendId) {
+		return false;
+	}
+	
+	public boolean hasFriendByUserName(String friendUserName) {
+		return false;
+	}
 }

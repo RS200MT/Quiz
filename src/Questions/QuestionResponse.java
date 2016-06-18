@@ -1,17 +1,21 @@
 package Questions;
 
-public class QuestionResponse {
-	private final int SCORE_FOR_THIS_QUESTION = 1;
-	private String question = "";
-	private String correctAnswer = "";
-	
-	public QuestionResponse(String question, String correctAnswer) {
-		this.question = question;
-		this.correctAnswer = correctAnswer;
-	}
-	
-	public String getAnswer() {
-		return this.correctAnswer;
-	}
+import java.util.ArrayList;
 
+import Models.Constants;
+import Models.Question;
+
+public class QuestionResponse extends Question {
+	public QuestionResponse(String question, ArrayList<String> answers) {
+		this.question = question;
+		this.answers = answers;
+	}
+	
+	@Override
+	public String getHTML(int index) {
+		String result = "Question: <b>" + getQuestion() + "</b><BR>";
+		result += "Answer: <input type='text' required='required' name='" + Constants.INDEX_DO_QUIZ_QUESTION_ANSWER + index
+					+ "' id='" + Constants.INDEX_DO_QUIZ_QUESTION_ANSWER + index + "' />";
+		return result;
+	}
 }

@@ -1,7 +1,6 @@
 package listeners;
 
 import java.util.HashMap;
-import java.util.HashSet;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;

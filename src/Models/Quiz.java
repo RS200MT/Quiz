@@ -1,118 +1,167 @@
 package Models;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
-import Questions.Question;
-
 public class Quiz {
 	private int id;
-	private String author;
-	private List<Question> questions;
-	private HashMap<Integer, String> userAnswers;
-	private int timesWritten;
-	private int currentQuestion;
-	private boolean singleQuestion;
 	private String title;
+	private String description;
+	private String author;
+	private String createTime;
+	private int timesWritten;
+	private boolean randomized;
+	private boolean immediateCorrection;
+	private ArrayList<Question> questions;
 
-	public Quiz(int id, String author, int timesWritten, String title) {
+	private boolean displaySingleQuestion;
+	private int currentQuestionIndex;
+	private ArrayList<String> userAnswers;
+
+	public Quiz(int id, String title, String description, String author, String createTime, int timesWritten,
+			boolean randomized, boolean immediateCorrection, ArrayList<Question> questions,
+			boolean displaySingleQuestion) {
 		this.id = id;
+		this.title = title;
+		this.description = description;
 		this.author = author;
+		this.createTime = createTime;
 		this.timesWritten = timesWritten;
 		this.questions = new ArrayList<Question>();
-		this.userAnswers = new HashMap<Integer, String>();
-		this.currentQuestion = 0;
-		this.singleQuestion = true;
-		this.title = title;
+		this.randomized = randomized;
+		this.immediateCorrection = immediateCorrection;
+		this.displaySingleQuestion = displaySingleQuestion;
+		if (this.randomized)
+			randomizeQuestions();
+		currentQuestionIndex = 0;
+		userAnswers = new ArrayList<String>();
 	}
 
-	public void addQuestion(Question q) {
-		this.questions.add(q);
+	private void randomizeQuestions() {
+		Collections.shuffle(this.questions);
+	}
+
+	public void setUserAnswer(String answer) {
+		userAnswers.add(answer);
 	}
 
 	public int getID() {
 		return this.id;
 	}
 
-	public String getTitle(){
+	public String getTitle() {
 		return this.title;
 	}
-	public List<Question> getQuestions() {
-		return this.questions;
+
+	public String getDescription() {
+		return this.description;
 	}
 
 	public String getAuthor() {
 		return this.author;
 	}
 
+	public String getCreateTime() {
+		return this.createTime;
+	}
+
 	public int getTimesWritten() {
 		return this.timesWritten;
 	}
 
-	public int getCurrentIndex() {
-		return currentQuestion;
-	}
-	
-	public int increaseQuestionIndex() {
-		return ++currentQuestion;
+	public boolean isRandomized() {
+		return this.randomized;
 	}
 
-	public void setAnswer(int questionIndex, String answer) {
-		this.userAnswers.put(questionIndex, answer);
-	}
-	
-	public HashMap<Integer, String> getUserAnswers() {
-		return this.userAnswers;
+	public boolean isImmediateCorrection() {
+		return this.immediateCorrection;
 	}
 
-	public boolean hasMoreQuestions() {
-		return this.currentQuestion < this.questions.size();
+	public void addQuestion(Question q) {
+		this.questions.add(q);
 	}
 
-	public Question getQuestion() {
-		if (!hasMoreQuestions())
-			restart();
-		return this.questions.get(this.currentQuestion++);
+	public ArrayList<Question> getQuestions() {
+		return this.questions;
 	}
 
-	public void randomizeQuestions() {
-		// TODO
+	public boolean displaySingleQuestion() {
+		return this.displaySingleQuestion;
 	}
-	
-	public int getScore() {
-		int result = 0;
-		for (int i = 0; i < getQuestions().size(); i++) {
-			if (getUserAnswers().containsKey(i)) {
-				String userAnswer = getUserAnswers().get(i);
-				if (getQuestions().get(i).checkAnswer(userAnswer))
-					result++;
+
+	public String getHTML() {
+		String result = "";
+		// string title
+		if (!this.displaySingleQuestion) {
+			result += getAllQuestionsHTML();
+		} else {
+			if (currentQuestionIndex < this.questions.size()) {
+				result += this.questions.get(currentQuestionIndex).getHTML(currentQuestionIndex) + "<BR>";
 			}
 		}
 		return result;
 	}
 
-	public boolean isSingleQuestion() {
-		return this.singleQuestion;
+	private String getAllQuestionsHTML() {
+		String result = "";
+		for (int i = 0; i < this.questions.size(); i++) {
+			result += this.questions.get(i).getHTML(i) + "<HR>";
+		}
+		return result;
 	}
 
-	public void allQuestionsOnPage() {
-		this.singleQuestion = false;
+	public void increaseQuestionCounter() {
+		this.currentQuestionIndex++;
 	}
 
-	public String toHTMLall() {
-		String res = "";
-		for (int i = 0; i < getQuestions().size(); i++)
-			res += getQuestions().get(i).toHTML(i) + "<HR>";
-		return res;
-	}
-	public String toHTMLsingle() {
-		String res = getQuestion().toHTML(getCurrentIndex() - 1);
-		return res;
-	}
-	
-	public void restart() {
-		this.currentQuestion = 0;
+	public boolean hasMoreQuestions() {
+		return this.questions.size() > this.currentQuestionIndex;
 	}
 
+	public int getScore() {
+		int score = 0;
+		for (int i = 0; i < this.userAnswers.size(); i++) {
+			score += this.questions.get(i).isCorrect(this.userAnswers.get(i));
+		}
+		return score;
+	}
+
+	/*
+	 * public int getCurrentIndex() { return currentQuestion; }
+	 * 
+	 * public int increaseQuestionIndex() { return ++currentQuestion; }
+	 * 
+	 * public void setAnswer(int questionIndex, String answer) {
+	 * this.userAnswers.put(questionIndex, answer); }
+	 * 
+	 * public HashMap<Integer, String> getUserAnswers() { return
+	 * this.userAnswers; }
+	 * 
+	 * public boolean hasMoreQuestions() { return this.currentQuestion <
+	 * this.questions.size(); }
+	 * 
+	 * public Question getQuestion() { if (!hasMoreQuestions()) restart();
+	 * return this.questions.get(this.currentQuestion++); }
+	 * 
+	 * public int getScore() { int result = 0; for (int i = 0; i <
+	 * getQuestions().size(); i++) { if (getUserAnswers().containsKey(i)) {
+	 * String userAnswer = getUserAnswers().get(i); if
+	 * (getQuestions().get(i).checkAnswer(userAnswer)) result++; } } return
+	 * result; }
+	 * 
+	 * public boolean isSingleQuestion() { return this.singleQuestion; }
+	 * 
+	 * public void allQuestionsOnPage() { this.singleQuestion = false; }
+	 * 
+	 * public String toHTMLall() { String res = ""; for (int i = 0; i <
+	 * getQuestions().size(); i++) res += getQuestions().get(i).toHTML(i) +
+	 * "<HR>"; return res; }
+	 * 
+	 * public String toHTMLsingle() { String res =
+	 * getQuestion().toHTML(getCurrentIndex() - 1); return res; }
+	 * 
+	 * public void restart() { this.currentQuestion = 0; }
+	 */
 }

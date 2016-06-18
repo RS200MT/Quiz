@@ -7,10 +7,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
-import javafx.util.Pair;
 
-import Questions.Question;
-import Questions.Question.QuestionType;
+import Models.Question.QuestionType;
+import javafx.util.Pair;
 
 public class DBObject {
 	public static final String ATTR_DB = "ATTR_DB";
@@ -210,10 +209,11 @@ public class DBObject {
 	 * Gets quiz with given id from database and return it;
 	 * Returns null if quiz with given id was not found;
 	 * @param id
+	 * @param singleQuestion 
 	 * @return Quiz
 	 * @throws SQLException
 	 */
-	public Quiz getQuizById(int id) throws SQLException {
+	public Quiz getQuizById(int id, int singleQuestion) throws SQLException {
 		Connection conn = getConnection();
 		String query = "SELECT * FROM " + TABLE_QUIZES + " WHERE id = " + id + ";";
 		ResultSet rs = getResultSet(query, conn);
@@ -407,13 +407,13 @@ public class DBObject {
 		for (int i = 0; i < answers.size(); i++)
 			executeUpdate("INSERT INTO " + TABLE_CORRECT_ANSWERS + " (question_id, correct_answer) VALUES ('"
 					+ questionId + "', '" + answers.get(i) + "');", conn);
-		if (type == Question.QuestionType.MultipleChoice.ordinal()) {
+		if (type == Models.QuestionType.MultipleChoice.ordinal()) {
 			ArrayList<String> multiple_ch = question.getPossibleAnswers();
 			for (int i = 0; i < multiple_ch.size(); i++)
 				executeUpdate("INSERT INTO " + TABLE_MULTIPLE_CHOICES + " (question_id, answer) VALUES ('" + questionId
 						+ "', '" + multiple_ch.get(i) + "');", conn);
 		}
-		if (type == Question.QuestionType.PictureResponse.ordinal())
+		if (type == Models.QuestionType.PictureResponse.ordinal())
 			executeUpdate("INSERT INTO " + TABLE_QUESTION_IMAGES + " (question_id, image_url) VALUES ('" + questionId
 					+ "', '" + question.getImageURL() + "');", conn);
 		closeConnection(conn);
@@ -437,6 +437,11 @@ public class DBObject {
 		}
 		closeConnection(conn);
 		return res;
+	}
+
+	public User getUserByUserName(String passed_username) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	
