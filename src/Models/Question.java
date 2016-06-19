@@ -17,11 +17,15 @@ public abstract class Question {
 		return 0;
 	}
 	
+	public ArrayList<String> getAnswers() {
+		return this.answers;
+	}
+	
 	public String getHTML(int index) {
 		return "";
 	}
 	
-	public int getType() {
-		return 0;
+	public ArrayList<String> getAdditionalData() {
+		return null;
 	}
 }

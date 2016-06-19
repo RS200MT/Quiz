@@ -12,8 +12,10 @@ import javax.servlet.http.HttpServletResponse;
 import Models.Constants;
 import Models.DBObject;
 import Models.Question;
-import Models.User;
-import Models.Question.QuestionType;
+import Questions.FillInBlankQuestion;
+import Questions.MultipleChoiceQuestion;
+import Questions.PictureQuestion;
+import Questions.QuestionResponse;
 
 /**
  * Servlet implementation class addQuestion
@@ -42,12 +44,43 @@ public class addQuestion extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
-	// gadmogvecema tipi, kitxva, pasuxi,
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		int quizId = Integer.parseInt(request.getParameter(Constants.ADD_QUESTION_QUIZ_ID));
+		int questionType = Integer.parseInt(request.getParameter(Constants.ADD_QUESTION_TYPE));
+		Question curQuestion = getQuestion(request, questionType);
+		if (curQuestion == null)
+			System.out.println("Error! curQuestion == null");
+		DBObject obj = (DBObject) getServletContext().getAttribute(DBObject.ATTR_DB);
+		obj.addQuestionToQuiz(quizId, curQuestion, questionType);
+		if (request.getParameter(Constants.ADD_QUESTION_NEXT_QUESTION) != null) {
+			request.setAttribute(Constants.ATTR_QUIZ_ID_FOR_QUESTION, quizId);
+			request.getRequestDispatcher(Constants.getAction(Constants.INDEX_DO_ADD_QUESTION)).forward(request,
+					response);
+		} else
+			request.getRequestDispatcher(Constants.INDEX).forward(request, response);
+	}
+
+	private Question getQuestion(HttpServletRequest request, int type) {
+		Question result = null;
 		String question = request.getParameter(Constants.ADD_QUESTION_QUESTION);
-		int type = Integer.parseInt(request.getParameter(Constants.ADD_QUESTION_TYPE));
+		ArrayList<String> answers = getAnswers(request);
+		if (type == PictureQuestion.getType()) {
+			String imageURL = request.getParameter(Constants.ADD_QUESTION_IMAGE);
+			result = new PictureQuestion(question, answers, imageURL);
+		} else if (type == MultipleChoiceQuestion.getType()) {
+			ArrayList<String> possibleAnswers = new ArrayList<String>();
+			for (int i = 1; i <= 4; i++)
+				possibleAnswers.add(request.getParameter(Constants.ADD_QUESTION_POSSIBLE_ANSWER + i));
+			result = new MultipleChoiceQuestion(question, answers, possibleAnswers);
+		} else if (type == FillInBlankQuestion.getType())
+			result = new FillInBlankQuestion(question, answers);
+		else
+			result = new QuestionResponse(question, answers);
+		return result;
+	}
+
+	private ArrayList<String> getAnswers(HttpServletRequest request) {
 		ArrayList<String> answers = new ArrayList<String>();
 		int i = 1;
 		while (true) {
@@ -57,27 +90,7 @@ public class addQuestion extends HttpServlet {
 			answers.add(answer);
 			i++;
 		}
-		ArrayList<Object> questionInfo = new ArrayList<Object>();
-		questionInfo.add(question);
-		questionInfo.add(answers);
-		if (type == QuestionType.PictureResponse.ordinal()) {
-			questionInfo.add(request.getParameter(Constants.ADD_QUESTION_IMAGE));
-		} else if (type == QuestionType.MultipleChoice.ordinal()) {
-			ArrayList<String> arr = new ArrayList<String>();
-			for (int j = 1; j <= 4; j++) {
-				arr.add(request.getParameter(Constants.ADD_QUESTION_POSSIBLE_ANSWER + j));
-			}
-			questionInfo.add(arr);
-		}
-		DBObject obj = (DBObject) getServletContext().getAttribute(DBObject.ATTR_DB);
-		Question q = new Question(QuestionType.values()[type], questionInfo);
-		obj.addQuestionToQuiz(quizId, q);
-		if (request.getParameter(Constants.ADD_QUESTION_NEXT_QUESTION) != null) {
-			request.setAttribute(Constants.ATTR_QUIZ_ID_FOR_QUESTION, quizId);
-			request.getRequestDispatcher(Constants.getAction(Constants.INDEX_DO_ADD_QUESTION)).forward(request, response);
-		} else
-			request.getRequestDispatcher(Constants.INDEX).forward(request, response);
-
+		return answers;
 	}
 
 }

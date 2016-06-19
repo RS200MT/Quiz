@@ -12,11 +12,6 @@
 		out.print("You must be logged in to accept the quiz!");
 		return;
 	}
-	if (request.getAttribute(Constants.INDEX_DO_QUIZ_ATTR_FINISHED) != null) {
-		out.print("Finished quiz! your score is: "
-				+ request.getAttribute(Constants.INDEX_DO_QUIZ_ATTR_RESULT_SCORE));
-		return;
-	}
 %>
 
 <form action="<%=Constants.S_QUIZING%>" method="post">
@@ -33,6 +28,7 @@
 		<input type="radio" name="<%=Constants.QUIZINT_SINGLE_QUESTION%>"
 			value="2" />All questions on page
 	</p>
+	<input type="submit" value="Submit" />
 
 	<%
 		} else {
@@ -51,5 +47,5 @@
 		}
 	%>
 	<input type="hidden" name="<%=Constants.ATTR_QUIZ_ID_FOR_QUESTION%>"
-		value="<%=quizId%>" /> <input type="submit" value="Submit" />
+		value="<%=quizId%>" />
 </form>

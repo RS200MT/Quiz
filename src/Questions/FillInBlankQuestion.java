@@ -19,8 +19,7 @@ public class FillInBlankQuestion extends Question {
 		return result;
 	}
 	
-	@Override
-	public int getType() {
+	public static int getType() {
 		return 2;
 	}
 }

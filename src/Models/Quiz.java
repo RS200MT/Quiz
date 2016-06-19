@@ -19,6 +19,7 @@ public class Quiz {
 	private boolean displaySingleQuestion;
 	private int currentQuestionIndex;
 	private ArrayList<String> userAnswers;
+	private int score;
 
 	public Quiz(int id, String title, String description, String author, String createTime, int timesWritten,
 			boolean randomized, boolean immediateCorrection, ArrayList<Question> questions,
@@ -29,14 +30,15 @@ public class Quiz {
 		this.author = author;
 		this.createTime = createTime;
 		this.timesWritten = timesWritten;
-		this.questions = new ArrayList<Question>();
+		this.questions = questions != null ? questions : new ArrayList<Question>();
 		this.randomized = randomized;
 		this.immediateCorrection = immediateCorrection;
 		this.displaySingleQuestion = displaySingleQuestion;
 		if (this.randomized)
 			randomizeQuestions();
-		currentQuestionIndex = 0;
-		userAnswers = new ArrayList<String>();
+		this.currentQuestionIndex = 0;
+		this.score = 0;
+		this.userAnswers = new ArrayList<String>();
 	}
 
 	private void randomizeQuestions() {
@@ -44,6 +46,7 @@ public class Quiz {
 	}
 
 	public void setUserAnswer(String answer) {
+		this.score += this.questions.get(this.userAnswers.size()).isCorrect(answer);
 		userAnswers.add(answer);
 	}
 
@@ -93,7 +96,8 @@ public class Quiz {
 
 	public String getHTML() {
 		String result = "";
-		// string title
+		result += "Quiz Title: <b>" + getTitle() + "</b><HR>";
+		System.out.println(this.questions.size());
 		if (!this.displaySingleQuestion) {
 			result += getAllQuestionsHTML();
 		} else {
@@ -115,17 +119,17 @@ public class Quiz {
 	public void increaseQuestionCounter() {
 		this.currentQuestionIndex++;
 	}
+	
+	public int getCurrentQuestionIndex() {
+		return this.currentQuestionIndex;
+	}
 
 	public boolean hasMoreQuestions() {
 		return this.questions.size() > this.currentQuestionIndex;
 	}
 
 	public int getScore() {
-		int score = 0;
-		for (int i = 0; i < this.userAnswers.size(); i++) {
-			score += this.questions.get(i).isCorrect(this.userAnswers.get(i));
-		}
-		return score;
+		return this.score;
 	}
 
 	/*

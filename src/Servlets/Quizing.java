@@ -55,30 +55,62 @@ public class Quizing extends HttpServlet {
 		}
 	}
 
-	private void nextQuestionAfterCheck(HttpServletResponse response, HttpServletRequest request, Quiz curQuiz) {
+	private void nextQuestionAfterCheck(HttpServletResponse response, HttpServletRequest request, Quiz curQuiz) throws ServletException, IOException {
+		if (curQuiz.hasMoreQuestions())
+			redirectAndSetQuizInSession(curQuiz, request, response);
+		else
+			redirectToResultPageAndDoneQuiz(request, response, curQuiz);
+	}
+
+	private void checkAnswer(HttpServletRequest request, HttpServletResponse response, Quiz curQuiz)
+			throws ServletException, IOException {
+		String answer = request
+				.getParameter(Constants.INDEX_DO_QUIZ_QUESTION_ANSWER + curQuiz.getCurrentQuestionIndex());
+		if (answer == null)
+			answer = "";
+		int lastScore = curQuiz.getScore();
+		curQuiz.setUserAnswer(answer);
+		int newScore = curQuiz.getScore();
 		curQuiz.increaseQuestionCounter();
-		redirectToQuizPage(curQuiz, request, response);
+		String message = "Your answer is: ";
+		message += newScore == lastScore ? "INCORRECT!" : "CORRECT!";
+		message += " | Your score: " + newScore;
+		message += "<BR><form action='" + Constants.S_QUIZING + "' method='post'><input type='submit' name='"
+				+ Constants.QUIZINIG_CHECK_RESULT_NEXT_QUESTION + "' value='Next Question'/></form>";
+		request.setAttribute(Constants.INDEX_DO_QUIZ_ATTR_RESULT_MESSAGE, message);
+		request.getRequestDispatcher(Constants.getAction(Constants.INDEX_DO_QUIZ_RESULT)).forward(request, response);
 	}
 
-	private void checkAnswer(HttpServletRequest request, HttpServletResponse response, Quiz curQuiz) {
-		// TODO Auto-generated method stub
-		
+	private void nextQuestion(HttpServletRequest request, HttpServletResponse response, Quiz curQuiz)
+			throws ServletException, IOException {
+		String answer = request
+				.getParameter(Constants.INDEX_DO_QUIZ_QUESTION_ANSWER + curQuiz.getCurrentQuestionIndex());
+		if (answer == null)
+			answer = "";
+		curQuiz.setUserAnswer(answer);
+		curQuiz.increaseQuestionCounter();
+		if (curQuiz.hasMoreQuestions())
+			redirectAndSetQuizInSession(curQuiz, request, response);
+		else 
+			redirectToResultPageAndDoneQuiz(request, response, curQuiz);
 	}
 
-	private void nextQuestion(HttpServletRequest request, HttpServletResponse response, Quiz curQuiz) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	private void doneQuiz(HttpServletRequest request, HttpServletResponse response, Quiz curQuiz) throws ServletException, IOException {
+	private void doneQuiz(HttpServletRequest request, HttpServletResponse response, Quiz curQuiz)
+			throws ServletException, IOException {
 		for (int i = 0; i < curQuiz.getQuestions().size(); i++) {
 			String answer = request.getParameter(Constants.INDEX_DO_QUIZ_QUESTION_ANSWER + i);
 			curQuiz.setUserAnswer(answer);
 		}
+		redirectToResultPageAndDoneQuiz(request, response, curQuiz);
+	}
+
+	private void redirectToResultPageAndDoneQuiz(HttpServletRequest request, HttpServletResponse response,
+			Quiz curQuiz) throws ServletException, IOException {
 		int score = curQuiz.getScore();
 		request.setAttribute(Constants.INDEX_DO_QUIZ_ATTR_FINISHED, 1);
-		request.setAttribute(Constants.INDEX_DO_QUIZ_ATTR_RESULT_SCORE, score);
-		request.getRequestDispatcher(Constants.getAction("asd")).forward(request, response);
+		request.setAttribute(Constants.INDEX_DO_QUIZ_ATTR_RESULT_MESSAGE, "You're done. your score is: " + score);
+		request.getSession().setAttribute(Constants.ATTR_SESSION_QUIZ, null);
+		request.getRequestDispatcher(Constants.getAction(Constants.INDEX_DO_QUIZ_RESULT)).forward(request, response);
 	}
 
 	private Quiz getCurrentQuiz(HttpServletRequest request, HttpServletResponse response) {
@@ -92,13 +124,26 @@ public class Quizing extends HttpServlet {
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
-			redirectToQuizPage(curQuiz, request, response);
+			if (curQuiz == null)
+				System.out.println("Quiz not found!");
+			redirectAndSetQuizInSession(curQuiz, request, response);
 		} else
 			curQuiz = (Quiz) request.getSession().getAttribute(Constants.ATTR_SESSION_QUIZ);
 		return curQuiz;
 	}
 
-	private void redirectToQuizPage(Quiz curQuiz, HttpServletRequest request, HttpServletResponse response) {
+	private void getAnswersAndCheck(Quiz curQuiz, HttpServletRequest request, HttpServletResponse response) {
+		for (int i = 0; i < curQuiz.getQuestions().size(); i++) {
+			String answer = request.getParameter(Constants.INDEX_DO_QUIZ_QUESTION_ANSWER + i);
+			curQuiz.setAnswer(i, answer);
+		}
+		int score = curQuiz.getScore();
+		request.setAttribute(Constants.INDEX_DO_QUIZ_ATTR_FINISHED, 1);
+		request.setAttribute(Constants.INDEX_DO_QUIZ_ATTR_RESULT_SCORE, score);
+		curQuiz.restart();
+	}
+
+	private void redirectAndSetQuizInSession(Quiz curQuiz, HttpServletRequest request, HttpServletResponse response) {
 		try {
 			request.getSession().setAttribute(Constants.ATTR_SESSION_QUIZ, curQuiz);
 			request.getRequestDispatcher(Constants.getQuizURL(curQuiz.getID())).forward(request, response);
