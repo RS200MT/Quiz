@@ -28,4 +28,9 @@ public class PictureQuestion extends Question {
 					+ "' id='" + Constants.INDEX_DO_QUIZ_QUESTION_ANSWER + index + "' />";
 		return result;
 	}
+	
+	@Override
+	public int getType() {
+		return 4;
+	}
 }

@@ -30,4 +30,9 @@ public class MultipleChoiceQuestion extends Question {
 		result += getMultipleChoiceHTML(index);
 		return result;
 	}
+	
+	@Override
+	public int getType() {
+		return 3;
+	}
 }

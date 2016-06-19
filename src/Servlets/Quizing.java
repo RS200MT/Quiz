@@ -53,33 +53,6 @@ public class Quizing extends HttpServlet {
 		} else if (request.getParameter(Constants.QUIZINIG_CHECK_RESULT_NEXT_QUESTION) != null) {
 			nextQuestionAfterCheck(response, request, curQuiz);
 		}
-
-		Quiz curQuiz = null;
-		if (request.getParameter(Constants.QUIZINT_SINGLE_QUESTION) != null) {
-			int singleQuestion = Integer.parseInt(request.getParameter(Constants.QUIZINT_SINGLE_QUESTION));
-			int quizId = Integer.parseInt(request.getParameter(Constants.ATTR_QUIZ_ID_FOR_QUESTION));
-			DBObject obj = (DBObject) getServletContext().getAttribute(DBObject.ATTR_DB);
-			curQuiz = null;
-			try {
-				curQuiz = obj.getQuizById(quizId);
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		} else {
-			curQuiz = (Quiz) request.getSession().getAttribute(Constants.ATTR_SESSION_QUIZ);
-			if (!curQuiz.isSingleQuestion()) {
-				getAnswersAndCheck(curQuiz, request, response);
-			} else {
-				curQuiz.setAnswer(curQuiz.getCurrentIndex() - 1, request
-						.getParameter(Constants.INDEX_DO_QUIZ_QUESTION_ANSWER + (curQuiz.getCurrentIndex() - 1)));
-				if (!curQuiz.hasMoreQuestions()) {
-					request.setAttribute(Constants.INDEX_DO_QUIZ_ATTR_RESULT_SCORE, curQuiz.getScore());
-					request.setAttribute(Constants.INDEX_DO_QUIZ_ATTR_FINISHED, 1);
-					curQuiz.restart();
-				}
-			}
-		}
-		redirectToQuizPage(curQuiz, request, response);
 	}
 
 	private void nextQuestionAfterCheck(HttpServletResponse response, HttpServletRequest request, Quiz curQuiz) {
@@ -123,17 +96,6 @@ public class Quizing extends HttpServlet {
 		} else
 			curQuiz = (Quiz) request.getSession().getAttribute(Constants.ATTR_SESSION_QUIZ);
 		return curQuiz;
-	}
-
-	private void getAnswersAndCheck(Quiz curQuiz, HttpServletRequest request, HttpServletResponse response) {
-		for (int i = 0; i < curQuiz.getQuestions().size(); i++) {
-			String answer = request.getParameter(Constants.INDEX_DO_QUIZ_QUESTION_ANSWER + i);
-			curQuiz.setAnswer(i, answer);
-		}
-		int score = curQuiz.getScore();
-		request.setAttribute(Constants.INDEX_DO_QUIZ_ATTR_FINISHED, 1);
-		request.setAttribute(Constants.INDEX_DO_QUIZ_ATTR_RESULT_SCORE, score);
-		curQuiz.restart();
 	}
 
 	private void redirectToQuizPage(Quiz curQuiz, HttpServletRequest request, HttpServletResponse response) {

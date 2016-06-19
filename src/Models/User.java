@@ -14,14 +14,18 @@ public class User {
 	private int type;
 	private ArrayList<Pair<Integer, String>> friends;
 
-	public User(int id, String userName, String email, String regDate, int quizNumber, int type, ArrayList<Pair<Integer, String>> friends) {
+	public User(int id, String userName, String email, String regDate, int quizNumber, int type,
+			ArrayList<Pair<Integer, String>> friends) {
 		this.id = id;
 		this.userName = userName;
 		this.email = email;
 		this.regDate = regDate;
 		this.quizNumber = quizNumber;
 		this.type = type;
-		this.friends = friends;
+		if (friends != null)
+			this.friends = friends;
+		else
+			friends = new ArrayList<Pair<Integer, String>>();
 	}
 
 	public int getId() {
@@ -51,11 +55,26 @@ public class User {
 	public void increaseQuizNumber() {
 		this.quizNumber++;
 	}
-	 
+
+	public void addFriend(Pair<Integer, String> newFriend) {
+		this.friends.add(newFriend);
+	}
+
+	public void addFriends(ArrayList<Pair<Integer, String>> newFriends) {
+		if (newFriends == null)
+			return;
+		if (this.friends.size() == 0)
+			this.friends = newFriends;
+		else
+			for (int i = 0; i < newFriends.size(); i++)
+				this.friends.add(newFriends.get(i));
+
+	}
+
 	public boolean hasFriendById(int friendId) {
 		return false;
 	}
-	
+
 	public boolean hasFriendByUserName(String friendUserName) {
 		return false;
 	}

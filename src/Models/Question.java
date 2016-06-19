@@ -20,4 +20,8 @@ public abstract class Question {
 	public String getHTML(int index) {
 		return "";
 	}
+	
+	public int getType() {
+		return 0;
+	}
 }

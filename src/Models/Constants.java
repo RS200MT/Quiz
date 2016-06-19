@@ -32,6 +32,9 @@ public class Constants {
 	public static final String REGISTER_EMAIL = "register_email";
 	public static final String REGISTER_PASSWORD = "register_password";
 	public static final String ADD_QUIZ_TITLE = "quiz_title";
+	public static final String ADD_QUIZ_DESCRIPTION = "quiz_description";
+	public static final String ADD_QUIZ_RANDOMIZED = "quiz_randomized";
+	public static final String ADD_QUIZ_IMMEDIATE_CORRECTION = "quiz_immediateCorrection";
 	public static final String ADD_QUESTION_QUESTION = "question";
 	public static final String ADD_QUESTION_ANSWER = "answer";
 	public static final String ADD_QUESTION_TYPE = "type";
@@ -99,7 +102,7 @@ public class Constants {
 		return INDEX + "?" + INDEX_DO + "=" + INDEX_DO_QUIZ_PAGE + "&" + ATTR_QUIZ_ID_FOR_QUESTION + "=" + id;
 	}
 	
-	
+	public static final int QUESTION_TYPES_LENGTH = 4;
 	
 	
 	public static final String QUIZINIG_DONE = "doneQuiz";
