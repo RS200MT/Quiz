@@ -1,6 +1,9 @@
 package Models;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+
+import javafx.util.Pair;
 
 public class User {
 	private int id;
@@ -9,15 +12,20 @@ public class User {
 	private String regDate;
 	private int quizNumber;
 	private int type;
+	private ArrayList<Pair<Integer, String>> friends;
 
-	public User(String userName, DBObject db) {
+	public User(int id, String userName, String email, String regDate, int quizNumber, int type,
+			ArrayList<Pair<Integer, String>> friends) {
+		this.id = id;
 		this.userName = userName;
-		HashMap<String, Object> userInfo = db.getUserInfo(this.userName);
-		this.id = (int)userInfo.get("id");
-		this.email = (String)userInfo.get("email");
-		this.regDate = (String)userInfo.get("reg_date");
-		this.quizNumber = (int)userInfo.get("quizes_written");
-		this.type = (int)userInfo.get("type");
+		this.email = email;
+		this.regDate = regDate;
+		this.quizNumber = quizNumber;
+		this.type = type;
+		if (friends != null)
+			this.friends = friends;
+		else
+			friends = new ArrayList<Pair<Integer, String>>();
 	}
 
 	public int getId() {
@@ -39,7 +47,7 @@ public class User {
 	public int getQuizNumber() {
 		return this.quizNumber;
 	}
-	
+
 	public int getType() {
 		return this.type;
 	}
@@ -48,5 +56,30 @@ public class User {
 		this.quizNumber++;
 	}
 
+<<<<<<< HEAD
 	
+=======
+	public void addFriend(Pair<Integer, String> newFriend) {
+		this.friends.add(newFriend);
+	}
+
+	public void addFriends(ArrayList<Pair<Integer, String>> newFriends) {
+		if (newFriends == null)
+			return;
+		if (this.friends.size() == 0)
+			this.friends = newFriends;
+		else
+			for (int i = 0; i < newFriends.size(); i++)
+				this.friends.add(newFriends.get(i));
+
+	}
+
+	public boolean hasFriendById(int friendId) {
+		return false;
+	}
+
+	public boolean hasFriendByUserName(String friendUserName) {
+		return false;
+	}
+>>>>>>> 4bcc634f0c89cf1a9078f2a038015347c9ac0d26
 }

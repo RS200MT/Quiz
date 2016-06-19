@@ -1,9 +1,7 @@
-<%@page import="Questions.Question"%>
-<%@page import="Questions.Question.QuestionType"%>
 <%@page import="Models.Constants"%>
 <style>
 .dropbtn {
-	background-color: #4CAF50; 
+	background-color: #4CAF50;
 	color: white;
 	padding: 16px;
 	font-size: 16px;
@@ -53,7 +51,7 @@
 %>
 <script>
 		function displayForm(object, id) {
-			for (var i = 1; i < <%=Question.QuestionType.values().length %>; i++) { 
+			for (var i = 1; i < <%=Constants.QUESTION_TYPES_LENGTH+1 %>; i++) { 
 				if (i == id) {
 					document.getElementById("type" + i).style.display = "block";
 					document.getElementById('<%=Constants.ADD_QUESTION_TYPE %>').value = id;
@@ -145,32 +143,27 @@
 		id="<%=Constants.ADD_QUESTION_TYPE%>" readonly /> <input
 		type="hidden" required="required"
 		name="<%=Constants.ADD_QUESTION_QUIZ_ID%>"
-		id="<%=Constants.ADD_QUESTION_QUIZ_ID%>"
-		value="<%=quizId%>" readonly />
-	<p>
-		<input type="submit" value="Done"
-			name="<%=Constants.ADD_QUESTION_DONE_QUIZ%>"
-			id="<%=Constants.ADD_QUESTION_DONE_QUIZ%>" />
-	</p>
+		id="<%=Constants.ADD_QUESTION_QUIZ_ID%>" value="<%=quizId%>" readonly />
 	<p>
 		<input type="submit" value="Next Question"
 			name="<%=Constants.ADD_QUESTION_NEXT_QUESTION%>"
 			id="<%=Constants.ADD_QUESTION_NEXT_QUESTION%>" />
+	</p>
+	<p>
+		<input type="submit" value="Done"
+			name="<%=Constants.ADD_QUESTION_DONE_QUIZ%>"
+			id="<%=Constants.ADD_QUESTION_DONE_QUIZ%>" />
 	</p>
 </form>
 <button onClick="addCorrectAnswer()">Add another correct answer</button>
 <button onClick="removeAnswersField()" id="removeFieldButton"
 	style="display: none">remove</button>
 <script>
-
 		document.getElementById('<%=Constants.ADD_QUESTION_TYPE%>').value = 1;
-	/* When the user clicks on the button, 
-	 toggle between hiding and showing the dropdown content */
 	function myFunction() {
 		document.getElementById("myDropdown").classList.toggle("show");
 	}
 
-	// Close the dropdown if the user clicks outside of it
 	window.onclick = function(event) {
 		if (!event.target.matches('.dropbtn')) {
 

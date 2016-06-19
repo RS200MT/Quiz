@@ -47,6 +47,7 @@ public class Quizing extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+<<<<<<< HEAD
 		Quiz curQuiz = null;
 		DBObject obj = (DBObject) getServletContext().getAttribute(DBObject.ATTR_DB);
 		if (request.getParameter(Constants.QUIZINT_SINGLE_QUESTION) != null) {
@@ -76,24 +77,70 @@ public class Quizing extends HttpServlet {
 					obj.addToQuizLog(((User)request.getSession().getAttribute(Constants.ATTR_USER)).getId(),curQuiz);
 				}
 			}
+=======
+		Quiz curQuiz = getCurrentQuiz(request, response);
+		if (request.getParameter(Constants.QUIZINIG_DONE) != null) {
+			doneQuiz(request, response, curQuiz);
+		} else if (request.getParameter(Constants.QUIZINIG_NEXT) != null) {
+			nextQuestion(request, response, curQuiz);
+		} else if (request.getParameter(Constants.QUIZINIG_CHECK) != null) {
+			checkAnswer(request, response, curQuiz);
+		} else if (request.getParameter(Constants.QUIZINIG_CHECK_RESULT_NEXT_QUESTION) != null) {
+			nextQuestionAfterCheck(response, request, curQuiz);
+>>>>>>> 4bcc634f0c89cf1a9078f2a038015347c9ac0d26
 		}
+	}
+
+	private void nextQuestionAfterCheck(HttpServletResponse response, HttpServletRequest request, Quiz curQuiz) {
+		curQuiz.increaseQuestionCounter();
 		redirectToQuizPage(curQuiz, request, response);
 	}
 
+<<<<<<< HEAD
 	private void fixEndTime(Quiz curQuiz) {
 		Date date = new Date();
 		curQuiz.setSpentTime(date.getSeconds() - curQuiz.getStartTime().getSeconds());
 	}
 
 	private void getAnswersAndCheck(Quiz curQuiz, HttpServletRequest request, HttpServletResponse response) {
+=======
+	private void checkAnswer(HttpServletRequest request, HttpServletResponse response, Quiz curQuiz) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private void nextQuestion(HttpServletRequest request, HttpServletResponse response, Quiz curQuiz) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private void doneQuiz(HttpServletRequest request, HttpServletResponse response, Quiz curQuiz) throws ServletException, IOException {
+>>>>>>> 4bcc634f0c89cf1a9078f2a038015347c9ac0d26
 		for (int i = 0; i < curQuiz.getQuestions().size(); i++) {
 			String answer = request.getParameter(Constants.INDEX_DO_QUIZ_QUESTION_ANSWER + i);
-			curQuiz.setAnswer(i, answer);
+			curQuiz.setUserAnswer(answer);
 		}
 		int score = curQuiz.getScore();
 		request.setAttribute(Constants.INDEX_DO_QUIZ_ATTR_FINISHED, 1);
 		request.setAttribute(Constants.INDEX_DO_QUIZ_ATTR_RESULT_SCORE, score);
-		curQuiz.restart();
+		request.getRequestDispatcher(Constants.getAction("asd")).forward(request, response);
+	}
+
+	private Quiz getCurrentQuiz(HttpServletRequest request, HttpServletResponse response) {
+		Quiz curQuiz = null;
+		if (request.getParameter(Constants.QUIZINT_SINGLE_QUESTION) != null) {
+			int singleQuestion = Integer.parseInt(request.getParameter(Constants.QUIZINT_SINGLE_QUESTION));
+			int quizId = Integer.parseInt(request.getParameter(Constants.ATTR_QUIZ_ID_FOR_QUESTION));
+			DBObject obj = (DBObject) getServletContext().getAttribute(DBObject.ATTR_DB);
+			try {
+				curQuiz = obj.getQuizById(quizId, singleQuestion);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			redirectToQuizPage(curQuiz, request, response);
+		} else
+			curQuiz = (Quiz) request.getSession().getAttribute(Constants.ATTR_SESSION_QUIZ);
+		return curQuiz;
 	}
 
 	private void redirectToQuizPage(Quiz curQuiz, HttpServletRequest request, HttpServletResponse response) {

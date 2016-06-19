@@ -1,6 +1,5 @@
 <%@page import="java.util.HashMap"%>
 <%@page import="java.util.HashSet"%>
-<%@page import="Questions.Question"%>
 <%@page import="Models.Constants"%>
 <%@page import="Models.User"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"

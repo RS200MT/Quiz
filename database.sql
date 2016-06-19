@@ -37,7 +37,9 @@ create table if not exists friends(
 	id int not null primary key,
 	user1_id int,
     user2_id int,
-    status int not null
+    status int not null,
+    key(user1_id),
+    key(user2_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 
@@ -45,13 +47,13 @@ create table if not exists friends(
 create table if not exists quizes (
 	id int auto_increment primary key,
     title tinytext not null,
+    description text not null,
     author int not null,
     create_time timestamp,
     times_written int DEFAULT 0,
     randomize int default 0,
     immediate_correction int default 0,
-    practice_mode int default 0,
-    description text not null
+    practice_mode int default 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 

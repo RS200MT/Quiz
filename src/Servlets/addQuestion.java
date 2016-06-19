@@ -11,9 +11,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import Models.Constants;
 import Models.DBObject;
+import Models.Question;
 import Models.User;
-import Questions.Question;
-import Questions.Question.QuestionType;
+import Models.Question.QuestionType;
 
 /**
  * Servlet implementation class addQuestion

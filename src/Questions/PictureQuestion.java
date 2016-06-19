@@ -1,13 +1,36 @@
 package Questions;
 
-public class PictureQuestion {
-	private String question = "";
-	private String imgSrc = "";
-	private String answer = "";
+import java.util.ArrayList;
+
+import Models.Constants;
+import Models.Question;
+
+public class PictureQuestion extends Question {
+	private String imageURL;
 	
-	public PictureQuestion(String question, String url, String answer){
+	public PictureQuestion(String question, ArrayList<String> answers, String imageURL) {
 		this.question = question;
-		this.imgSrc = url;
-		this.answer = answer;
+		this.answers = answers;
+		this.imageURL = imageURL;
+	}
+	
+	private String getImageHTML() {
+		String result = "";
+		result +="<img src='" + this.imageURL + "' width='350' height='200'/>";
+		return result;
+	}
+	
+	@Override
+	public String getHTML(int index) {
+		String result = "Question: <b>" + getQuestion() + "</b><BR>";
+		result += getImageHTML() + "<BR>";
+		result += "Answer: <input type='text' required='required' name='" + Constants.INDEX_DO_QUIZ_QUESTION_ANSWER + index
+					+ "' id='" + Constants.INDEX_DO_QUIZ_QUESTION_ANSWER + index + "' />";
+		return result;
+	}
+	
+	@Override
+	public int getType() {
+		return 4;
 	}
 }

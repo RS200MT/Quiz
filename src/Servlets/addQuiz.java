@@ -42,9 +42,12 @@ public class addQuiz extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		String title = request.getParameter(Constants.ADD_QUIZ_TITLE);
+		String description = request.getParameter(Constants.ADD_QUIZ_DESCRIPTION);
+		boolean isRandomized = request.getParameter(Constants.ADD_QUIZ_RANDOMIZED) != null;
+		boolean isImmediateCorrection = request.getParameter(Constants.ADD_QUIZ_IMMEDIATE_CORRECTION) != null;
 		DBObject obj = (DBObject) getServletContext().getAttribute(DBObject.ATTR_DB);
 		User user = (User) request.getSession().getAttribute(Constants.ATTR_USER);
-		int quizId = obj.addQuiz(title, user.getId());
+		int quizId = obj.addQuiz(title, description, isRandomized, isImmediateCorrection, user.getId());
 		request.setAttribute(Constants.ATTR_QUIZ_ID_FOR_QUESTION, quizId);
 		request.getRequestDispatcher(Constants.getAction(Constants.INDEX_DO_ADD_QUESTION)).forward(request, response);
 	}

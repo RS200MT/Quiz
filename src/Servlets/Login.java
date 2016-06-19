@@ -19,6 +19,7 @@ import Models.User;
 @WebServlet("/Login")
 public class Login extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
@@ -28,9 +29,11 @@ public class Login extends HttpServlet {
 	}
 
 	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+	 *      response)
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		request.getRequestDispatcher(Models.Constants.INDEX).forward(request, response);
 	}
 
@@ -46,7 +49,8 @@ public class Login extends HttpServlet {
 		String db_password = obj.getPasswordHash(passed_username);
 		if (db_password != null) {
 			if (Password.passwordMatches(db_password, passed_password)) {
-				request.getSession().setAttribute(Constants.ATTR_USER, new User(passed_username, obj));
+				User loggedUser = obj.getUserByUserName(passed_username);
+				request.getSession().setAttribute(Constants.ATTR_USER, loggedUser);
 			} else {
 				request.setAttribute(Constants.ATTR_FAILED_LOGIN, Constants.LOGIN_INCORRECT_PASSWORD);
 			}

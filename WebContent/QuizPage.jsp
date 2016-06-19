@@ -1,4 +1,4 @@
-<%@page import="Questions.Question"%>
+<%@page import="Models.Question"%>
 <%@page import="Models.User"%>
 <%@page import="Models.Quiz"%>
 <%@page import="Models.Constants"%>
@@ -13,7 +13,8 @@
 		return;
 	}
 	if (request.getAttribute(Constants.INDEX_DO_QUIZ_ATTR_FINISHED) != null) {
-		out.print ("Finished quiz! your score is: " + request.getAttribute(Constants.INDEX_DO_QUIZ_ATTR_RESULT_SCORE));
+		out.print("Finished quiz! your score is: "
+				+ request.getAttribute(Constants.INDEX_DO_QUIZ_ATTR_RESULT_SCORE));
 		return;
 	}
 %>
@@ -34,10 +35,20 @@
 	</p>
 
 	<%
-		} else if (!quiz.isSingleQuestion())
-			out.print(quiz.toHTMLall());
-		else
-			out.print(quiz.toHTMLsingle());
+		} else {
+			out.print(quiz.getHTML());
+			if (quiz.displaySingleQuestion()) {
+				if (quiz.isImmediateCorrection()) {
+					out.print(
+							"<input type='submit' name='" + Constants.QUIZINIG_CHECK + "' value='check answer'/>");
+				} else {
+					out.print(
+							"<input type='submit' name='" + Constants.QUIZINIG_NEXT + "' value='next question'/>");
+				}
+			} else {
+				out.print("<input type='submit' name='" + Constants.QUIZINIG_DONE + "' value='done quiz'/>");
+			}
+		}
 	%>
 	<input type="hidden" name="<%=Constants.ATTR_QUIZ_ID_FOR_QUESTION%>"
 		value="<%=quizId%>" /> <input type="submit" value="Submit" />
