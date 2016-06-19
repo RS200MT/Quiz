@@ -352,7 +352,7 @@ public class DBObject {
 	public ArrayList<Quiz> getRecentQuizesForUser(int userID, int n) throws SQLException{
 		ArrayList<Quiz> recentQuizesForUser = new ArrayList<Quiz>();
 		Connection conn = getConnection();
-		String query = "select * from " + TABLE_QUIZ_LOGS + " where user_id = " + userID + " order by end_time limit " + n +";";
+		String query = "select * from " + TABLE_QUIZ_LOGS + " where user_id = " + userID + " order by start_time limit " + n +";";
 		ResultSet rs = getResultSet(query, conn);
 		if(!rs.isBeforeFirst())
 			return null;
@@ -384,6 +384,14 @@ public class DBObject {
 		}
 		closeConnection(conn);
 		return recentQuizes;
+	}
+	
+	public void addToQuizLog(int userID, Quiz quiz){
+		Connection conn = getConnection();
+		String query = "Insert into " + TABLE_QUIZ_LOGS + " values ('" + userID +"', '" + quiz.getID() +
+				"', '" + quiz.getScore() + "', '" + quiz.getStartTime() + "', '" + quiz.getSpentTime() +"');";
+		executeUpdate(query, conn);
+		closeConnection(conn);
 	}
 	
 	// This function insert quiz in database

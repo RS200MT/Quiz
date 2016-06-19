@@ -1,6 +1,7 @@
 package Models;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -15,6 +16,8 @@ public class Quiz {
 	private int currentQuestion;
 	private boolean singleQuestion;
 	private String title;
+	private Date startTime;
+	private double spentTime;
 
 	public Quiz(int id, String author, int timesWritten, String title) {
 		this.id = id;
@@ -25,6 +28,7 @@ public class Quiz {
 		this.currentQuestion = 0;
 		this.singleQuestion = true;
 		this.title = title;
+		this.spentTime = 0;
 	}
 
 	public void addQuestion(Question q) {
@@ -46,6 +50,22 @@ public class Quiz {
 		return this.author;
 	}
 
+	public void setStartTime(Date starTime){
+		this.startTime = starTime;
+	}
+	
+	public Date getStartTime(){
+		return this.startTime;
+	}
+	
+	public void setSpentTime(double spentTime){
+		this.spentTime = spentTime;
+	}
+	
+	public double getSpentTime(){
+		return this.spentTime;
+	}
+	
 	public int getTimesWritten() {
 		return this.timesWritten;
 	}
