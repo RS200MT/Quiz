@@ -127,6 +127,10 @@ public class Quiz {
 	public boolean hasMoreQuestions() {
 		return this.questions.size() > this.currentQuestionIndex;
 	}
+	
+	public boolean isLastQuestion() {
+		return this.currentQuestionIndex == this.questions.size() - 1;
+	}
 
 	public int getScore() {
 		return this.score;

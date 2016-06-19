@@ -32,11 +32,14 @@
 
 	<%
 		} else {
+			String checkAnswer = "Check Answer";
+			String nextQuestion = "Next Question";
+			String doneQuiz = "Done Quiz";
 			out.print(quiz.getHTML());
 			if (quiz.displaySingleQuestion()) {
 				if (quiz.isImmediateCorrection()) {
 					out.print(
-							"<input type='submit' name='" + Constants.QUIZINIG_CHECK + "' value='check answer'/>");
+							"<input type='submit' name='" + (quiz.isLastQuestion() ? Constants.QUIZINIG_NEXT :  Constants.QUIZINIG_CHECK) + "' value='check answer'/>");
 				} else {
 					out.print(
 							"<input type='submit' name='" + Constants.QUIZINIG_NEXT + "' value='next question'/>");
