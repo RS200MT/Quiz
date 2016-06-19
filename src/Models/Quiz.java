@@ -1,11 +1,11 @@
 package Models;
 
 import java.util.ArrayList;
-<<<<<<< HEAD
+
 import java.util.Date;
-=======
+
 import java.util.Collections;
->>>>>>> 4bcc634f0c89cf1a9078f2a038015347c9ac0d26
+
 import java.util.HashMap;
 import java.util.List;
 
@@ -16,13 +16,7 @@ public class Quiz {
 	private String author;
 	private String createTime;
 	private int timesWritten;
-<<<<<<< HEAD
-	private int currentQuestion;
-	private boolean singleQuestion;
-	private String title;
-	private Date startTime;
-	private double spentTime;
-=======
+
 	private boolean randomized;
 	private boolean immediateCorrection;
 	private ArrayList<Question> questions;
@@ -30,7 +24,7 @@ public class Quiz {
 	private boolean displaySingleQuestion;
 	private int currentQuestionIndex;
 	private ArrayList<String> userAnswers;
->>>>>>> 4bcc634f0c89cf1a9078f2a038015347c9ac0d26
+
 
 	public Quiz(int id, String title, String description, String author, String createTime, int timesWritten,
 			boolean randomized, boolean immediateCorrection, ArrayList<Question> questions,
@@ -42,13 +36,7 @@ public class Quiz {
 		this.createTime = createTime;
 		this.timesWritten = timesWritten;
 		this.questions = new ArrayList<Question>();
-<<<<<<< HEAD
-		this.userAnswers = new HashMap<Integer, String>();
-		this.currentQuestion = 0;
-		this.singleQuestion = true;
-		this.title = title;
-		this.spentTime = 0;
-=======
+
 		this.randomized = randomized;
 		this.immediateCorrection = immediateCorrection;
 		this.displaySingleQuestion = displaySingleQuestion;
@@ -56,7 +44,6 @@ public class Quiz {
 			randomizeQuestions();
 		currentQuestionIndex = 0;
 		userAnswers = new ArrayList<String>();
->>>>>>> 4bcc634f0c89cf1a9078f2a038015347c9ac0d26
 	}
 
 	private void randomizeQuestions() {
@@ -83,29 +70,28 @@ public class Quiz {
 		return this.author;
 	}
 
-<<<<<<< HEAD
-	public void setStartTime(Date starTime){
-		this.startTime = starTime;
-	}
-	
-	public Date getStartTime(){
-		return this.startTime;
-	}
-	
-	public void setSpentTime(double spentTime){
-		this.spentTime = spentTime;
-	}
-	
-	public double getSpentTime(){
-		return this.spentTime;
-	}
-	
-=======
+//<<<<<<< HEAD
+//	public void setStartTime(Date starTime){
+//		this.startTime = starTime;
+//	}
+//	
+//	public Date getStartTime(){
+//		return this.startTime;
+//	}
+//	
+//	public void setSpentTime(double spentTime){
+//		this.spentTime = spentTime;
+//	}
+//	
+//	public double getSpentTime(){
+//		return this.spentTime;
+//	}
+//	
+//=======
 	public String getCreateTime() {
 		return this.createTime;
 	}
 
->>>>>>> 4bcc634f0c89cf1a9078f2a038015347c9ac0d26
 	public int getTimesWritten() {
 		return this.timesWritten;
 	}

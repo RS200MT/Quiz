@@ -38,17 +38,17 @@ public class nextQuestion extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		Quiz q = (Quiz)request.getSession().getAttribute("A");
-		if(q.isSingleQuestion()){
-			q.setAnswer(q.getCurrentIndex(),(String)request.getParameter(""));
-		} else {
-			Enumeration<String> answers = request.getParameterNames();
-			int i = 0;
-			while(answers.hasMoreElements()){
-				q.setAnswer(i++, answers.nextElement());
-			}
-			
-		}
+//		Quiz q = (Quiz)request.getSession().getAttribute("A");
+//		if(q.isSingleQuestion()){
+//			q.setAnswer(q.getCurrentIndex(),(String)request.getParameter(""));
+//		} else {
+//			Enumeration<String> answers = request.getParameterNames();
+//			int i = 0;
+//			while(answers.hasMoreElements()){
+//				q.setAnswer(i++, answers.nextElement());
+//			}
+//			
+//		}
 	}
 	
 	

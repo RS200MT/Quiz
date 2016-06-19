@@ -56,9 +56,7 @@ public class User {
 		this.quizNumber++;
 	}
 
-<<<<<<< HEAD
-	
-=======
+
 	public void addFriend(Pair<Integer, String> newFriend) {
 		this.friends.add(newFriend);
 	}
@@ -81,5 +79,5 @@ public class User {
 	public boolean hasFriendByUserName(String friendUserName) {
 		return false;
 	}
->>>>>>> 4bcc634f0c89cf1a9078f2a038015347c9ac0d26
+
 }
