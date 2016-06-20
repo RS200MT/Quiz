@@ -8,6 +8,10 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import Questions.FillInBlankQuestion;
+import Questions.MultipleChoiceQuestion;
+import Questions.PictureQuestion;
+import Questions.QuestionResponse;
 import javafx.util.Pair;
 
 public class DBObject {
@@ -212,33 +216,24 @@ public class DBObject {
 	 */
 	public Quiz getQuizById(int id, int singleQuestion) throws SQLException {
 		Connection conn = getConnection();
-		String query = "SELECT * FROM " + TABLE_QUIZES + " WHERE id = " + id + ";";
+		String query = "SELECT quizes.*, users.user_name FROM " + TABLE_QUIZES + " quizes left join " + TABLE_USERS
+				+ " users on quizes.author = users.id WHERE quizes.id = " + id + " limit 1;";
 		ResultSet rs = getResultSet(query, conn);
-		int timesWritten = 0;
-		int authorId = 0;
-		String title = "";
 		if (rs.next()) {
-			authorId = rs.getInt("author");
-			timesWritten = rs.getInt("times_written");
-			title = rs.getString("title");
+			String title = rs.getString("title");
+			String description = rs.getString("description");
+			String author = rs.getString("user_name");
+			String createTime = rs.getString("create_time");
+			int timesWritten = rs.getInt("times_written");
+			boolean randomized = rs.getInt("randomize") == 1;
+			boolean immediateCorrection = rs.getInt("immediate_correction") == 1;
+			ArrayList<Question> questions = getQuestionsForQuiz(id, conn);
+			boolean displaySingleQuestion = singleQuestion == 1;
+			return new Quiz(id, title, description, author, createTime, timesWritten, randomized, immediateCorrection, questions, displaySingleQuestion);
 		} else {
-			System.out.println("asdasd");
+			System.out.println("Quiz not found!");
 			return null;
 		}
-		ResultSet getAuthorName = getResultSet("SELECT * FROM " + TABLE_USERS + " WHERE id = " + authorId + ";", conn);
-		String authorName = "";
-		if (getAuthorName.next()) {
-			authorName = getAuthorName.getString("user_name");
-		}
-		Quiz quiz = new Quiz(id, authorName, timesWritten, title);
-		ArrayList<Question> questions = getQuestionsForQuiz(id, conn);
-		if (questions != null) {
-			for (Question q : questions) {
-				quiz.addQuestion(q);
-			}
-		}
-		closeConnection(conn);
-		return quiz;
 	}
 
 	/**
@@ -257,40 +252,72 @@ public class DBObject {
 		if (!rs.isBeforeFirst()) {
 			return null;
 		}
-		ArrayList<Question> res = new ArrayList<Question>();
+		ArrayList<Question> result = new ArrayList<Question>();
 		while (rs.next()) {
-			int qType = rs.getInt("q_type");
 			int qId = rs.getInt("id");
-			ArrayList<Object> qInfo = new ArrayList<Object>();
-			qInfo.add(rs.getString("question"));
-			getCorrectAnswers(qInfo, qId);
-			getSpecificQuestionInfo(qInfo, qId, qType);
-			Question q = new Question(QuestionType.values()[qType], qInfo);
-			res.add(q);
+			result.add(getQuestionById(qId, conn));
 		}
-		return res;
+		return result;
+	}
+
+	private Question getQuestionById(int id, Connection conn) throws SQLException {
+		String query = "SELECT * FROM " + TABLE_QUESTIONS + " WHERE id = " + id + " limit 1;";
+		ResultSet rs = getResultSet(query, conn);
+		if (rs.next()) {
+			int quizId = rs.getInt("quiz_id");
+			String question = rs.getString("question");
+			int type = rs.getInt("q_type");
+			if (type == QuestionResponse.getType()) {
+				return new QuestionResponse(question, getCorrectAnswers(id, conn));
+			} else if (type == FillInBlankQuestion.getType()) {
+				return new FillInBlankQuestion(question, getCorrectAnswers(id, conn));
+			} else if (type == MultipleChoiceQuestion.getType()) {
+				return new MultipleChoiceQuestion(question, getCorrectAnswers(id, conn), getPossibleAnswers(id, conn));
+			} else if (type == PictureQuestion.getType()) {
+				return new PictureQuestion(question, getCorrectAnswers(id, conn), getImageURL(id, conn));
+			}
+		}
+		return null;
+	}
+
+	private String getImageURL(int id, Connection conn) throws SQLException {
+		String imageURL = "SELECT * FROM " + TABLE_QUESTION_IMAGES + " WHERE question_id = " + id + ";";
+		ResultSet rs = getResultSet(imageURL, conn);
+		if (rs.next()) 
+			return rs.getString("image_url");
+		return "";
+	}
+
+	private ArrayList<String> getPossibleAnswers(int id, Connection conn) throws SQLException {
+		String getPossibleAnswers = "SELECT * FROM " + TABLE_MULTIPLE_CHOICES + " WHERE question_id = " + id + ";";
+		ResultSet possibleAnswers = getResultSet(getPossibleAnswers, conn);
+		ArrayList<String> possibleAnswersList = new ArrayList<String>();
+		while (possibleAnswers.next()) {
+			String nextPossAnswer = possibleAnswers.getString("answer");
+			possibleAnswersList.add(nextPossAnswer);
+		}
+		return possibleAnswersList;
 	}
 
 	/**
 	 * 
-	 * @param qInfo
-	 * @param qId
+	 * @param id
+	 * @param conn2
+	 * @return 
 	 * @throws SQLException
 	 */
-	private void getCorrectAnswers(ArrayList<Object> qInfo, int qId) throws SQLException {
-		Connection conn = getConnection();
-		String getCorrectAnswers = "SELECT * FROM " + TABLE_CORRECT_ANSWERS + " WHERE question_id = " + qId + ";";
+	private ArrayList<String> getCorrectAnswers(int id, Connection conn) throws SQLException {
+		String getCorrectAnswers = "SELECT * FROM " + TABLE_CORRECT_ANSWERS + " WHERE question_id = " + id + ";";
 		ResultSet correctAnswers = getResultSet(getCorrectAnswers, conn);
 		if (!correctAnswers.isBeforeFirst()) {
 			throw new Error("No correct answers for this question in database");
 		}
-		ArrayList<String> corrAnswersForThisQuestion = new ArrayList<String>();
+		ArrayList<String> result = new ArrayList<String>();
 		while (correctAnswers.next()) {
 			String nextAnswer = correctAnswers.getString("correct_answer");
-			corrAnswersForThisQuestion.add(nextAnswer);
+			result.add(nextAnswer);
 		}
-		qInfo.add(1, corrAnswersForThisQuestion);
-		closeConnection(conn);
+		return result;
 	}
 
 	/**
@@ -301,26 +328,26 @@ public class DBObject {
 	 * @param qType
 	 * @throws SQLException
 	 */
-	private void getSpecificQuestionInfo(ArrayList<Object> info, int qId, int qType) throws SQLException {
-		Connection conn = getConnection();
-		if (qType == QuestionType.MultipleChoice.ordinal()) {
-			String getPossibleAnswers = "SELECT * FROM " + TABLE_MULTIPLE_CHOICES + " WHERE question_id = " + qId + ";";
-			ResultSet possibleAnswers = getResultSet(getPossibleAnswers, conn);
-			ArrayList<String> possibleAnswersList = new ArrayList<String>();
-			while (possibleAnswers.next()) {
-				String nextPossAnswer = possibleAnswers.getString("answer");
-				possibleAnswersList.add(nextPossAnswer);
-			}
-			info.add(2, possibleAnswersList);
-		} else if (qType == QuestionType.PictureResponse.ordinal()) {
-			String imageURL = "SELECT * FROM " + TABLE_QUESTION_IMAGES + " WHERE question_id = " + qId + ";";
-			ResultSet url = getResultSet(imageURL, conn);
-			if (url.next()) {
-				info.add(2, url.getString("image_url"));
-			}
-		}
-		conn.close();
-	}
+//	private void getSpecificQuestionInfo(ArrayList<Object> info, int qId, int qType) throws SQLException {
+//		Connection conn = getConnection();
+//		if (qType == QuestionType.MultipleChoice.ordinal()) {
+//			String getPossibleAnswers = "SELECT * FROM " + TABLE_MULTIPLE_CHOICES + " WHERE question_id = " + qId + ";";
+//			ResultSet possibleAnswers = getResultSet(getPossibleAnswers, conn);
+//			ArrayList<String> possibleAnswersList = new ArrayList<String>();
+//			while (possibleAnswers.next()) {
+//				String nextPossAnswer = possibleAnswers.getString("answer");
+//				possibleAnswersList.add(nextPossAnswer);
+//			}
+//			info.add(2, possibleAnswersList);
+//		} else if (qType == QuestionType.PictureResponse.ordinal()) {
+//			String imageURL = "SELECT * FROM " + TABLE_QUESTION_IMAGES + " WHERE question_id = " + qId + ";";
+//			ResultSet url = getResultSet(imageURL, conn);
+//			if (url.next()) {
+//				info.add(2, url.getString("image_url"));
+//			}
+//		}
+//		conn.close();
+//	}
 
 	/**
 	 * Get several most popular quizzes in the database; If there are not as
@@ -408,25 +435,28 @@ public class DBObject {
 
 	// This function gets quizId and question and inserts this question in
 	// database for the quiz
-	public int addQuestionToQuiz(int quizId, Question question) {
+	public int addQuestionToQuiz(int quizId, Question question, int questionType) {
 		Connection conn = getConnection();
-		int type = question.getType().ordinal();
 		String quest = question.getQuestion();
 		ArrayList<String> answers = question.getAnswers();
-		int questionId = executeUpdate("INSERT INTO " + TABLE_QUESTIONS + " (quiz_id, question, q_type) VALUES ('"
-				+ quizId + "', '" + quest + "', '" + type + "');", conn);
+		int questionId = executeUpdate("INSERT INTO " + TABLE_QUESTIONS + " (quiz_id, question, q_type) VALUES ("
+				+ quizId + ", '" + quest + "', " + questionType + ");", conn);
 		for (int i = 0; i < answers.size(); i++)
-			executeUpdate("INSERT INTO " + TABLE_CORRECT_ANSWERS + " (question_id, correct_answer) VALUES ('"
-					+ questionId + "', '" + answers.get(i) + "');", conn);
-		if (type == Models.QuestionType.MultipleChoice.ordinal()) {
-			ArrayList<String> multiple_ch = question.getPossibleAnswers();
-			for (int i = 0; i < multiple_ch.size(); i++)
-				executeUpdate("INSERT INTO " + TABLE_MULTIPLE_CHOICES + " (question_id, answer) VALUES ('" + questionId
-						+ "', '" + multiple_ch.get(i) + "');", conn);
+			executeUpdate("INSERT INTO " + TABLE_CORRECT_ANSWERS + " (question_id, correct_answer) VALUES ("
+					+ questionId + ", '" + answers.get(i) + "');", conn);
+		if (questionType == MultipleChoiceQuestion.getType()) {
+			ArrayList<String> possibleAnswers = question.getAdditionalData();
+			if (possibleAnswers != null) {
+				for (int i = 0; i < possibleAnswers.size(); i++)
+					executeUpdate("INSERT INTO " + TABLE_MULTIPLE_CHOICES + " (question_id, answer) VALUES ("
+							+ questionId + ", '" + possibleAnswers.get(i) + "');", conn);
+			}
+		} else if (questionType == PictureQuestion.getType()) {
+			ArrayList<String> additionalData = question.getAdditionalData();
+			if (additionalData != null && additionalData.size() == 1)
+				executeUpdate("INSERT INTO " + TABLE_QUESTION_IMAGES + " (question_id, image_url) VALUES (" + questionId
+						+ ", '" + additionalData.get(0) + "');", conn);
 		}
-		if (type == Models.QuestionType.PictureResponse.ordinal())
-			executeUpdate("INSERT INTO " + TABLE_QUESTION_IMAGES + " (question_id, image_url) VALUES ('" + questionId
-					+ "', '" + question.getImageURL() + "');", conn);
 		closeConnection(conn);
 		return questionId;
 	}

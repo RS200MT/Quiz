@@ -11,7 +11,7 @@ public class MultipleChoiceQuestion extends Question {
 	public MultipleChoiceQuestion(String question, ArrayList<String> answers, ArrayList<String> possibleAnswers) {
 		this.question = question;
 		this.answers = answers;
-		this.answers = possibleAnswers;
+		this.possibleAnswers = possibleAnswers;
 	}
 
 	private String getMultipleChoiceHTML(int index) {
@@ -31,8 +31,12 @@ public class MultipleChoiceQuestion extends Question {
 		return result;
 	}
 	
-	@Override
-	public int getType() {
+	public static int getType() {
 		return 3;
+	}
+	
+	@Override
+	public ArrayList<String> getAdditionalData() {
+		return this.possibleAnswers;
 	}
 }

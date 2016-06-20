@@ -29,8 +29,14 @@ public class PictureQuestion extends Question {
 		return result;
 	}
 	
-	@Override
-	public int getType() {
+	public static int getType() {
 		return 4;
+	}
+	
+	@Override
+	public ArrayList<String> getAdditionalData() {
+		ArrayList<String> additionalData= new ArrayList<>();
+		additionalData.add(this.imageURL);
+		return additionalData;
 	}
 }
