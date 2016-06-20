@@ -2,8 +2,11 @@ package Models;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+
+import com.sun.jmx.snmp.Timestamp;
 
 public class Quiz {
 	private int id;
@@ -20,6 +23,7 @@ public class Quiz {
 	private int currentQuestionIndex;
 	private ArrayList<String> userAnswers;
 	private int score;
+	private Timestamp startTime;
 
 	public Quiz(int id, String title, String description, String author, String createTime, int timesWritten,
 			boolean randomized, boolean immediateCorrection, ArrayList<Question> questions,
@@ -39,6 +43,7 @@ public class Quiz {
 		this.currentQuestionIndex = 0;
 		this.score = 0;
 		this.userAnswers = new ArrayList<String>();
+		this.startTime = null;
 	}
 
 	private void randomizeQuestions() {
@@ -119,7 +124,7 @@ public class Quiz {
 	public void increaseQuestionCounter() {
 		this.currentQuestionIndex++;
 	}
-	
+
 	public int getCurrentQuestionIndex() {
 		return this.currentQuestionIndex;
 	}
@@ -127,9 +132,22 @@ public class Quiz {
 	public boolean hasMoreQuestions() {
 		return this.questions.size() > this.currentQuestionIndex;
 	}
-	
+
 	public boolean isLastQuestion() {
 		return this.currentQuestionIndex == this.questions.size() - 1;
+	}
+
+	public void setStartTime(Timestamp time) {
+		this.startTime = time;
+	}
+
+	public Timestamp getStartTime() {
+		return this.startTime;
+	}
+
+	public Timestamp getThisQuizTime(Timestamp endTime) {
+		long difference = endTime.getDate().getTime() - this.startTime.getDate().getTime();
+		return new Timestamp(difference);
 	}
 
 	public int getScore() {
