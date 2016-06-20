@@ -49,7 +49,7 @@ create table if not exists quizes (
     title tinytext not null,
     description text not null,
     author int not null,
-    create_time timestamp,
+    create_time timestamp DEFAULT CURRENT_TIMESTAMP,
     times_written int DEFAULT 0,
     randomize int default 0,
     immediate_correction int default 0,
@@ -87,7 +87,11 @@ create table if not exists quiz_logs (
     quiz_id int not null,
     score int,
     start_time timestamp,
+<<<<<<< HEAD
     spent_time double,
+=======
+    quizTime timestamp,
+>>>>>>> 85b831a622eeab1ec3cf77a09e451ae91d40979d
     
     key (user_id),
     key (quiz_id)

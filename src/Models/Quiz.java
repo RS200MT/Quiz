@@ -5,9 +5,15 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import java.util.Collections;
+<<<<<<< HEAD
 
+=======
+import java.util.Date;
+>>>>>>> 85b831a622eeab1ec3cf77a09e451ae91d40979d
 import java.util.HashMap;
 import java.util.List;
+
+import com.sun.jmx.snmp.Timestamp;
 
 public class Quiz {
 	private int id;
@@ -27,6 +33,7 @@ public class Quiz {
 	private int currentQuestionIndex;
 	private ArrayList<String> userAnswers;
 	private int score;
+	private Timestamp startTime;
 
 
 	public Quiz(int id, String title, String description, String author, String createTime, int timesWritten,
@@ -48,6 +55,7 @@ public class Quiz {
 		this.currentQuestionIndex = 0;
 		this.score = 0;
 		this.userAnswers = new ArrayList<String>();
+		this.startTime = null;
 	}
 
 	private void randomizeQuestions() {
@@ -163,7 +171,7 @@ public class Quiz {
 	public void increaseQuestionCounter() {
 		this.currentQuestionIndex++;
 	}
-	
+
 	public int getCurrentQuestionIndex() {
 		return this.currentQuestionIndex;
 	}
@@ -171,9 +179,22 @@ public class Quiz {
 	public boolean hasMoreQuestions() {
 		return this.questions.size() > this.currentQuestionIndex;
 	}
-	
+
 	public boolean isLastQuestion() {
 		return this.currentQuestionIndex == this.questions.size() - 1;
+	}
+
+	public void setStartTime(Timestamp time) {
+		this.startTime = time;
+	}
+
+	public Timestamp getStartTime() {
+		return this.startTime;
+	}
+
+	public Timestamp getThisQuizTime(Timestamp endTime) {
+		long difference = endTime.getDate().getTime() - this.startTime.getDate().getTime();
+		return new Timestamp(difference);
 	}
 
 	public int getScore() {

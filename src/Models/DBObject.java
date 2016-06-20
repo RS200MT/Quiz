@@ -8,6 +8,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import com.sun.jmx.snmp.Timestamp;
+
 import Questions.FillInBlankQuestion;
 import Questions.MultipleChoiceQuestion;
 import Questions.PictureQuestion;
@@ -229,7 +231,8 @@ public class DBObject {
 			boolean immediateCorrection = rs.getInt("immediate_correction") == 1;
 			ArrayList<Question> questions = getQuestionsForQuiz(id, conn);
 			boolean displaySingleQuestion = singleQuestion == 1;
-			return new Quiz(id, title, description, author, createTime, timesWritten, randomized, immediateCorrection, questions, displaySingleQuestion);
+			return new Quiz(id, title, description, author, createTime, timesWritten, randomized, immediateCorrection,
+					questions, displaySingleQuestion);
 		} else {
 			System.out.println("Quiz not found!");
 			return null;
@@ -283,7 +286,7 @@ public class DBObject {
 	private String getImageURL(int id, Connection conn) throws SQLException {
 		String imageURL = "SELECT * FROM " + TABLE_QUESTION_IMAGES + " WHERE question_id = " + id + ";";
 		ResultSet rs = getResultSet(imageURL, conn);
-		if (rs.next()) 
+		if (rs.next())
 			return rs.getString("image_url");
 		return "";
 	}
@@ -303,7 +306,7 @@ public class DBObject {
 	 * 
 	 * @param id
 	 * @param conn2
-	 * @return 
+	 * @return
 	 * @throws SQLException
 	 */
 	private ArrayList<String> getCorrectAnswers(int id, Connection conn) throws SQLException {
@@ -383,7 +386,6 @@ public class DBObject {
 			recentQuizesForUser.add(getQuizById(rs.getInt("id")));
 		}
 		closeConnection(conn);
-		System.out.println(recentQuizesForUser.size());
 		return recentQuizesForUser;
 	}
 
@@ -509,6 +511,14 @@ public class DBObject {
 		String query = "Select * from " + TABLE_FRIENDS + " where user1_id = " + id + " or user2_id = " + id + ";";
 		// TO DO TODO
 		return null;
+	}
+
+	public void logQuiz(int user_id, int quiz_id, int score, Timestamp startTime, Timestamp thisQuizTime) {
+		Connection conn = getConnection();
+		String query = "INSERT INTO " + TABLE_QUIZ_LOGS + " (user_id, quiz_id, score, start_time, quizTime) VALUES ("
+				+ user_id + ", " + quiz_id + ", " + score + ", " + startTime + ", " + thisQuizTime + ") ;";
+		executeUpdate(query, conn);
+		closeConnection(conn);
 	}
 
 }
