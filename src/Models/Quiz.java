@@ -1,15 +1,8 @@
 package Models;
 
 import java.util.ArrayList;
-
-import java.util.Date;
-
 import java.util.Collections;
-<<<<<<< HEAD
-
-=======
 import java.util.Date;
->>>>>>> 85b831a622eeab1ec3cf77a09e451ae91d40979d
 import java.util.HashMap;
 import java.util.List;
 
@@ -22,9 +15,6 @@ public class Quiz {
 	private String author;
 	private String createTime;
 	private int timesWritten;
-	private Date startTime;
-	private double spentTime;
-	
 	private boolean randomized;
 	private boolean immediateCorrection;
 	private ArrayList<Question> questions;
@@ -33,8 +23,7 @@ public class Quiz {
 	private int currentQuestionIndex;
 	private ArrayList<String> userAnswers;
 	private int score;
-	private Timestamp startTime;
-
+	private long startTime;
 
 	public Quiz(int id, String title, String description, String author, String createTime, int timesWritten,
 			boolean randomized, boolean immediateCorrection, ArrayList<Question> questions,
@@ -45,7 +34,6 @@ public class Quiz {
 		this.author = author;
 		this.createTime = createTime;
 		this.timesWritten = timesWritten;
-
 		this.questions = questions != null ? questions : new ArrayList<Question>();
 		this.randomized = randomized;
 		this.immediateCorrection = immediateCorrection;
@@ -55,30 +43,13 @@ public class Quiz {
 		this.currentQuestionIndex = 0;
 		this.score = 0;
 		this.userAnswers = new ArrayList<String>();
-		this.startTime = null;
+		this.startTime = 0;
 	}
 
 	private void randomizeQuestions() {
 		Collections.shuffle(this.questions);
 	}
 
-	public void setStartTime(Date startTime){
-		this.startTime = startTime;
-	}
-	
-	public Date getStartTime(){
-		return startTime;
-	}
-	
-	public void setSpentTime(double time){
-		this.spentTime = time;
-	}
-	
-	public double getSpentTime(){
-		return this.spentTime;
-	}
-	
-	
 	public void setUserAnswer(String answer) {
 		this.score += this.questions.get(this.userAnswers.size()).isCorrect(answer);
 		userAnswers.add(answer);
@@ -100,24 +71,6 @@ public class Quiz {
 		return this.author;
 	}
 
-//<<<<<<< HEAD
-//	public void setStartTime(Date starTime){
-//		this.startTime = starTime;
-//	}
-//	
-//	public Date getStartTime(){
-//		return this.startTime;
-//	}
-//	
-//	public void setSpentTime(double spentTime){
-//		this.spentTime = spentTime;
-//	}
-//	
-//	public double getSpentTime(){
-//		return this.spentTime;
-//	}
-//	
-//=======
 	public String getCreateTime() {
 		return this.createTime;
 	}
@@ -149,7 +102,6 @@ public class Quiz {
 	public String getHTML() {
 		String result = "";
 		result += "Quiz Title: <b>" + getTitle() + "</b><HR>";
-		System.out.println(this.questions.size());
 		if (!this.displaySingleQuestion) {
 			result += getAllQuestionsHTML();
 		} else {
@@ -184,57 +136,20 @@ public class Quiz {
 		return this.currentQuestionIndex == this.questions.size() - 1;
 	}
 
-	public void setStartTime(Timestamp time) {
+	public void setStartTime(long time) {
 		this.startTime = time;
 	}
 
-	public Timestamp getStartTime() {
+	public long getStartTime() {
 		return this.startTime;
 	}
 
-	public Timestamp getThisQuizTime(Timestamp endTime) {
-		long difference = endTime.getDate().getTime() - this.startTime.getDate().getTime();
-		return new Timestamp(difference);
+	public long getThisQuizTime(long endTime) {
+		long difference = endTime - this.startTime;
+		return difference;
 	}
 
 	public int getScore() {
 		return this.score;
 	}
-
-	/*
-	 * public int getCurrentIndex() { return currentQuestion; }
-	 * 
-	 * public int increaseQuestionIndex() { return ++currentQuestion; }
-	 * 
-	 * public void setAnswer(int questionIndex, String answer) {
-	 * this.userAnswers.put(questionIndex, answer); }
-	 * 
-	 * public HashMap<Integer, String> getUserAnswers() { return
-	 * this.userAnswers; }
-	 * 
-	 * public boolean hasMoreQuestions() { return this.currentQuestion <
-	 * this.questions.size(); }
-	 * 
-	 * public Question getQuestion() { if (!hasMoreQuestions()) restart();
-	 * return this.questions.get(this.currentQuestion++); }
-	 * 
-	 * public int getScore() { int result = 0; for (int i = 0; i <
-	 * getQuestions().size(); i++) { if (getUserAnswers().containsKey(i)) {
-	 * String userAnswer = getUserAnswers().get(i); if
-	 * (getQuestions().get(i).checkAnswer(userAnswer)) result++; } } return
-	 * result; }
-	 * 
-	 * public boolean isSingleQuestion() { return this.singleQuestion; }
-	 * 
-	 * public void allQuestionsOnPage() { this.singleQuestion = false; }
-	 * 
-	 * public String toHTMLall() { String res = ""; for (int i = 0; i <
-	 * getQuestions().size(); i++) res += getQuestions().get(i).toHTML(i) +
-	 * "<HR>"; return res; }
-	 * 
-	 * public String toHTMLsingle() { String res =
-	 * getQuestion().toHTML(getCurrentIndex() - 1); return res; }
-	 * 
-	 * public void restart() { this.currentQuestion = 0; }
-	 */
 }

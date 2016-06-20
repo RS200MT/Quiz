@@ -2,10 +2,6 @@ package Servlets;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -50,7 +46,6 @@ public class Quizing extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-
 		Quiz curQuiz = getCurrentQuiz(request, response);
 		if (request.getParameter(Constants.QUIZINIG_DONE) != null) {
 			doneQuiz(request, response, curQuiz);
@@ -70,7 +65,6 @@ public class Quizing extends HttpServlet {
 		else
 			redirectToResultPageAndDoneQuiz(request, response, curQuiz);
 	}
-
 
 	private void checkAnswer(HttpServletRequest request, HttpServletResponse response, Quiz curQuiz)
 			throws ServletException, IOException {
@@ -111,41 +105,30 @@ public class Quizing extends HttpServlet {
 			String answer = request.getParameter(Constants.INDEX_DO_QUIZ_QUESTION_ANSWER + i);
 			curQuiz.setUserAnswer(answer);
 		}
-		addToLog(request,curQuiz);
 		redirectToResultPageAndDoneQuiz(request, response, curQuiz);
 	}
 
-	private void addToLog(HttpServletRequest request, Quiz curQuiz) {
-		System.out.println("aa");
-		Date now = new Date();
-		curQuiz.setSpentTime(now.getSeconds() - curQuiz.getStartTime().getSeconds());
-		DBObject obj = (DBObject) getServletContext().getAttribute(DBObject.ATTR_DB);
-		int userID = ((User)request.getSession().getAttribute(Constants.ATTR_USER)).getId();
-		obj.addToQuizLog(userID, curQuiz);
-		
-	}
-
-	
 	private void redirectToResultPageAndDoneQuiz(HttpServletRequest request, HttpServletResponse response, Quiz curQuiz)
 			throws ServletException, IOException {
 		int score = curQuiz.getScore();
-		//String quizTime = logQuiz(curQuiz, score, request);
+		String quizTime = logQuiz(curQuiz, score, request);
 		request.setAttribute(Constants.INDEX_DO_QUIZ_ATTR_FINISHED, 1);
-		//request.setAttribute(Constants.INDEX_DO_QUIZ_ATTR_RESULT_MESSAGE, "You're done. your score is: " + score + " | time: " + quizTime);
+		request.setAttribute(Constants.INDEX_DO_QUIZ_ATTR_RESULT_MESSAGE,
+				"You're done. your score is: " + score + " | time: " + quizTime);
 		request.getSession().setAttribute(Constants.ATTR_SESSION_QUIZ, null);
 		request.getRequestDispatcher(Constants.getAction(Constants.INDEX_DO_QUIZ_RESULT)).forward(request, response);
 	}
 
-//	private String logQuiz(Quiz curQuiz, int score, HttpServletRequest request) {
-//		DBObject obj = (DBObject) getServletContext().getAttribute(DBObject.ATTR_DB);
-//		java.util.Date date = new java.util.Date();
-//		Timestamp endTime = curQuiz.getThisQuizTime(new Timestamp(date.getTime()));
-//		Timestamp quizTime = curQuiz.getThisQuizTime(endTime);
-//		User user = (User) request.getSession().getAttribute(Constants.ATTR_USER);
-//		if (user != null)
-//			obj.logQuiz(user.getId(), curQuiz.getID(), score, curQuiz.getStartTime(), quizTime);
-//		return quizTime.toString();
-//	}
+	private String logQuiz(Quiz curQuiz, int score, HttpServletRequest request) {
+		DBObject obj = (DBObject) getServletContext().getAttribute(DBObject.ATTR_DB);
+		java.util.Date date = new java.util.Date();
+		long endTime = date.getTime();
+		long quizTime = curQuiz.getThisQuizTime(endTime);
+		User user = (User) request.getSession().getAttribute(Constants.ATTR_USER);
+		if (user != null)
+			obj.logQuiz(user.getId(), curQuiz.getID(), score, curQuiz.getStartTime(), quizTime);
+		return (int) quizTime / 1000 + " seconds";
+	}
 
 	private Quiz getCurrentQuiz(HttpServletRequest request, HttpServletResponse response) {
 		Quiz curQuiz = null;
@@ -160,25 +143,13 @@ public class Quizing extends HttpServlet {
 			}
 			if (curQuiz == null)
 				System.out.println("Quiz not found!");
-			curQuiz.setStartTime(new Date());
-
+			java.util.Date date = new java.util.Date();
+			curQuiz.setStartTime(date.getTime());
 			redirectAndSetQuizInSession(curQuiz, request, response);
 		} else
 			curQuiz = (Quiz) request.getSession().getAttribute(Constants.ATTR_SESSION_QUIZ);
 		return curQuiz;
 	}
-
-//	private void getAnswersAndCheck(Quiz curQuiz, HttpServletRequest request, HttpServletResponse response) {
-//		for (int i = 0; i < curQuiz.getQuestions().size(); i++) {
-//			String answer = request.getParameter(Constants.INDEX_DO_QUIZ_QUESTION_ANSWER + i);
-//			curQuiz.setAnswer(i, answer);
-//		}
-//		int score = curQuiz.getScore();
-//		request.setAttribute(Constants.INDEX_DO_QUIZ_ATTR_FINISHED, 1);
-//		request.setAttribute(Constants.INDEX_DO_QUIZ_ATTR_RESULT_SCORE, score);
-//		curQuiz.restart();
-//	}
-
 
 	private void redirectAndSetQuizInSession(Quiz curQuiz, HttpServletRequest request, HttpServletResponse response) {
 		try {

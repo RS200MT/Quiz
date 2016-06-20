@@ -513,7 +513,7 @@ public class DBObject {
 		return null;
 	}
 
-	public void logQuiz(int user_id, int quiz_id, int score, Timestamp startTime, Timestamp thisQuizTime) {
+	public void logQuiz(int user_id, int quiz_id, int score, long startTime, long thisQuizTime) {
 		Connection conn = getConnection();
 		String query = "INSERT INTO " + TABLE_QUIZ_LOGS + " (user_id, quiz_id, score, start_time, quizTime) VALUES ("
 				+ user_id + ", " + quiz_id + ", " + score + ", " + startTime + ", " + thisQuizTime + ") ;";

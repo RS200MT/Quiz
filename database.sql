@@ -86,12 +86,8 @@ create table if not exists quiz_logs (
     user_id int not null,
     quiz_id int not null,
     score int,
-    start_time timestamp,
-<<<<<<< HEAD
-    spent_time double,
-=======
-    quizTime timestamp,
->>>>>>> 85b831a622eeab1ec3cf77a09e451ae91d40979d
+    start_time long,
+    quizTime long,
     
     key (user_id),
     key (quiz_id)
