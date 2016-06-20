@@ -267,7 +267,6 @@ public class DBObject {
 		String query = "SELECT * FROM " + TABLE_QUESTIONS + " WHERE id = " + id + " limit 1;";
 		ResultSet rs = getResultSet(query, conn);
 		if (rs.next()) {
-			int quizId = rs.getInt("quiz_id");
 			String question = rs.getString("question");
 			int type = rs.getInt("q_type");
 			if (type == QuestionResponse.getType()) {
@@ -411,16 +410,6 @@ public class DBObject {
 		return recentQuizes;
 	}
 
-	
-	public void addToQuizLog(int userID, Quiz quiz){
-		Connection conn = getConnection();
-		String query = "Insert into " + TABLE_QUIZ_LOGS + " values ('" + userID +"', '" + quiz.getID() +
-				"', '" + quiz.getScore() + "', '" + quiz.getStartTime() + "', '" + quiz.getSpentTime() +"');";
-		executeUpdate(query, conn);
-		closeConnection(conn);
-	}
-	
-
 	// This function insert quiz in database
 	public int addQuiz(String title, String description, boolean isRandomized, boolean isImmediateCorrection,
 			int authorId) {
@@ -508,9 +497,9 @@ public class DBObject {
 
 	private ArrayList<Pair<Integer, String>> getUserFriends(Connection conn, int id) {
 		ArrayList<Pair<Integer, String>> friends = new ArrayList<Pair<Integer, String>>();
-		String query = "Select * from " + TABLE_FRIENDS + " where user1_id = " + id + " or user2_id = " + id + ";";
-		// TO DO TODO
-		return null;
+		//String query = "Select * from " + TABLE_FRIENDS + " where user1_id = " + id + " or user2_id = " + id + ";";
+		// TODO
+		return friends;
 	}
 
 	public void logQuiz(int user_id, int quiz_id, int score, long startTime, long thisQuizTime) {
