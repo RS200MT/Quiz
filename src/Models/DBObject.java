@@ -354,6 +354,9 @@ public class DBObject {
 	// conn.close();
 	// }
 
+	
+	
+	
 	/**
 	 * Get several most popular quizzes in the database; If there are not as
 	 * many quizzes in database as n, returns all the quizzes sorted according
@@ -363,22 +366,22 @@ public class DBObject {
 	 * @return {@link ArrayList}
 	 * @throws SQLException
 	 */
-	public ArrayList<Quiz> getPopularQuizes(int n) throws SQLException {
-		ArrayList<Quiz> popularQuizes = new ArrayList<Quiz>();
+	public ArrayList<Pair<String,Integer>> getPopularQuizes(int n) throws SQLException {
+		ArrayList<Pair<String,Integer>> popularQuizes = new ArrayList<Pair<String,Integer>>();
 		Connection conn = getConnection();
 		String query = "SELECT * FROM " + TABLE_QUIZES + " ORDER BY times_written DESC LIMIT " + n + ";";
 		ResultSet rs = getResultSet(query, conn);
 		if (!rs.isBeforeFirst())
 			return null;
 		while (rs.next()) {
-			popularQuizes.add(getQuizById(rs.getInt("id")));
+			popularQuizes.add(new Pair<String,Integer>(rs.getString("title"),rs.getInt("id")));
 		}
 		closeConnection(conn);
 		return popularQuizes;
 	}
 
-	public ArrayList<Quiz> getRecentQuizesForUser(int userID, int n) throws SQLException {
-		ArrayList<Quiz> recentQuizesForUser = new ArrayList<Quiz>();
+	public ArrayList<Pair<String,Integer>> getRecentQuizesForUser(int userID, int n) throws SQLException {
+		ArrayList<Pair<String,Integer>> recentQuizesForUser = new ArrayList<Pair<String,Integer>>();
 		Connection conn = getConnection();
 		String query = "select * from " + TABLE_QUIZ_LOGS + " where user_id = " + userID + " order by start_time limit "
 				+ n + ";";
@@ -386,7 +389,7 @@ public class DBObject {
 		if (!rs.isBeforeFirst())
 			return null;
 		while (rs.next()) {
-			recentQuizesForUser.add(getQuizById(rs.getInt("id")));
+			recentQuizesForUser.add(new Pair<String,Integer>(rs.getString("title"),rs.getInt("id")));
 		}
 		closeConnection(conn);
 		return recentQuizesForUser;

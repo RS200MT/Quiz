@@ -3,29 +3,29 @@
 <%@page import="java.util.ArrayList"%>
 <%@page import="Models.Quiz"%>
 <%@page import="Models.User"%>
-
+<%@page import="javafx.util.Pair"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 
 <H3> Popular Quizes : <br> </H3>
 <%
-/*
+
 DBObject obj = (DBObject)request.getServletContext().getAttribute(DBObject.ATTR_DB);
-ArrayList<Quiz> popQuizes = obj.getPopularQuizes(2);
-for(Quiz q : popQuizes){
-	out.print("<a href = '" + Constants.getQuizURL(q.getID()) + "'>" + q.getTitle() + "</a> <br>");
+ArrayList<Pair<String,Integer>> popQuizes = obj.getPopularQuizes(3);
+for(Pair<String,Integer> q : popQuizes){
+	out.print("<a href = '" + Constants.getQuizURL(q.getValue()) + "'>" + q.getKey() + "</a> <br>");
 }
-*/
+
 %>
 
 <H3> Recent Quizes : <br> </H3>
 <%
-/*
-ArrayList<Quiz> recentQuizes = obj.getRecentQuizes(3);
-for(Quiz q : recentQuizes){
-	out.print("<a href = '" + Constants.getQuizURL(q.getID()) + "'>" + q.getTitle() + "</a> <br>");
+
+ArrayList<Pair<String,Integer>> recentQuizes = obj.getPopularQuizes(3);
+for(Pair<String,Integer> q : recentQuizes){
+	out.print("<a href = '" + Constants.getQuizURL(q.getValue()) + "'>" + q.getKey() + "</a> <br>");
 }
-*/
+
 %>
 
 <H3> Recent Quizes For user : <br> </H3>
