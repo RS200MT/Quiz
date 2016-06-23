@@ -330,26 +330,29 @@ public class DBObject {
 	 * @param qType
 	 * @throws SQLException
 	 */
-//	private void getSpecificQuestionInfo(ArrayList<Object> info, int qId, int qType) throws SQLException {
-//		Connection conn = getConnection();
-//		if (qType == QuestionType.MultipleChoice.ordinal()) {
-//			String getPossibleAnswers = "SELECT * FROM " + TABLE_MULTIPLE_CHOICES + " WHERE question_id = " + qId + ";";
-//			ResultSet possibleAnswers = getResultSet(getPossibleAnswers, conn);
-//			ArrayList<String> possibleAnswersList = new ArrayList<String>();
-//			while (possibleAnswers.next()) {
-//				String nextPossAnswer = possibleAnswers.getString("answer");
-//				possibleAnswersList.add(nextPossAnswer);
-//			}
-//			info.add(2, possibleAnswersList);
-//		} else if (qType == QuestionType.PictureResponse.ordinal()) {
-//			String imageURL = "SELECT * FROM " + TABLE_QUESTION_IMAGES + " WHERE question_id = " + qId + ";";
-//			ResultSet url = getResultSet(imageURL, conn);
-//			if (url.next()) {
-//				info.add(2, url.getString("image_url"));
-//			}
-//		}
-//		conn.close();
-//	}
+	// private void getSpecificQuestionInfo(ArrayList<Object> info, int qId, int
+	// qType) throws SQLException {
+	// Connection conn = getConnection();
+	// if (qType == QuestionType.MultipleChoice.ordinal()) {
+	// String getPossibleAnswers = "SELECT * FROM " + TABLE_MULTIPLE_CHOICES + "
+	// WHERE question_id = " + qId + ";";
+	// ResultSet possibleAnswers = getResultSet(getPossibleAnswers, conn);
+	// ArrayList<String> possibleAnswersList = new ArrayList<String>();
+	// while (possibleAnswers.next()) {
+	// String nextPossAnswer = possibleAnswers.getString("answer");
+	// possibleAnswersList.add(nextPossAnswer);
+	// }
+	// info.add(2, possibleAnswersList);
+	// } else if (qType == QuestionType.PictureResponse.ordinal()) {
+	// String imageURL = "SELECT * FROM " + TABLE_QUESTION_IMAGES + " WHERE
+	// question_id = " + qId + ";";
+	// ResultSet url = getResultSet(imageURL, conn);
+	// if (url.next()) {
+	// info.add(2, url.getString("image_url"));
+	// }
+	// }
+	// conn.close();
+	// }
 
 	/**
 	 * Get several most popular quizzes in the database; If there are not as
@@ -377,7 +380,8 @@ public class DBObject {
 	public ArrayList<Quiz> getRecentQuizesForUser(int userID, int n) throws SQLException {
 		ArrayList<Quiz> recentQuizesForUser = new ArrayList<Quiz>();
 		Connection conn = getConnection();
-		String query = "select * from " + TABLE_QUIZ_LOGS + " where user_id = " + userID + " order by start_time limit " + n +";";
+		String query = "select * from " + TABLE_QUIZ_LOGS + " where user_id = " + userID + " order by start_time limit "
+				+ n + ";";
 		ResultSet rs = getResultSet(query, conn);
 		if (!rs.isBeforeFirst())
 			return null;
@@ -484,20 +488,21 @@ public class DBObject {
 				int quizesWritten = rs.getInt("quizes_written");
 				int type = rs.getInt("type");
 				result = new User(id, passed_username, email, regDate, quizesWritten, type, null);
+				result.addFriends(getUserFriends(conn, result.getId()));
 			} else {
 				System.out.println("User was not found in database!");
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		result.addFriends(getUserFriends(conn, result.getId()));
 		closeConnection(conn);
 		return result;
 	}
 
 	private ArrayList<Pair<Integer, String>> getUserFriends(Connection conn, int id) {
 		ArrayList<Pair<Integer, String>> friends = new ArrayList<Pair<Integer, String>>();
-		//String query = "Select * from " + TABLE_FRIENDS + " where user1_id = " + id + " or user2_id = " + id + ";";
+		// String query = "Select * from " + TABLE_FRIENDS + " where user1_id =
+		// " + id + " or user2_id = " + id + ";";
 		// TODO
 		return friends;
 	}
@@ -508,6 +513,31 @@ public class DBObject {
 				+ user_id + ", " + quiz_id + ", " + score + ", " + startTime + ", " + thisQuizTime + ") ;";
 		executeUpdate(query, conn);
 		closeConnection(conn);
+	}
+
+	public void increaseQuizesWritten(int id) {
+		Connection conn = getConnection();
+		int timesWritten = getQuizTimesWritten(id, conn);
+		if (timesWritten == -1)
+			System.out.println("Error in MYSQL function: getQuizTimesWritten");
+		String query = "UPDATE " + TABLE_QUIZES + " SET times_written = " + (timesWritten + 1) + " WHERE id = " + id
+				+ ";";
+		executeUpdate(query, conn);
+		closeConnection(conn);
+	}
+
+	private int getQuizTimesWritten(int id, Connection conn) {
+		String query = "SELECT * from " + TABLE_QUIZES + " WHERE id = " + id + " LIMIT 1;";
+		ResultSet rs = getResultSet(query, conn);
+		int result = -1;
+		try {
+			if (rs.next()) {
+				result = rs.getInt("times_written");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return result;
 	}
 
 }

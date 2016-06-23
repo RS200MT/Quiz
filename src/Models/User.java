@@ -25,7 +25,7 @@ public class User {
 		if (friends != null)
 			this.friends = friends;
 		else
-			friends = new ArrayList<Pair<Integer, String>>();
+			this.friends = new ArrayList<Pair<Integer, String>>();
 	}
 
 	public int getId() {

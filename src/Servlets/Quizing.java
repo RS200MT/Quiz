@@ -127,6 +127,7 @@ public class Quizing extends HttpServlet {
 		User user = (User) request.getSession().getAttribute(Constants.ATTR_USER);
 		if (user != null)
 			obj.logQuiz(user.getId(), curQuiz.getID(), score, curQuiz.getStartTime(), quizTime);
+		obj.increaseQuizesWritten(curQuiz.getID());
 		return (int) quizTime / 1000 + " seconds";
 	}
 
