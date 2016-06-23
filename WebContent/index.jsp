@@ -37,23 +37,19 @@ body {
 	color: #1f1f1f;
 }
 
-.leftSidebar {
-	float: left;
+td.leftSidebar {
 	width: 300px;
 }
 
-.rightSidebar {
-	float: left;
+td.rightSidebar {
 	width: 300px;
 }
 
-.content {
-	float: left;
-	width: calc(100% - 600px);
-	margin-top: 5px;
+td.content {
+	
 }
 
-.block {
+div.block {
 	padding: 5px;
 	background-color: #ccc;
 	margin-top: 0px !important;
@@ -61,14 +57,14 @@ body {
 	border-radius: 0px 0px 7px 7px;
 }
 
-.block#content {
+div.block#content {
 	background-color: rgba(0, 0, 0, 0.5);
 	color: #fff;
 	margin: 0px;
 	border-radius: 0px 0px 7px 7px;
 }
 
-.block-header {
+div.block-header {
 	padding: 5px;
 	background-color: #000;
 	color: #fff;
@@ -77,44 +73,55 @@ body {
 	border-radius: 7px 7px 0px 0px;
 }
 
-.block-header#content {
+div.block-header#content {
 	background-color: #ccc;
+	margin-top: 5px !important;
 	margin: 0px;
 	color: #000;
 }
 
-.footer {
+div.footer {
 	background-color: rgba(0, 0, 0, 0.7);
 	border-radius: 7px 7px 0px 0px;
 	color: #fff;
 	margin: 5px;
+	float: none;
+	padding: 8px;
 }
 
-.header {
+div.header {
 	background-color: rgba(0, 0, 0, 0.7);
 	border-radius: 0px 0px 7px 7px;
 	color: #fff;
 	margin-top: 0px !important;
 	margin: 5px;
+	padding: 8px;
+}
+
+table {
+	margin: 0px;
+	padding: 0px;
+}
+
+td {
+	vertical-align: top;
 }
 </style>
 	<div class="header">
-		header content<BR>
-		header content<BR>
+		header content<BR> header content<BR>
 	</div>
-	<div class="leftSidebar">
-		<jsp:include page="Left.jsp" />
-	</div>
-	<div class="content">
-		<div class="block-header" id="content">content title</div>
-		<div class="block" id="content">
-			<jsp:include page="<%=toInclude%>" />
-		</div>
-	</div>
-	<div class="rightSidebar">
-		<jsp:include page="Right.jsp" />
-	</div>
-	&nbsp;
+	<table style="width: 100%">
+		<tr>
+			<td class="leftSidebar"><jsp:include page="Left.jsp" /></td>
+			<td class="content">
+				<div class="block-header" id="content">content title</div>
+				<div class="block" id="content">
+					<jsp:include page="<%=toInclude%>" />
+				</div>
+			</td>
+			<td class="rightSidebar"><jsp:include page="Right.jsp" /></td>
+		</tr>
+	</table>
 	<div class="footer">
 		footer content<BR> footer content<BR> footer content<BR>
 		footer content<BR> footer content<BR> footer content<BR>
