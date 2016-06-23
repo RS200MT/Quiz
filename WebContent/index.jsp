@@ -13,7 +13,7 @@
 		toInclude = (request.getParameter(Constants.INDEX_DO) != null
 				&& request.getParameter(Constants.INDEX_DO).equals(Constants.INDEX_DO_REGISTER))
 						? Constants.INDEX_DO_REGISTER : Constants.INDEX_DO_PROFILE_INFO;
-	} else  {
+	} else {
 		boolean doOther = request.getParameter(Constants.INDEX_DO) != null
 				&& pages.containsKey(request.getParameter(Constants.INDEX_DO));
 		if (doOther)
@@ -31,29 +31,67 @@
 <body>
 
 	<style>
+body {
+	margin-top: 10px !important;
+	margin: 0px;
+	background-color: #f1f1f1;
+	color: #1f1f1f;
+}
+
 .leftSidebar {
 	float: left;
 	width: 24%;
-	border: 1px solid;
 }
 
 .rightSidebar {
 	float: left;
 	width: 24%;
-	border: 1px solid;
 }
 
 .content {
 	float: left;
 	width: 51%;
-	border: 1px solid;
+	margin-top: 5px;
+}
+
+div.block {
+	padding: 5px;
+	background-color: #ccc;
+	margin-top: 0px !important;
+	margin: 5px;
+	border-radius: 0px 0px 7px 7px;
+}
+
+div.block#content {
+	background-color: rgba(0, 0, 0, 0.5);
+	color: #fff;
+	margin:0px;
+	border-radius: 0px 0px 7px 7px;
+}
+
+div.block-header {
+	padding: 5px;
+	background-color: #000;
+	color: #fff;
+	margin-bottom: 0px !important;
+	margin: 5px;
+	border-radius: 7px 7px 0px 0px;
+}
+
+div.block-header#content {
+	background-color: #ccc;
+	margin:0px;
+	color: #000;
 }
 </style>
 	<div class="leftSidebar">
 		<jsp:include page="Left.jsp" />
 	</div>
 	<div class="content">
-		<jsp:include page="<%=toInclude%>" />
+		<div class="block-header" id="content">block2</div>
+		<div class="block" id="content">
+			<jsp:include page="<%=toInclude%>" />
+		</div>
 	</div>
 	<div class="rightSidebar">
 		<jsp:include page="Right.jsp" />
