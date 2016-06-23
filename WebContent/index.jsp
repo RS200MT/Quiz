@@ -32,7 +32,6 @@
 
 	<style>
 body {
-	margin-top: 10px !important;
 	margin: 0px;
 	background-color: #f1f1f1;
 	color: #1f1f1f;
@@ -40,21 +39,21 @@ body {
 
 .leftSidebar {
 	float: left;
-	width: 24%;
+	width: 300px;
 }
 
 .rightSidebar {
 	float: left;
-	width: 24%;
+	width: 300px;
 }
 
 .content {
 	float: left;
-	width: 51%;
+	width: calc(100% - 600px);
 	margin-top: 5px;
 }
 
-div.block {
+.block {
 	padding: 5px;
 	background-color: #ccc;
 	margin-top: 0px !important;
@@ -62,14 +61,14 @@ div.block {
 	border-radius: 0px 0px 7px 7px;
 }
 
-div.block#content {
+.block#content {
 	background-color: rgba(0, 0, 0, 0.5);
 	color: #fff;
-	margin:0px;
+	margin: 0px;
 	border-radius: 0px 0px 7px 7px;
 }
 
-div.block-header {
+.block-header {
 	padding: 5px;
 	background-color: #000;
 	color: #fff;
@@ -78,23 +77,47 @@ div.block-header {
 	border-radius: 7px 7px 0px 0px;
 }
 
-div.block-header#content {
+.block-header#content {
 	background-color: #ccc;
-	margin:0px;
+	margin: 0px;
 	color: #000;
 }
+
+.footer {
+	background-color: rgba(0, 0, 0, 0.7);
+	border-radius: 7px 7px 0px 0px;
+	color: #fff;
+	margin: 5px;
+}
+
+.header {
+	background-color: rgba(0, 0, 0, 0.7);
+	border-radius: 0px 0px 7px 7px;
+	color: #fff;
+	margin-top: 0px !important;
+	margin: 5px;
+}
 </style>
+	<div class="header">
+		header content<BR>
+		header content<BR>
+	</div>
 	<div class="leftSidebar">
 		<jsp:include page="Left.jsp" />
 	</div>
 	<div class="content">
-		<div class="block-header" id="content">block2</div>
+		<div class="block-header" id="content">content title</div>
 		<div class="block" id="content">
 			<jsp:include page="<%=toInclude%>" />
 		</div>
 	</div>
 	<div class="rightSidebar">
 		<jsp:include page="Right.jsp" />
+	</div>
+	&nbsp;
+	<div class="footer">
+		footer content<BR> footer content<BR> footer content<BR>
+		footer content<BR> footer content<BR> footer content<BR>
 	</div>
 </body>
 </html>
