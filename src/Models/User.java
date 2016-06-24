@@ -3,6 +3,8 @@ package Models;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import com.mysql.fabric.xmlrpc.base.Array;
+
 import javafx.util.Pair;
 
 public class User {
@@ -78,6 +80,10 @@ public class User {
 
 	public boolean hasFriendByUserName(String friendUserName) {
 		return this.friends.contains(friendUserName);
+	}
+
+	public void removeFriend(String userName) {
+		this.friends.remove(userName);		
 	}
 
 }

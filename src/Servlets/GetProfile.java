@@ -48,11 +48,12 @@ public class GetProfile extends HttpServlet {
 			String userName = request.getParameter(Constants.GET_PROFILE_USER_NAME_HIDDEN);
 			String addFriend = request.getParameter(Constants.GET_PROFILE_ADD_FRIEND);
 			String sendMessage = request.getParameter(Constants.GET_PROFILE_SEND_MESSAGE);
+			String unfriend = request.getParameter(Constants.GET_PROFILE_UNFRIEND);
 			//If add friend was pusher
 			if(addFriend!=null) {
 				db.addFriendRequest(sessionUser.getUserName(), userName);
 				sessionUser.addFriend(userName);
-				request.getRequestDispatcher(Constants.getUserProfileURL(userName)).forward(request, response);
+//				request.getRequestDispatcher(Constants.getUserProfileURL(userName)).forward(request, response);
 			}
 			//If send message was pushed
 			if(sendMessage != null) {
@@ -60,8 +61,15 @@ public class GetProfile extends HttpServlet {
 				if(messageText!=null && !messageText.equals("") && !messageText.equals("Message Text")) {
 					db.addSentMessage(sessionUser.getUserName(), userName, messageText);
 				}
-				request.getRequestDispatcher(Constants.getUserProfileURL(userName)).forward(request, response);
 			}
+			//If unfriend was pushed
+			if(unfriend != null) {
+				db.removeFriend(sessionUser.getUserName(), userName);
+				sessionUser.removeFriend(userName);
+				
+			}
+			request.getRequestDispatcher(Constants.getUserProfileURL(userName)).forward(request, response);
+
 		}
 		
 		

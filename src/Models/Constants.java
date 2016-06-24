@@ -108,13 +108,13 @@ public class Constants {
 		return INDEX + "?" + INDEX_DO + "=" + INDEX_DO_QUIZ_PAGE + "&" + ATTR_QUIZ_ID_FOR_QUESTION + "=" + id;
 	}
 	
-<<<<<<< HEAD
 	public static String getMessageURL(int id) {
 		return INDEX + "?" + INDEX_DO + "=" + INDEX_DO_QUIZ_PAGE + "&" + ATTR_QUIZ_ID_FOR_QUESTION + "=" + id;
-=======
+	}
+
+		
 	public static String getUserProfileURL(String userName) {
 		return INDEX + "?" + INDEX_DO + "=" + INDEX_DO_GET_PROFILE + "&" + ATTR_USER_NAME_FOR_GET_PROFILE + "=" + userName;
->>>>>>> 1accf3f5cc7960d37df598e57a2ee1c949ff64c3
 	}
 	
 	public static final int QUESTION_TYPES_LENGTH = 4;
@@ -126,6 +126,7 @@ public class Constants {
 	public static final String QUIZINIG_CHECK_RESULT_NEXT_QUESTION = "checkResult";
 	
 	public static final String GET_PROFILE_ADD_FRIEND = "addFriend";
+	public static final String GET_PROFILE_UNFRIEND = "unfriend";
 	public static final String GET_PROFILE_SEND_MESSAGE = "sendMessage";
 	public static final String GET_PROFILE_MESSAGE_TEXT = "messageText";
 	public static final String GET_PROFILE_USER_NAME_HIDDEN = "userNameHidden";

@@ -394,8 +394,27 @@ public class DBObject {
 		closeConnection(conn);
 		return popularQuizes;
 	}
-
 	
+	public ArrayList<Pair<String,Integer>> getRecentQuizesForUser(int userID, int n) throws SQLException {
+		ArrayList<Pair<String,Integer>> recentQuizesForUser = new ArrayList<Pair<String,Integer>>();
+		Connection conn = getConnection();
+		String query = "select quiz_id from " + TABLE_QUIZ_LOGS + " where user_id = " + userID + " order by start_time limit "
+				+ n + ";";
+		ResultSet rs = getResultSet(query, conn);
+		if (!rs.isBeforeFirst())
+			return null;
+		while (rs.next()) {
+			int id = rs.getInt("quiz_id");
+			ResultSet r = getResultSet("Select title from quizes where id = " + id, conn);
+			while(r.next()) {
+				String title = r.getString("title");
+				recentQuizesForUser.add(new Pair<String,Integer>(title,id));
+			}
+		}
+		closeConnection(conn);
+		return recentQuizesForUser;
+	}
+
 
 	/**
 	 * Returns list of given number of recently created quizzes; If there are
@@ -419,25 +438,8 @@ public class DBObject {
 		return recentQuizes;
 	}
 
-	public ArrayList<Pair<String,Integer>> getRecentQuizesForUser(int userID, int n) throws SQLException {
-		ArrayList<Pair<String,Integer>> recentQuizesForUser = new ArrayList<Pair<String,Integer>>();
-		Connection conn = getConnection();
-		String query = "select quiz_id from " + TABLE_QUIZ_LOGS + " where user_id = " + userID + " order by start_time limit "
-				+ n + ";";
-		ResultSet rs = getResultSet(query, conn);
-		if (!rs.isBeforeFirst())
-			return null;
-		while (rs.next()) {
-			int id = rs.getInt("quiz_id");
-			ResultSet r = getResultSet("Select title from quizes where id = " + id, conn);
-			while(r.next()) {
-				String title = r.getString("title");
-				recentQuizesForUser.add(new Pair<String,Integer>(title,id));
-			}
-		}
-		closeConnection(conn);
-		return recentQuizesForUser;
-	}
+	
+
 
 	// This function insert quiz in database
 	public int addQuiz(String title, String description, boolean isRandomized, boolean isImmediateCorrection,
@@ -634,6 +636,17 @@ public class DBObject {
 		User u2 = this.getUserByUserName(recipient);
 		int id2 = u2.getId();
 		String query="INSERT INTO friends (user1_id, user2_id, status) VALUES ("+id1+", "+id2+", "+FRIEND_STATUS_PENDING+");";
+		this.executeUpdate(query, conn);
+		closeConnection(conn);
+	}
+
+	public void removeFriend(String userName1, String userName2) {
+		Connection conn = getConnection();
+		User u1 = this.getUserByUserName(userName1);
+		int id1 = u1.getId();
+		User u2 = this.getUserByUserName(userName2);
+		int id2 = u2.getId();
+		String query="DELETE FROM friends WHERE (user1_id="+id1+" and user2_id="+id2+") or (user1_id="+id2+" and user2_id="+id1+");";
 		this.executeUpdate(query, conn);
 		closeConnection(conn);
 	}
