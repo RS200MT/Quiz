@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS correct_answers(
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8 COLLATE=utf8_bin;
 
 create table if not exists friends(
-	id int not null primary key,
+	id int not null primary key auto_increment,
 	user1_id int,
     user2_id int,
     status int not null,
@@ -93,9 +93,8 @@ create table if not exists quiz_logs (
     key (quiz_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
-
 create table if not exists messages (
-	id int primary key,
+	id int primary key auto_increment,
     sender int not null, 
     recipient int not null,
     type int not null,
