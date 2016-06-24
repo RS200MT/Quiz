@@ -22,30 +22,30 @@
 		out.print("There are no quizes..");
 %>
 
-<H3>
-	Recent 5 Quizes : <br>
-</H3>
+<H3>Recent Quizes : <br> </H3>
 <%
-	ArrayList<Pair<String, Integer>> recentQuizes = obj.getPopularQuizes(5);
-	for (int i = 0; i < recentQuizes.size(); i++) {
-		Pair<String, Integer> q = recentQuizes.get(i);
-		out.print("<a href = '" + Constants.getQuizURL(q.getValue()) + "'>" + q.getKey() + "</a> <br>");
-	}
-	if (recentQuizes.size() == 0)
-		out.print("There are no quizes..");
+
+ArrayList<Pair<String,Integer>> recentQuizes = obj.getRecentQuizes(3);
+for(Pair<String,Integer> q : recentQuizes){
+	out.print("<a href = '" + Constants.getQuizURL(q.getValue()) + "'>" + q.getKey() + "</a> <br>");
+}
 %>
+
+
 
 <H3>
 	Recent Quizes For user : <br>
 </H3>
 <%
-	/*
-	User user = (User)request.getSession().getAttribute(Constants.ATTR_USER);
-	ArrayList<Quiz> recentQuizesForUser = obj.getRecentQuizesForUser(user.getId(),3);
-	if(recentQuizesForUser != null){
-		for(Quiz q : recentQuizesForUser){
-			out.print("<a href = '" + Constants.getQuizURL(q.getID()) + "'>" + q.getTitle() + "</a> <br>");
-		}
-	}
-	*/
+
+User user = (User)request.getSession().getAttribute(Constants.ATTR_USER);
+ArrayList<Pair<String,Integer>> recentQuizesForUser = obj.getRecentQuizesForUser(user.getId(),3);
+if(recentQuizesForUser != null){
+	for(Pair<String,Integer> q : recentQuizesForUser){
+		out.print("<a href = '" + Constants.getQuizURL(q.getValue()) + "'>" + q.getKey() + "</a> <br>");	}
+}
+
 %>
+<a href = inbox.jsp> Inbox</a>
+	
+	

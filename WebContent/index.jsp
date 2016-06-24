@@ -27,88 +27,11 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title><%=pageTitle%></title>
+<link rel="stylesheet" type="text/css" href='style.css'>
 </head>
 <body>
-
-	<style>
-body {
-	margin: 0px;
-	background-color: #f1f1f1;
-	color: #1f1f1f;
-}
-
-td.leftSidebar {
-	width: 300px;
-}
-
-td.rightSidebar {
-	width: 300px;
-}
-
-td.content {
-	
-}
-
-div.block {
-	padding: 5px;
-	background-color: #ccc;
-	margin-top: 0px !important;
-	margin: 5px;
-	border-radius: 0px 0px 7px 7px;
-}
-
-div.block#content {
-	background-color: rgba(0, 0, 0, 0.5);
-	color: #fff;
-	margin: 0px;
-	border-radius: 0px 0px 7px 7px;
-}
-
-div.block-header {
-	padding: 5px;
-	background-color: #000;
-	color: #fff;
-	margin-bottom: 0px !important;
-	margin: 5px;
-	border-radius: 7px 7px 0px 0px;
-}
-
-div.block-header#content {
-	background-color: #ccc;
-	margin-top: 5px !important;
-	margin: 0px;
-	color: #000;
-}
-
-div.footer {
-	background-color: rgba(0, 0, 0, 0.7);
-	border-radius: 7px 7px 0px 0px;
-	color: #fff;
-	margin: 5px;
-	float: none;
-	padding: 8px;
-}
-
-div.header {
-	background-color: rgba(0, 0, 0, 0.7);
-	border-radius: 0px 0px 7px 7px;
-	color: #fff;
-	margin-top: 0px !important;
-	margin: 5px;
-	padding: 8px;
-}
-
-table {
-	margin: 0px;
-	padding: 0px;
-}
-
-td {
-	vertical-align: top;
-}
-</style>
 	<div class="header">
-		header content<BR> header content<BR>
+		<a href="./"><b>Homepage</b></a>header content<BR> header content<BR>
 	</div>
 	<table style="width: 100%">
 		<tr>

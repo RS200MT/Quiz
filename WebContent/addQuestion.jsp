@@ -1,7 +1,7 @@
 <%@page import="Models.Constants"%>
 <style>
 .dropbtn {
-	background-color: #4CAF50;
+	background-color: #4c78af;
 	color: white;
 	padding: 16px;
 	font-size: 16px;
@@ -10,7 +10,7 @@
 }
 
 .dropbtn:hover, .dropbtn:focus {
-	background-color: #3e8e41;
+	background-color: #3e679b;
 }
 
 .dropdown {
@@ -25,6 +25,7 @@
 	min-width: 160px;
 	overflow: auto;
 	box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+	border-radius: 0px 0px 10px 10px;
 }
 
 .dropdown-content a {
@@ -155,7 +156,7 @@
 			id="<%=Constants.ADD_QUESTION_DONE_QUIZ%>" />
 	</p>
 </form>
-<button onClick="addCorrectAnswer()">Add another correct answer</button>
+<button onClick="addCorrectAnswer()" id="addFieldButton">Add another correct answer</button>
 <button onClick="removeAnswersField()" id="removeFieldButton"
 	style="display: none">remove</button>
 <script>

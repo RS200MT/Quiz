@@ -31,6 +31,10 @@ public class DBObject {
 	public static final String TABLE_QUESTION_IMAGES = "question_images";
 	public static final String TABLE_MULTIPLE_CHOICES = "multiple_choices";
 	public static final String TABLE_FRIENDS = "friends";
+<<<<<<< HEAD
+	public static final String TABLE_MESSAGES = "messages";
+	
+=======
 	
 	public static final int MESSAGE_TYPE_CHALLENGE = 0;
 	public static final int MESSAGE_TYPE_TEXT_MESSAGE = 1;
@@ -38,6 +42,7 @@ public class DBObject {
 	public static final int MESSAGE_NOT_SEEN = 1;
 	public static final int FRIEND_STATUS_PENDING = 0;
 	public static final int FRIEND_STATUS_ACCEPTED = 1;
+>>>>>>> 1accf3f5cc7960d37df598e57a2ee1c949ff64c3
 	
 	public DBObject() {
 		try {
@@ -415,6 +420,21 @@ public class DBObject {
 	 * @return {@link ArrayList}
 	 * @throws SQLException
 	 */
+<<<<<<< HEAD
+	public ArrayList<Pair<String,Integer>> getRecentQuizes(int n) throws SQLException {
+		ArrayList<Pair<String,Integer>> recentQuizes = new ArrayList<Pair<String,Integer>>();
+		Connection conn = getConnection();
+		String query = "SELECT * FROM " + TABLE_QUIZES + " ORDER BY create_time DESC LIMIT " + n + ";";
+		ResultSet rs = getResultSet(query, conn);
+		if (!rs.isBeforeFirst())
+			return null;
+		while (rs.next()) {
+			recentQuizes.add(new Pair<String,Integer>(rs.getString("title"),rs.getInt("id")));
+		}
+		closeConnection(conn);
+		return recentQuizes;
+	}
+=======
 //	public ArrayList<Quiz> getRecentQuizes(int n) throws SQLException {
 //		ArrayList<Quiz> recentQuizes = new ArrayList<Quiz>(); gasuli viyavi daklone anu ho? ki vcadot axla aba
 //		Connection conn = getConnection();
@@ -428,6 +448,7 @@ public class DBObject {
 //		closeConnection(conn);
 //		return recentQuizes;
 //	}
+>>>>>>> 1accf3f5cc7960d37df598e57a2ee1c949ff64c3
 
 	// This function insert quiz in database
 	public int addQuiz(String title, String description, boolean isRandomized, boolean isImmediateCorrection,
@@ -513,6 +534,18 @@ public class DBObject {
 		closeConnection(conn);
 		return result;
 	}
+	
+	
+	public String getUserNameById(int userId) throws SQLException{
+		Connection conn = getConnection();
+		String query = "Select user_name from " + TABLE_USERS + " where id = " + userId;
+		ResultSet rs = getResultSet(query, conn);
+		if(!rs.isBeforeFirst())
+			return null;
+		String userName = rs.getString("user_name");
+		closeConnection(conn);
+		return userName;
+	}
 
 	private ArrayList<String> getUserFriends(Connection conn, int id) {
 		ArrayList<String> friends = new ArrayList<String>();
@@ -539,6 +572,31 @@ public class DBObject {
 				+ ";";
 		executeUpdate(query, conn);
 		closeConnection(conn);
+	}
+	
+	private ArrayList<Message> getMessages(int userId){
+		Connection conn = getConnection();
+		String query = "select * from " + TABLE_MESSAGES + " where recipient = " + userId;
+		ArrayList<Message> messages = new ArrayList<Message>();
+		ResultSet rs = getResultSet(query, conn);
+		try {
+			while(rs.next()){
+				String message = rs.getString("message_text");
+				int senderId = rs.getInt("sender");
+				int recipientId = rs.getInt("recipient");
+				boolean seen = false;
+				if(rs.getInt("seen") == 1)
+					seen = true;
+				String receiveTime = rs.getTimestamp("receive_time").toString();
+				int type = rs.getInt("type");
+				messages.add(new Message( message, senderId, recipientId, receiveTime));
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		closeConnection(conn);
+		return messages;
 	}
 
 	private int getQuizTimesWritten(int id, Connection conn) {

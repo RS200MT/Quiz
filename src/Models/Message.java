@@ -10,13 +10,15 @@ public class Message {
 	private int senderId;
 	private int recipientId;
 	private boolean seen;
+	private String receiveTime;
 	
-	public Message(MessageType type, String text, int senderId, int recipientId) {
+	public Message( String text, int senderId, int recipientId,String receiveTime) {
 		this.type = type;
 		this.messageText = text;
 		this.senderId = senderId;
 		this.recipientId = recipientId;
 		this.seen = false;
+		this.receiveTime = receiveTime;
 	}
 	
 	public MessageType getType() {
@@ -37,6 +39,10 @@ public class Message {
 	
 	public boolean isSeen() {
 		return this.seen;
+	}
+	
+	public String getReceiveTime(){
+		return this.receiveTime;
 	}
 	
 }
