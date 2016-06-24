@@ -372,7 +372,7 @@ public class DBObject {
 		String query = "SELECT * FROM " + TABLE_QUIZES + " ORDER BY times_written DESC LIMIT " + n + ";";
 		ResultSet rs = getResultSet(query, conn);
 		if (!rs.isBeforeFirst())
-			return null;
+			return popularQuizes;
 		while (rs.next()) {
 			popularQuizes.add(new Pair<String,Integer>(rs.getString("title"),rs.getInt("id")));
 		}
