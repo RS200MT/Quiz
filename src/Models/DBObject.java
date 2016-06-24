@@ -8,6 +8,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import com.sun.corba.se.spi.orbutil.fsm.Guard.Result;
 import com.sun.jmx.snmp.Timestamp;
 
 import Questions.FillInBlankQuestion;
@@ -388,7 +389,6 @@ public class DBObject {
 		if (!rs.isBeforeFirst())
 			return null;
 		while (rs.next()) {
-			 
 			popularQuizes.add(new Pair<String,Integer>(rs.getString("title"),rs.getInt("id")));
 		}
 		closeConnection(conn);
@@ -422,16 +422,18 @@ public class DBObject {
 	public ArrayList<Pair<String,Integer>> getRecentQuizesForUser(int userID, int n) throws SQLException {
 		ArrayList<Pair<String,Integer>> recentQuizesForUser = new ArrayList<Pair<String,Integer>>();
 		Connection conn = getConnection();
-		String query = "select * from " + TABLE_QUIZ_LOGS + " where user_id = " + userID + " order by start_time limit "
+		String query = "select quiz_id from " + TABLE_QUIZ_LOGS + " where user_id = " + userID + " order by start_time limit "
 				+ n + ";";
 		ResultSet rs = getResultSet(query, conn);
 		if (!rs.isBeforeFirst())
 			return null;
 		while (rs.next()) {
 			int id = rs.getInt("quiz_id");
-			ResultSet r = getResultSet("Select * from quizes where id = " + id, conn);
-			String title = r.getString("title");
-			recentQuizesForUser.add(new Pair<String,Integer>(title,id));
+			ResultSet r = getResultSet("Select title from quizes where id = " + id, conn);
+			while(r.next()) {
+				String title = r.getString("title");
+				recentQuizesForUser.add(new Pair<String,Integer>(title,id));
+			}
 		}
 		closeConnection(conn);
 		return recentQuizesForUser;
