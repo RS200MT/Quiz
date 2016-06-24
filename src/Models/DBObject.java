@@ -31,10 +31,8 @@ public class DBObject {
 	public static final String TABLE_QUESTION_IMAGES = "question_images";
 	public static final String TABLE_MULTIPLE_CHOICES = "multiple_choices";
 	public static final String TABLE_FRIENDS = "friends";
-<<<<<<< HEAD
 	public static final String TABLE_MESSAGES = "messages";
 	
-=======
 	
 	public static final int MESSAGE_TYPE_CHALLENGE = 0;
 	public static final int MESSAGE_TYPE_TEXT_MESSAGE = 1;
@@ -42,7 +40,6 @@ public class DBObject {
 	public static final int MESSAGE_NOT_SEEN = 1;
 	public static final int FRIEND_STATUS_PENDING = 0;
 	public static final int FRIEND_STATUS_ACCEPTED = 1;
->>>>>>> 1accf3f5cc7960d37df598e57a2ee1c949ff64c3
 	
 	public DBObject() {
 		try {
@@ -389,28 +386,16 @@ public class DBObject {
 		String query = "SELECT * FROM " + TABLE_QUIZES + " ORDER BY times_written DESC LIMIT " + n + ";";
 		ResultSet rs = getResultSet(query, conn);
 		if (!rs.isBeforeFirst())
-			return popularQuizes;
+			return null;
 		while (rs.next()) {
+			 
 			popularQuizes.add(new Pair<String,Integer>(rs.getString("title"),rs.getInt("id")));
 		}
 		closeConnection(conn);
 		return popularQuizes;
 	}
 
-	public ArrayList<Pair<String,Integer>> getRecentQuizesForUser(int userID, int n) throws SQLException {
-		ArrayList<Pair<String,Integer>> recentQuizesForUser = new ArrayList<Pair<String,Integer>>();
-		Connection conn = getConnection();
-		String query = "select * from " + TABLE_QUIZ_LOGS + " where user_id = " + userID + " order by start_time limit "
-				+ n + ";";
-		ResultSet rs = getResultSet(query, conn);
-		if (!rs.isBeforeFirst())
-			return null;
-		while (rs.next()) {
-			recentQuizesForUser.add(new Pair<String,Integer>(rs.getString("title"),rs.getInt("id")));
-		}
-		closeConnection(conn);
-		return recentQuizesForUser;
-	}
+	
 
 	/**
 	 * Returns list of given number of recently created quizzes; If there are
@@ -420,7 +405,6 @@ public class DBObject {
 	 * @return {@link ArrayList}
 	 * @throws SQLException
 	 */
-<<<<<<< HEAD
 	public ArrayList<Pair<String,Integer>> getRecentQuizes(int n) throws SQLException {
 		ArrayList<Pair<String,Integer>> recentQuizes = new ArrayList<Pair<String,Integer>>();
 		Connection conn = getConnection();
@@ -434,21 +418,24 @@ public class DBObject {
 		closeConnection(conn);
 		return recentQuizes;
 	}
-=======
-//	public ArrayList<Quiz> getRecentQuizes(int n) throws SQLException {
-//		ArrayList<Quiz> recentQuizes = new ArrayList<Quiz>(); gasuli viyavi daklone anu ho? ki vcadot axla aba
-//		Connection conn = getConnection();
-//		String query = "SELECT * FROM " + TABLE_QUIZES + " ORDER BY create_time DESC LIMIT " + n + ";";
-//		ResultSet rs = getResultSet(query, conn);
-//		if (!rs.isBeforeFirst())
-//			return null;
-//		while (rs.next()) {
-//			recentQuizes.add(getQuizById(rs.getInt("id")));
-//		}
-//		closeConnection(conn);
-//		return recentQuizes;
-//	}
->>>>>>> 1accf3f5cc7960d37df598e57a2ee1c949ff64c3
+
+	public ArrayList<Pair<String,Integer>> getRecentQuizesForUser(int userID, int n) throws SQLException {
+		ArrayList<Pair<String,Integer>> recentQuizesForUser = new ArrayList<Pair<String,Integer>>();
+		Connection conn = getConnection();
+		String query = "select * from " + TABLE_QUIZ_LOGS + " where user_id = " + userID + " order by start_time limit "
+				+ n + ";";
+		ResultSet rs = getResultSet(query, conn);
+		if (!rs.isBeforeFirst())
+			return null;
+		while (rs.next()) {
+			int id = rs.getInt("quiz_id");
+			ResultSet r = getResultSet("Select * from quizes where id = " + id, conn);
+			String title = r.getString("title");
+			recentQuizesForUser.add(new Pair<String,Integer>(title,id));
+		}
+		closeConnection(conn);
+		return recentQuizesForUser;
+	}
 
 	// This function insert quiz in database
 	public int addQuiz(String title, String description, boolean isRandomized, boolean isImmediateCorrection,
@@ -574,11 +561,13 @@ public class DBObject {
 		closeConnection(conn);
 	}
 	
-	private ArrayList<Message> getMessages(int userId){
+	public ArrayList<Message> getMessages(int userId) throws SQLException{
 		Connection conn = getConnection();
 		String query = "select * from " + TABLE_MESSAGES + " where recipient = " + userId;
 		ArrayList<Message> messages = new ArrayList<Message>();
 		ResultSet rs = getResultSet(query, conn);
+		if(!rs.isBeforeFirst())
+			return null;
 		try {
 			while(rs.next()){
 				String message = rs.getString("message_text");

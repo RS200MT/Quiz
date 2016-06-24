@@ -10,6 +10,7 @@
 <H3>
 	Popular 5 Quizes: <br>
 </H3>
+
 <%
 
 	DBObject obj = (DBObject) request.getServletContext().getAttribute(DBObject.ATTR_DB);
@@ -20,14 +21,18 @@
 	}
 	if (popQuizes.size() == 0)
 		out.print("There are no quizes..");
+	
 %>
 
 <H3>Recent Quizes : <br> </H3>
-<%
+
+	<%
 
 ArrayList<Pair<String,Integer>> recentQuizes = obj.getRecentQuizes(3);
-for(Pair<String,Integer> q : recentQuizes){
-	out.print("<a href = '" + Constants.getQuizURL(q.getValue()) + "'>" + q.getKey() + "</a> <br>");
+if(recentQuizes != null){
+	for(Pair<String,Integer> q : recentQuizes){
+		out.print("<a href = '" + Constants.getQuizURL(q.getValue()) + "'>" + q.getKey() + "</a> <br>");
+	}
 }
 %>
 
@@ -47,5 +52,4 @@ if(recentQuizesForUser != null){
 
 %>
 <a href = inbox.jsp> Inbox</a>
-	
 	

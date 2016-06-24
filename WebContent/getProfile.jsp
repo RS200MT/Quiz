@@ -4,7 +4,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 
-<form action=<%=Constants.S_GET_PROFILE%> method="post">
+<form action= "<%=Constants.S_GET_PROFILE%>" method="post">
  
 <%
 	User currUser = (User)request.getSession().getAttribute(Constants.ATTR_USER);
