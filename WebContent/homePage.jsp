@@ -18,10 +18,10 @@ for(Pair<String,Integer> q : popQuizes){
 
 %>
 
-<H3> Recent Quizes : <br> </H3>
+<H3>Recent Quizes : <br> </H3>
 <%
 
-ArrayList<Pair<String,Integer>> recentQuizes = obj.getPopularQuizes(3);
+ArrayList<Pair<String,Integer>> recentQuizes = obj.getRecentQuizes(3);
 for(Pair<String,Integer> q : recentQuizes){
 	out.print("<a href = '" + Constants.getQuizURL(q.getValue()) + "'>" + q.getKey() + "</a> <br>");
 }
@@ -30,13 +30,13 @@ for(Pair<String,Integer> q : recentQuizes){
 
 <H3> Recent Quizes For user : <br> </H3>
 <%
-/*
+
 User user = (User)request.getSession().getAttribute(Constants.ATTR_USER);
-ArrayList<Quiz> recentQuizesForUser = obj.getRecentQuizesForUser(user.getId(),3);
+ArrayList<Pair<String,Integer>> recentQuizesForUser = obj.getRecentQuizesForUser(user.getId(),3);
 if(recentQuizesForUser != null){
-	for(Quiz q : recentQuizesForUser){
-		out.print("<a href = '" + Constants.getQuizURL(q.getID()) + "'>" + q.getTitle() + "</a> <br>");
-	}
+	for(Pair<String,Integer> q : recentQuizesForUser){
+		out.print("<a href = '" + Constants.getQuizURL(q.getValue()) + "'>" + q.getKey() + "</a> <br>");	}
 }
-*/
+
 %>
+<a href = inbox.jsp> Inbox</a>

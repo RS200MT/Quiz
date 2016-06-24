@@ -77,6 +77,10 @@ public class Constants {
 	public static final String INDEX_DO_ADD_QUIZ_TITLE = "Create new quiz";
 	public static final String INDEX_DO_ADD_QUESTION = "addQuestion";
 	public static final String INDEX_DO_ADD_QUESTION_TITLE = "Add question";
+	public static final String INDEX_DO_MESSAGE = "message";
+	public static final String INDEX_DO_MESSAGE_TITLE = "Messages";
+
+
 
 	public static final String INDEX_DO_MY_QUIZES = "myQuizes";
 	public static final String INDEX_DO_MY_QUIZES_TITLE = "my Quizes";
@@ -99,6 +103,10 @@ public class Constants {
 	}
 
 	public static String getQuizURL(int id) {
+		return INDEX + "?" + INDEX_DO + "=" + INDEX_DO_QUIZ_PAGE + "&" + ATTR_QUIZ_ID_FOR_QUESTION + "=" + id;
+	}
+	
+	public static String getMessageURL(int id) {
 		return INDEX + "?" + INDEX_DO + "=" + INDEX_DO_QUIZ_PAGE + "&" + ATTR_QUIZ_ID_FOR_QUESTION + "=" + id;
 	}
 	
