@@ -26,7 +26,7 @@
 		out.println(curUser.getUserName());
 %>
 <form action="<%=Constants.S_LOGOUT%>" method="post">
-	<input type="submit" value="<%out.print(Constants.B_LOGOUT);%>" />
+	<input type="submit" value="<%out.print(Constants.B_LOGOUT);%>" id="logout"/>
 </form>
 
 <a href="<%=Constants.getAction(Constants.INDEX_DO_ADD_QUIZ)%>"><%=Constants.B_ADD_QUIZ%></a>
