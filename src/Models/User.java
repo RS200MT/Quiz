@@ -3,6 +3,8 @@ package Models;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import com.mysql.fabric.xmlrpc.base.Array;
+
 import javafx.util.Pair;
 
 public class User {
@@ -13,6 +15,7 @@ public class User {
 	private int quizNumber;
 	private int type;
 	private ArrayList<String> friends;
+	private ArrayList<String> achievements;
 
 	public User(int id, String userName, String email, String regDate, int quizNumber, int type,
 			ArrayList<String> friends) {
@@ -26,6 +29,7 @@ public class User {
 			this.friends = friends;
 		else
 			this.friends = new ArrayList<String>();
+		this.achievements = new ArrayList<String>();
 	}
 
 	public int getId() {
@@ -82,6 +86,10 @@ public class User {
 
 	public void removeFriend(String userName) {
 		this.friends.remove(userName);		
+	}
+	 
+	public void addNewAchievement(String newAchievement) {
+		this.achievements.add(newAchievement);
 	}
 
 }
