@@ -15,6 +15,7 @@ public class Constants {
 	public static final String S_REGISTER = "addUser";
 	public static final String S_ADD_QUIZ = "addQuiz";
 	public static final String S_QUIZING = "Quizing";
+	public static final String S_GET_PROFILE = "GetProfile";
 
 	//
 
@@ -57,6 +58,7 @@ public class Constants {
 	public static final String ATTR_USER = "USER";
 	public static final String ATTR_QUIZ_ID_FOR_QUESTION = "quizId";
 	public static final String ATTR_SESSION_QUIZ = "quizAttr";
+	public static final String ATTR_USER_NAME_FOR_GET_PROFILE = "userNameAttr";
 
 	// WASKA's constants new;
 	public static final String SITE_URL = "http://localhost:8080/QuizWebsite";
@@ -102,6 +104,10 @@ public class Constants {
 		return INDEX + "?" + INDEX_DO + "=" + INDEX_DO_QUIZ_PAGE + "&" + ATTR_QUIZ_ID_FOR_QUESTION + "=" + id;
 	}
 	
+	public static String getUserProfileURL(String userName) {
+		return INDEX + "?" + INDEX_DO + "=" + INDEX_DO_GET_PROFILE + "&" + ATTR_USER_NAME_FOR_GET_PROFILE + "=" + userName;
+	}
+	
 	public static final int QUESTION_TYPES_LENGTH = 4;
 	
 	
@@ -110,4 +116,8 @@ public class Constants {
 	public static final String QUIZINIG_CHECK = "checkAnswer";
 	public static final String QUIZINIG_CHECK_RESULT_NEXT_QUESTION = "checkResult";
 	
+	public static final String GET_PROFILE_ADD_FRIEND = "addFriend";
+	public static final String GET_PROFILE_SEND_MESSAGE = "sendMessage";
+	public static final String GET_PROFILE_MESSAGE_TEXT = "messageText";
+	public static final String GET_PROFILE_USER_NAME_HIDDEN = "userNameHidden";
 }

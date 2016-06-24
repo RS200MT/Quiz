@@ -12,9 +12,12 @@
 
 DBObject obj = (DBObject)request.getServletContext().getAttribute(DBObject.ATTR_DB);
 ArrayList<Pair<String,Integer>> popQuizes = obj.getPopularQuizes(3);
-for(Pair<String,Integer> q : popQuizes){
-	out.print("<a href = '" + Constants.getQuizURL(q.getValue()) + "'>" + q.getKey() + "</a> <br>");
+if(popQuizes!=null) {
+	for(Pair<String,Integer> q : popQuizes){
+		out.print("<a href = '" + Constants.getQuizURL(q.getValue()) + "'>" + q.getKey() + "</a> <br>");
+	}
 }
+
 
 %>
 
@@ -22,9 +25,12 @@ for(Pair<String,Integer> q : popQuizes){
 <%
 
 ArrayList<Pair<String,Integer>> recentQuizes = obj.getPopularQuizes(3);
-for(Pair<String,Integer> q : recentQuizes){
-	out.print("<a href = '" + Constants.getQuizURL(q.getValue()) + "'>" + q.getKey() + "</a> <br>");
+if(recentQuizes != null) {
+	for(Pair<String,Integer> q : recentQuizes){
+		out.print("<a href = '" + Constants.getQuizURL(q.getValue()) + "'>" + q.getKey() + "</a> <br>");
+	}
 }
+
 
 %>
 
