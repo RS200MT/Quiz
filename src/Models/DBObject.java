@@ -31,8 +31,18 @@ public class DBObject {
 	public static final String TABLE_QUESTION_IMAGES = "question_images";
 	public static final String TABLE_MULTIPLE_CHOICES = "multiple_choices";
 	public static final String TABLE_FRIENDS = "friends";
+<<<<<<< HEAD
 	public static final String TABLE_MESSAGES = "messages";
 	
+=======
+	
+	public static final int MESSAGE_TYPE_CHALLENGE = 0;
+	public static final int MESSAGE_TYPE_TEXT_MESSAGE = 1;
+	public static final int MESSAGE_SEEN = 0;
+	public static final int MESSAGE_NOT_SEEN = 1;
+	public static final int FRIEND_STATUS_PENDING = 0;
+	public static final int FRIEND_STATUS_ACCEPTED = 1;
+>>>>>>> 1accf3f5cc7960d37df598e57a2ee1c949ff64c3
 	
 	public DBObject() {
 		try {
@@ -55,8 +65,9 @@ public class DBObject {
 			e.printStackTrace();
 			System.err.println("MySQL user password server or db name is incorrect!");
 			return null;
-		}
+		} // auu moica :D :D mysql driveri sadme giweria? serve
 	}
+
 
 	/**
 	 * Closes given connection
@@ -84,9 +95,13 @@ public class DBObject {
 			stmt.executeQuery("USE " + MYSQL_DATABASE_NAME);
 			result = stmt.executeQuery(query);
 		} catch (SQLException e) {
+			System.out.println("=============================");
 			e.printStackTrace();
 		}
-		return result;
+		if(result == null) {
+			System.out.println("aa");
+		} else System.out.println("a");
+		return result; 
 	}
 
 	/**
@@ -148,7 +163,7 @@ public class DBObject {
 	 */
 	private boolean userAlreadyExists(String name, String email, Connection conn) {
 		String query = "SELECT * FROM " + TABLE_USERS + " WHERE user_name = '" + name + "' or email = '" + email
-				+ "' limit 1;";
+				+ "' limit 1;";  
 		ResultSet r = getResultSet(query, conn);
 		try {
 			if (r.next())
@@ -173,7 +188,7 @@ public class DBObject {
 		ResultSet rs = getResultSet(query, conn);
 		try {
 			if (rs.next())
-				result = rs.getString("password");
+				result = rs.getString("password"); 
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -374,7 +389,7 @@ public class DBObject {
 		String query = "SELECT * FROM " + TABLE_QUIZES + " ORDER BY times_written DESC LIMIT " + n + ";";
 		ResultSet rs = getResultSet(query, conn);
 		if (!rs.isBeforeFirst())
-			return null;
+			return popularQuizes;
 		while (rs.next()) {
 			popularQuizes.add(new Pair<String,Integer>(rs.getString("title"),rs.getInt("id")));
 		}
@@ -405,6 +420,7 @@ public class DBObject {
 	 * @return {@link ArrayList}
 	 * @throws SQLException
 	 */
+<<<<<<< HEAD
 	public ArrayList<Pair<String,Integer>> getRecentQuizes(int n) throws SQLException {
 		ArrayList<Pair<String,Integer>> recentQuizes = new ArrayList<Pair<String,Integer>>();
 		Connection conn = getConnection();
@@ -418,6 +434,21 @@ public class DBObject {
 		closeConnection(conn);
 		return recentQuizes;
 	}
+=======
+//	public ArrayList<Quiz> getRecentQuizes(int n) throws SQLException {
+//		ArrayList<Quiz> recentQuizes = new ArrayList<Quiz>(); gasuli viyavi daklone anu ho? ki vcadot axla aba
+//		Connection conn = getConnection();
+//		String query = "SELECT * FROM " + TABLE_QUIZES + " ORDER BY create_time DESC LIMIT " + n + ";";
+//		ResultSet rs = getResultSet(query, conn);
+//		if (!rs.isBeforeFirst())
+//			return null;
+//		while (rs.next()) {
+//			recentQuizes.add(getQuizById(rs.getInt("id")));
+//		}
+//		closeConnection(conn);
+//		return recentQuizes;
+//	}
+>>>>>>> 1accf3f5cc7960d37df598e57a2ee1c949ff64c3
 
 	// This function insert quiz in database
 	public int addQuiz(String title, String description, boolean isRandomized, boolean isImmediateCorrection,
@@ -516,8 +547,8 @@ public class DBObject {
 		return userName;
 	}
 
-	private ArrayList<Pair<Integer, String>> getUserFriends(Connection conn, int id) {
-		ArrayList<Pair<Integer, String>> friends = new ArrayList<Pair<Integer, String>>();
+	private ArrayList<String> getUserFriends(Connection conn, int id) {
+		ArrayList<String> friends = new ArrayList<String>();
 		// String query = "Select * from " + TABLE_FRIENDS + " where user1_id =
 		// " + id + " or user2_id = " + id + ";";
 		// TODO
@@ -580,6 +611,40 @@ public class DBObject {
 			e.printStackTrace();
 		}
 		return result;
+	}
+	/**
+	 * Insert new text message to the table of messages;
+	 * !!!!! not adding receive time !!!!!!!!
+	 * @param sender
+	 * @param recipient
+	 * @param messageText
+	 */
+	public void addSentMessage(String sender, String recipient, String messageText) {
+		Connection conn = getConnection();
+		User u1 = this.getUserByUserName(sender);
+		int id1 = u1.getId();
+		User u2 = this.getUserByUserName(recipient);
+		int id2 = u2.getId();
+		String query = "INSERT INTO messages (sender, recipient, type, message_text, seen) VALUES ("
+										+id1+", "+id2+", "+MESSAGE_TYPE_TEXT_MESSAGE+", '"+messageText+"', " + MESSAGE_NOT_SEEN+");";
+		this.executeUpdate(query, conn);
+		closeConnection(conn);
+	}
+
+	/**
+	 * 
+	 * @param sender
+	 * @param recipient
+	 */
+	public void addFriendRequest(String sender, String recipient) {
+		Connection conn = getConnection();
+		User u1 = this.getUserByUserName(sender);
+		int id1 = u1.getId();
+		User u2 = this.getUserByUserName(recipient);
+		int id2 = u2.getId();
+		String query="INSERT INTO friends (user1_id, user2_id, status) VALUES ("+id1+", "+id2+", "+FRIEND_STATUS_PENDING+");";
+		this.executeUpdate(query, conn);
+		closeConnection(conn);
 	}
 
 }

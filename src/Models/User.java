@@ -12,10 +12,10 @@ public class User {
 	private String regDate;
 	private int quizNumber;
 	private int type;
-	private ArrayList<Pair<Integer, String>> friends;
+	private ArrayList<String> friends;
 
 	public User(int id, String userName, String email, String regDate, int quizNumber, int type,
-			ArrayList<Pair<Integer, String>> friends) {
+			ArrayList<String> friends) {
 		this.id = id;
 		this.userName = userName;
 		this.email = email;
@@ -25,7 +25,7 @@ public class User {
 		if (friends != null)
 			this.friends = friends;
 		else
-			this.friends = new ArrayList<Pair<Integer, String>>();
+			this.friends = new ArrayList<String>();
 	}
 
 	public int getId() {
@@ -57,11 +57,11 @@ public class User {
 	}
 
 
-	public void addFriend(Pair<Integer, String> newFriend) {
+	public void addFriend(String newFriend) {
 		this.friends.add(newFriend);
 	}
 
-	public void addFriends(ArrayList<Pair<Integer, String>> newFriends) {
+	public void addFriends(ArrayList<String> newFriends) {
 		if (newFriends == null)
 			return;
 		if (this.friends.size() == 0)
@@ -77,7 +77,7 @@ public class User {
 	}
 
 	public boolean hasFriendByUserName(String friendUserName) {
-		return false;
+		return this.friends.contains(friendUserName);
 	}
 
 }
