@@ -80,4 +80,8 @@ public class User {
 		return this.friends.contains(friendUserName);
 	}
 
+	public void removeFriend(String userName) {
+		this.friends.remove(userName);		
+	}
+
 }

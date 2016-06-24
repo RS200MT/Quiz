@@ -589,4 +589,15 @@ public class DBObject {
 		closeConnection(conn);
 	}
 
+	public void removeFriend(String userName1, String userName2) {
+		Connection conn = getConnection();
+		User u1 = this.getUserByUserName(userName1);
+		int id1 = u1.getId();
+		User u2 = this.getUserByUserName(userName2);
+		int id2 = u2.getId();
+		String query="DELETE FROM friends WHERE (user1_id="+id1+" and user2_id="+id2+") or (user1_id="+id2+" and user2_id="+id1+");";
+		this.executeUpdate(query, conn);
+		closeConnection(conn);
+	}
+
 }

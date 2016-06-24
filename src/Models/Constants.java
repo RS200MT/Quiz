@@ -117,6 +117,7 @@ public class Constants {
 	public static final String QUIZINIG_CHECK_RESULT_NEXT_QUESTION = "checkResult";
 	
 	public static final String GET_PROFILE_ADD_FRIEND = "addFriend";
+	public static final String GET_PROFILE_UNFRIEND = "unfriend";
 	public static final String GET_PROFILE_SEND_MESSAGE = "sendMessage";
 	public static final String GET_PROFILE_MESSAGE_TEXT = "messageText";
 	public static final String GET_PROFILE_USER_NAME_HIDDEN = "userNameHidden";
