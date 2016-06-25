@@ -577,12 +577,12 @@ public class DBObject {
 				String message = rs.getString("message_text");
 				int senderId = rs.getInt("sender");
 				int recipientId = rs.getInt("recipient");
+				int messageId = rs.getInt("id");
 				boolean seen = false;
 				if(rs.getInt("seen") == 1)
 					seen = true;
 				String receiveTime = rs.getTimestamp("receive_time").toString();
-				int type = rs.getInt("type");
-				messages.add(new Message( message, senderId, recipientId, receiveTime));
+				messages.add(new Message( message, senderId, recipientId,seen,messageId, receiveTime));
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -592,6 +592,26 @@ public class DBObject {
 		return messages;
 	}
 
+	public Message getMessageById(int id) throws SQLException{
+		Connection conn = getConnection();
+		String query = "select * from " + TABLE_MESSAGES + " where id =" + id;
+		ResultSet rs = getResultSet(query, conn);
+		Message m = null;
+		if(rs.next()){
+			String message = rs.getString("message_text");
+			int senderId = rs.getInt("sender");
+			int recipientId = rs.getInt("recipient");
+			int messageId = rs.getInt("id");
+			boolean seen = false;
+			if(rs.getInt("seen") == 1)
+				seen = true;
+			String receiveTime = rs.getTimestamp("receive_time").toString();
+			m =  new Message( message, senderId, recipientId,seen,messageId, receiveTime);
+		}
+		return m;
+			
+	}
+	
 	private int getQuizTimesWritten(int id, Connection conn) {
 		String query = "SELECT * from " + TABLE_QUIZES + " WHERE id = " + id + " LIMIT 1;";
 		ResultSet rs = getResultSet(query, conn);

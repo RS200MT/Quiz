@@ -1,28 +1,28 @@
 package Models;
 
 public class Message {
-	public static enum MessageType{
-		Null, Challenge, Note
-	}
 	
-	private MessageType type;
+	
 	private String messageText;
 	private int senderId;
 	private int recipientId;
 	private boolean seen;
 	private String receiveTime;
+	private int messageId ;
 	
-	public Message( String text, int senderId, int recipientId,String receiveTime) {
-		this.type = type;
+	public Message( String text, int senderId, int recipientId,boolean seen,int messageId,String receiveTime) {
 		this.messageText = text;
 		this.senderId = senderId;
 		this.recipientId = recipientId;
-		this.seen = false;
+		this.seen = seen;
 		this.receiveTime = receiveTime;
+		this.messageId = messageId;
 	}
 	
-	public MessageType getType() {
-		return this.type;
+	
+	
+	public int getMessageId(){
+		return this.messageId;
 	}
 	
 	public String getMessageText() {
