@@ -93,6 +93,7 @@ create table if not exists quiz_logs (
     key (quiz_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
+
 create table if not exists messages (
 	id int primary key auto_increment,
     sender int not null, 
@@ -100,6 +101,6 @@ create table if not exists messages (
     type int not null,
     message_text text,
     seen int default 0,
-    receive_time timestamp not null
+    receive_time timestamp not null default now()
 );
 
