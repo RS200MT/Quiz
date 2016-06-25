@@ -136,4 +136,6 @@ public class Constants {
 	public static final String GET_PROFILE_SEND_MESSAGE = "sendMessage";
 	public static final String GET_PROFILE_MESSAGE_TEXT = "messageText";
 	public static final String GET_PROFILE_USER_NAME_HIDDEN = "userNameHidden";
+	public static final String GET_PROFILE_ACCEPT_FRIEND_REQUEST = "acceptFriendRequest";
+	public static final String GET_PROFILE_DECLINE_FRIEND_REQUEST = "declineFriendRequest";
 }

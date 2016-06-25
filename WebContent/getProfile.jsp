@@ -29,7 +29,14 @@
 		out.print("<input type='hidden' name='"+Constants.GET_PROFILE_USER_NAME_HIDDEN+"' value='"+userName+"'/>");
 		if(!currUser.getUserName().equals(userName)) {
 			if(!currUser.hasFriendByUserName(userName)) {
-				out.print("<input type='submit' name='"+Constants.GET_PROFILE_ADD_FRIEND+"' value = 'Add Friend'/>");	
+				ArrayList<String> requests = db.getFriendRequestsForUser(currUser.getId());
+				if(requests!=null && requests.contains(toDisplay.getUserName())) {
+					out.print("<input type='submit' name='"+Constants.GET_PROFILE_ACCEPT_FRIEND_REQUEST+"' value = 'Accept Friend Request'/>");
+					out.print("<input type='submit' name='"+Constants.GET_PROFILE_DECLINE_FRIEND_REQUEST+"' value = 'Decline Friend Request'/>");
+				} else {
+					out.print("<input type='submit' name='"+Constants.GET_PROFILE_ADD_FRIEND+"' value = 'Add Friend'/>");
+				}
+					
 			} else {
 				out.print("<input type='submit' name='"+Constants.GET_PROFILE_UNFRIEND+"' value = 'Unfriend'/>");
 			}

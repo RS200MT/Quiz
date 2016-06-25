@@ -22,6 +22,7 @@
 		String senderUserName = obj.getUserNameById(m.getSenderId());
 		out.print("From: " + "<a href = '" + Constants.getUserProfileURL(senderUserName)+"'>"+senderUserName+"</a>");				
 		out.print("<br>Time: "+m.getReceiveTime()+"<br>");
+		out.print("<br>"+m.getMessageText());
 	}
 	
 %>

@@ -1,6 +1,8 @@
 package Servlets;
 
 import java.io.IOException;
+import java.sql.SQLException;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -49,6 +51,8 @@ public class GetProfile extends HttpServlet {
 			String addFriend = request.getParameter(Constants.GET_PROFILE_ADD_FRIEND);
 			String sendMessage = request.getParameter(Constants.GET_PROFILE_SEND_MESSAGE);
 			String unfriend = request.getParameter(Constants.GET_PROFILE_UNFRIEND);
+			String acceptFriendRequest = request.getParameter(Constants.GET_PROFILE_ACCEPT_FRIEND_REQUEST);
+			String declineFriendRequest = request.getParameter(Constants.GET_PROFILE_DECLINE_FRIEND_REQUEST);
 			//If add friend was pusher
 			if(addFriend!=null) {
 				db.addFriendRequest(sessionUser.getUserName(), userName);
@@ -68,14 +72,22 @@ public class GetProfile extends HttpServlet {
 				sessionUser.removeFriend(userName);
 				
 			}
+			//If "accept friend request" was pushed
+			if(acceptFriendRequest != null) {
+				try {
+					db.acceptFriendRequest(sessionUser.getId(), db.getUserIdByUserName(userName));
+					sessionUser.addFriend(userName);
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			//If "decline friend request" was pushed
+			if(declineFriendRequest != null) {
+				db.removeFriend(sessionUser.getUserName(), userName);
+			}
 			request.getRequestDispatcher(Constants.getUserProfileURL(userName)).forward(request, response);
 
-		}
-		
-		
-		
-		
-		
+		}		
 	}
 
 }

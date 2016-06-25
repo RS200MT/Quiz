@@ -551,6 +551,32 @@ public class DBObject {
 		return userName;
 	}
 
+	
+	
+	public int getUserIdByUserName(String userName) throws SQLException {
+		Connection conn = getConnection();
+		String query = "Select * from " + TABLE_USERS + " where user_name = '" + userName+"';";
+		ResultSet rs = getResultSet(query, conn);
+		if(!rs.isBeforeFirst())
+			return -1;
+		int id = -1;
+		if(rs.next())
+		  id = rs.getInt("id");
+		closeConnection(conn);
+		return id;
+	}
+	
+	
+	
+	
+	public void acceptFriendRequest(int recipient, int sender) {
+		Connection conn = getConnection();
+		String query = "UPDATE "+TABLE_FRIENDS+" SET status = "+FRIEND_STATUS_ACCEPTED+" WHERE user1_id="+sender+" AND user2_id="+recipient+";";
+		executeUpdate(query, conn);		
+		closeConnection(conn);
+	}
+	
+	
 	private ArrayList<String> getUserFriends(Connection conn, int id) {
 		ArrayList<String> friends = new ArrayList<String>();
 		// String query = "Select * from " + TABLE_FRIENDS + " where user1_id =
@@ -701,10 +727,10 @@ public class DBObject {
 	public void addFriendRequest(String sender, String recipient) {
 		Connection conn = getConnection();
 		User u1 = this.getUserByUserName(sender);
-		int id1 = u1.getId();
+		int senderId = u1.getId();
 		User u2 = this.getUserByUserName(recipient);
-		int id2 = u2.getId();
-		String query="INSERT INTO friends (user1_id, user2_id, status) VALUES ("+id1+", "+id2+", "+FRIEND_STATUS_PENDING+");";
+		int recipientId = u2.getId();
+		String query="INSERT INTO friends (user1_id, user2_id, status) VALUES ("+senderId+", "+recipientId+", "+FRIEND_STATUS_PENDING+");";
 		this.executeUpdate(query, conn);
 		closeConnection(conn);
 	}
