@@ -10,7 +10,7 @@
     pageEncoding="ISO-8859-1"%>
 
 <form action= "<%=Constants.S_GET_PROFILE%>" method="post">
- 
+
 <%
 	User currUser = (User)request.getSession().getAttribute(Constants.ATTR_USER);
 	if(currUser == null) {
@@ -28,15 +28,13 @@
 		}
 		out.print("<input type='hidden' name='"+Constants.GET_PROFILE_USER_NAME_HIDDEN+"' value='"+userName+"'/>");
 		if(!currUser.getUserName().equals(userName)) {
-			if(!currUser.hasFriendByUserName(userName)) {
-				ArrayList<String> requests = db.getFriendRequestsForUser(currUser.getId());
-				if(requests!=null && requests.contains(toDisplay.getUserName())) {
+			if(!db.usersAreFriends(currUser.getId(), toDisplay.getId())) {
+				ArrayList<String> friendRequests = db.getFriendRequestsForUser(currUser.getId());
+				if(friendRequests!=null && friendRequests.contains(toDisplay.getUserName())) {
 					out.print("<input type='submit' name='"+Constants.GET_PROFILE_ACCEPT_FRIEND_REQUEST+"' value = 'Accept Friend Request'/>");
 					out.print("<input type='submit' name='"+Constants.GET_PROFILE_DECLINE_FRIEND_REQUEST+"' value = 'Decline Friend Request'/>");
-				} else {
-					out.print("<input type='submit' name='"+Constants.GET_PROFILE_ADD_FRIEND+"' value = 'Add Friend'/>");
 				}
-					
+				out.print("<input type='submit' name='"+Constants.GET_PROFILE_ADD_FRIEND+"' value = 'Add Friend'/>");					
 			} else {
 				out.print("<input type='submit' name='"+Constants.GET_PROFILE_UNFRIEND+"' value = 'Unfriend'/>");
 			}
@@ -47,3 +45,7 @@
 	
 %>
 </form>
+
+
+
+

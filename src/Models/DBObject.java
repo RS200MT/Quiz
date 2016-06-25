@@ -735,6 +735,20 @@ public class DBObject {
 		closeConnection(conn);
 	}
 
+	
+	public boolean usersAreFriends(int userId1, int userId2) throws SQLException {
+		Connection conn = getConnection();
+		String query = "SELECT * FROM "+TABLE_FRIENDS+" WHERE (user1_id="+userId1+" AND user2_id="+userId2+") OR (user1_id="
+				+userId2+" AND user2_id="+userId2+");";
+		ResultSet rs = getResultSet(query, conn);
+		if(!rs.isBeforeFirst())
+			return false;
+		closeConnection(conn);
+		return true;
+	}
+	
+	
+	
 	/**
 	 * Remove friendship of given two users from the table of friends;
 	 * @param userName1
