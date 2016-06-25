@@ -565,27 +565,20 @@ public class DBObject {
 		closeConnection(conn);
 	}
 	
-	public ArrayList<Message> getMessages(int userId) throws SQLException{
+	public ArrayList<Pair<Integer,Integer>> getMessages(int userId) throws SQLException{
 		Connection conn = getConnection();
 		String query = "select * from " + TABLE_MESSAGES + " where recipient = " + userId;
-		ArrayList<Message> messages = new ArrayList<Message>();
+		ArrayList<Pair<Integer,Integer>> messages = new ArrayList<Pair<Integer,Integer>>();
 		ResultSet rs = getResultSet(query, conn);
 		if(!rs.isBeforeFirst())
 			return null;
 		try {
 			while(rs.next()){
-				String message = rs.getString("message_text");
 				int senderId = rs.getInt("sender");
-				int recipientId = rs.getInt("recipient");
 				int messageId = rs.getInt("id");
-				boolean seen = false;
-				if(rs.getInt("seen") == 1)
-					seen = true;
-				String receiveTime = rs.getTimestamp("receive_time").toString();
-				messages.add(new Message( message, senderId, recipientId,seen,messageId, receiveTime));
+				messages.add(new Pair<Integer, Integer>(messageId, senderId));
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		closeConnection(conn);

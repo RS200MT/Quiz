@@ -17,7 +17,7 @@
 	User user = (User)request.getSession().getAttribute(Constants.ATTR_USER);
 	Message m = obj.getMessageById(Integer.parseInt(request.getParameter("messageId")));
 	if(m!=null){
-		String toPrint = "From : " + obj.getUserNameById(m.getSenderId()) + " Time :" + m.getReceiveTime() + "<br>";
+		String toPrint = "From : " + obj.getUserNameById(m.getSenderId()) + " Time : " + m.getReceiveTime() + "<br>";
 		toPrint+= "Message : " + m.getMessageText();
 		out.print(toPrint);
 	}

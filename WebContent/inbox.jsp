@@ -6,15 +6,16 @@
 <%@page import="Models.Quiz"%>
 <%@page import="Models.User"%>
 <%@page import="Models.Message"%>
+<%@page import="javafx.util.Pair"%>
 
     
     <% 
      	DBObject obj = (DBObject)request.getServletContext().getAttribute(DBObject.ATTR_DB);
    	 	User user = (User)request.getSession().getAttribute(Constants.ATTR_USER);
-   	 	ArrayList<Message> messages = obj.getMessages(user.getId());
+   	 	ArrayList<Pair<Integer,Integer>> messages = obj.getMessages(user.getId());
     	 	if(messages != null){
- 			for(Message m : messages){
- 				out.print("From : <a href = message.jsp?messageId=" +m.getMessageId()+ "> "+obj.getUserNameById(m.getSenderId()) +"</a>");
+ 			for(Pair<Integer,Integer> m : messages){
+ 				out.print("From : <a href = message.jsp?messageId=" +m.getKey()+ "> "+obj.getUserNameById(m.getValue()) +"</a>");
  			}
  		} 
     %>
