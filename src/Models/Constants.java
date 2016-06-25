@@ -103,6 +103,9 @@ public class Constants {
 	public static final String INDEX_DO_QUIZ_RESULT = "QuizResult";
 	public static final String INDEX_DO_QUIZ_RESULT_TITLE = "Result";
 	
+	public static final String INDEX_DO_FRIEND_REQUESTS = "friendRequests";
+	public static final String INDEX_DO_FRIEND_REQUESTS_TITILE = "Friend Requests"; 
+	
 	public static String getAction(String action) {
 		return INDEX + "?" + INDEX_DO + "=" + action;
 	}

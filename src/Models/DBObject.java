@@ -559,6 +559,33 @@ public class DBObject {
 		return friends;
 	}
 
+	
+	
+	/**
+	 * Gets the list of pending friend requests for given user;
+	 * @param id
+	 * @return
+	 * @throws SQLException
+	 */
+	public ArrayList<String> getFriendRequestsForUser(int id) throws SQLException {
+		Connection conn = getConnection();
+		ArrayList<String> friendRequests = new ArrayList<String>();
+		String query = "SELECT * FROM "+TABLE_FRIENDS+" WHERE user2_id = "+id+" and status = "+FRIEND_STATUS_PENDING+";";
+		ResultSet rs = getResultSet(query, conn);
+		if(!rs.isBeforeFirst()) {
+			return null;
+		}
+		while(rs.next()) {
+			int senderId = rs.getInt("user1_id");
+			String userName = getUserNameById(senderId);
+			friendRequests.add(userName);
+		}
+		closeConnection(conn);
+		return friendRequests;
+	}
+	
+	
+	
 	public void logQuiz(int user_id, int quiz_id, int score, long startTime, long thisQuizTime) {
 		Connection conn = getConnection();
 		String query = "INSERT INTO " + TABLE_QUIZ_LOGS + " (user_id, quiz_id, score, start_time, quizTime) VALUES ("
