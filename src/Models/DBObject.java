@@ -8,8 +8,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import com.sun.corba.se.spi.orbutil.fsm.Guard.Result;
-import com.sun.jmx.snmp.Timestamp;
+
 
 import Questions.FillInBlankQuestion;
 import Questions.MultipleChoiceQuestion;
@@ -63,7 +62,7 @@ public class DBObject {
 			e.printStackTrace();
 			System.err.println("MySQL user password server or db name is incorrect!");
 			return null;
-		} // auu moica :D :D mysql driveri sadme giweria? serve
+		} 
 	}
 
 
@@ -93,12 +92,11 @@ public class DBObject {
 			stmt.executeQuery("USE " + MYSQL_DATABASE_NAME);
 			result = stmt.executeQuery(query);
 		} catch (SQLException e) {
-			System.out.println("=============================");
+			
 			e.printStackTrace();
 		}
 		if(result == null) {
-			System.out.println("aa");
-		} else System.out.println("a");
+		} 
 		return result; 
 	}
 
@@ -529,11 +527,13 @@ public class DBObject {
 	
 	public String getUserNameById(int userId) throws SQLException{
 		Connection conn = getConnection();
-		String query = "Select user_name from " + TABLE_USERS + " where id = " + userId;
+		String query = "Select * from " + TABLE_USERS + " where id = " + userId;
 		ResultSet rs = getResultSet(query, conn);
 		if(!rs.isBeforeFirst())
 			return null;
-		String userName = rs.getString("user_name");
+		String userName = "";
+		if(rs.next())
+		  userName = rs.getString("user_name");
 		closeConnection(conn);
 		return userName;
 	}

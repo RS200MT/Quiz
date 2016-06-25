@@ -50,6 +50,8 @@ if(recentQuizesForUser != null){
 		out.print("<a href = '" + Constants.getQuizURL(q.getValue()) + "'>" + q.getKey() + "</a> <br>");	}
 }
 
+out.print("<a href =" + Constants.getAction("inbox") + ">INbox</a>" );
+
 %>
-<a href = inbox.jsp> Inbox</a>
+
 	
