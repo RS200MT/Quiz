@@ -62,7 +62,7 @@ public class DBObject {
 			e.printStackTrace();
 			System.err.println("MySQL user password server or db name is incorrect!");
 			return null;
-		} // auu moica :D :D mysql driveri sadme giweria? serve
+		} 
 	}
 
 
@@ -92,12 +92,8 @@ public class DBObject {
 			stmt.executeQuery("USE " + MYSQL_DATABASE_NAME);
 			result = stmt.executeQuery(query);
 		} catch (SQLException e) {
-			System.out.println("=============================");
 			e.printStackTrace();
 		}
-		if(result == null) {
-			System.out.println("aa");
-		} else System.out.println("a");
 		return result; 
 	}
 
