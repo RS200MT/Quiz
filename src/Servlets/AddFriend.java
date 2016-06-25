@@ -9,23 +9,21 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
-
 import Models.Constants;
 import Models.DBObject;
 import Models.User;
 
 /**
- * Servlet implementation class GetProfile
+ * Servlet implementation class AddFriend
  */
-@WebServlet("/GetProfile")
-public class GetProfile extends HttpServlet {
+@WebServlet("/AddFriend")
+public class AddFriend extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public GetProfile() {
+    public AddFriend() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -49,26 +47,13 @@ public class GetProfile extends HttpServlet {
 		} else {
 			String userName = request.getParameter(Constants.GET_PROFILE_USER_NAME_HIDDEN);
 			String addFriend = request.getParameter(Constants.GET_PROFILE_ADD_FRIEND);
-			String sendMessage = request.getParameter(Constants.GET_PROFILE_SEND_MESSAGE);
 			String unfriend = request.getParameter(Constants.GET_PROFILE_UNFRIEND);
 			String acceptFriendRequest = request.getParameter(Constants.GET_PROFILE_ACCEPT_FRIEND_REQUEST);
 			String declineFriendRequest = request.getParameter(Constants.GET_PROFILE_DECLINE_FRIEND_REQUEST);
-			//If add friend was pusher
+			//If "Add Friend" was pushed
 			if(addFriend!=null) {
 				db.addFriendRequest(sessionUser.getUserName(), userName);
 				sessionUser.addFriend(userName);
-//				request.getRequestDispatcher(Constants.getUserProfileURL(userName)).forward(request, response);
-			}
-			//If send message was pushed
-			if(sendMessage != null) {
-				String messageText = request.getParameter(Constants.GET_PROFILE_MESSAGE_TEXT);
-				if(messageText!=null && !messageText.equals("") && !messageText.equals("Message Text")) {
-					try {
-						db.addSentMessage(sessionUser.getUserName(), userName, messageText);
-					} catch (SQLException e) {
-						e.printStackTrace();
-					}
-				}
 			}
 			//If unfriend was pushed
 			if(unfriend != null) {
@@ -90,8 +75,7 @@ public class GetProfile extends HttpServlet {
 				db.removeFriend(sessionUser.getUserName(), userName);
 			}
 			request.getRequestDispatcher(Constants.getUserProfileURL(userName)).forward(request, response);
-
-		}		
+		}
 	}
 
 }

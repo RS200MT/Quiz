@@ -16,6 +16,8 @@ public class Constants {
 	public static final String S_ADD_QUIZ = "addQuiz";
 	public static final String S_QUIZING = "Quizing";
 	public static final String S_GET_PROFILE = "GetProfile";
+	public static final String S_SEND_MESSAGE = "SendMessage";
+	public static final String S_ADD_FRIEND = "AddFriend";
 
 	//
 

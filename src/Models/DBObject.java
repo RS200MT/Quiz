@@ -706,13 +706,12 @@ public class DBObject {
 	 * @param sender
 	 * @param recipient
 	 * @param messageText
+	 * @throws SQLException 
 	 */
-	public void addSentMessage(String sender, String recipient, String messageText) {
+	public void addSentMessage(String sender, String recipient, String messageText) throws SQLException {
 		Connection conn = getConnection();
-		User u1 = this.getUserByUserName(sender);
-		int id1 = u1.getId();
-		User u2 = this.getUserByUserName(recipient);
-		int id2 = u2.getId();
+		int id1 = this.getUserIdByUserName(sender);
+		int id2 = this.getUserIdByUserName(recipient);
 		String query = "INSERT INTO messages (sender, recipient, type, message_text, seen) VALUES ("
 										+id1+", "+id2+", "+MESSAGE_TYPE_TEXT_MESSAGE+", '"+messageText+"', " + MESSAGE_NOT_SEEN+");";
 		this.executeUpdate(query, conn);
