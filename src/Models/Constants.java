@@ -81,6 +81,9 @@ public class Constants {
 	public static final String INDEX_DO_ADD_QUESTION_TITLE = "Add question";
 	public static final String INDEX_DO_MESSAGE = "message";
 	public static final String INDEX_DO_MESSAGE_TITLE = "Messages";
+	public static final String INDEX_DO_INBOX = "inbox";
+	public static final String INDEX_DO_INBOX_TITLE = "Inbox";
+
 
 
 

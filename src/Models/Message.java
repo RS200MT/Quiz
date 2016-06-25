@@ -11,18 +11,24 @@ public class Message {
 	private int recipientId;
 	private boolean seen;
 	private String receiveTime;
+	private int id;
 	
-	public Message( String text, int senderId, int recipientId,String receiveTime) {
+	public Message(int id, String text, int senderId, int recipientId,String receiveTime, boolean seen) {
+		this.id = id;
 		this.type = type;
 		this.messageText = text;
 		this.senderId = senderId;
 		this.recipientId = recipientId;
-		this.seen = false;
+		this.seen = false; // ------------------------------
 		this.receiveTime = receiveTime;
 	}
 	
 	public MessageType getType() {
 		return this.type;
+	}
+	
+	public int getId() {
+		return this.id;
 	}
 	
 	public String getMessageText() {

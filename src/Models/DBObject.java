@@ -8,7 +8,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import com.sun.jmx.snmp.Timestamp;
+
 
 import Questions.FillInBlankQuestion;
 import Questions.MultipleChoiceQuestion;
@@ -384,7 +384,6 @@ public class DBObject {
 		if (!rs.isBeforeFirst())
 			return null;
 		while (rs.next()) {
-			 
 			popularQuizes.add(new Pair<String,Integer>(rs.getString("title"),rs.getInt("id")));
 		}
 		closeConnection(conn);
@@ -433,6 +432,8 @@ public class DBObject {
 		closeConnection(conn);
 		return recentQuizes;
 	}
+
+	
 
 
 	// This function insert quiz in database
@@ -523,11 +524,13 @@ public class DBObject {
 	
 	public String getUserNameById(int userId) throws SQLException{
 		Connection conn = getConnection();
-		String query = "Select user_name from " + TABLE_USERS + " where id = " + userId;
+		String query = "Select * from " + TABLE_USERS + " where id = " + userId;
 		ResultSet rs = getResultSet(query, conn);
 		if(!rs.isBeforeFirst())
 			return null;
-		String userName = rs.getString("user_name");
+		String userName = "";
+		if(rs.next())
+		  userName = rs.getString("user_name");
 		closeConnection(conn);
 		return userName;
 	}
@@ -568,24 +571,51 @@ public class DBObject {
 			return null;
 		try {
 			while(rs.next()){
+				int id = rs.getInt("id");
 				String message = rs.getString("message_text");
 				int senderId = rs.getInt("sender");
 				int recipientId = rs.getInt("recipient");
 				boolean seen = false;
-				if(rs.getInt("seen") == 1)
+				if(rs.getInt("seen") == MESSAGE_SEEN)
 					seen = true;
 				String receiveTime = rs.getTimestamp("receive_time").toString();
-				int type = rs.getInt("type");
-				messages.add(new Message( message, senderId, recipientId, receiveTime));
+//				int type = rs.getInt("type");
+				messages.add(new Message(id, message, senderId, recipientId, receiveTime, seen));
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		closeConnection(conn);
 		return messages;
 	}
 
+	/**
+	 * 
+	 * @param id
+	 * @return
+	 * @throws SQLException
+	 */
+	public Message getMessageById(int id) throws SQLException {
+		Connection conn = getConnection();
+		String query = "SELECT * FROM messages WHERE id="+id+";";
+		ResultSet rs = getResultSet(query, conn);
+		Message m = null;
+		if(!rs.isBeforeFirst())
+			return null;
+		while(rs.next()) {
+			int sender = rs.getInt("sender");
+			int recipient = rs.getInt("recipient");
+			String messageText = rs.getString("message_text");
+			boolean seen = rs.getInt("seen")==MESSAGE_SEEN ? true : false;
+			String receiveTime = rs.getTimestamp("receive_time").toString();
+			m = new Message(id, messageText, sender, recipient, receiveTime, seen);
+		}
+		closeConnection(conn);
+		return m;
+	}
+	
+	
+	
 	private int getQuizTimesWritten(int id, Connection conn) {
 		String query = "SELECT * from " + TABLE_QUIZES + " WHERE id = " + id + " LIMIT 1;";
 		ResultSet rs = getResultSet(query, conn);

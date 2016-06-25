@@ -44,12 +44,14 @@ if(recentQuizes != null){
 <%
 
 User user = (User)request.getSession().getAttribute(Constants.ATTR_USER);
-ArrayList<Pair<String,Integer>> recentQuizesForUser = obj.getRecentQuizesForUser(user.getId(),3);
+ArrayList<Pair<String,Integer>> recentQuizesForUser = obj.getRecentQuizesForUser(user.getId(), 3);
 if(recentQuizesForUser != null){
 	for(Pair<String,Integer> q : recentQuizesForUser){
 		out.print("<a href = '" + Constants.getQuizURL(q.getValue()) + "'>" + q.getKey() + "</a> <br>");	}
 }
 
+out.print("<a href =" + Constants.getAction("inbox") + ">INbox</a>" );
+
 %>
-<a href = inbox.jsp> Inbox</a>
+
 	

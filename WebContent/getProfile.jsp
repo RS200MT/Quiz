@@ -1,4 +1,6 @@
-<%@page import="org.apache.jasper.tagplugins.jstl.core.ForEach"%>
+<%@page import="javafx.util.Pair"%>
+<%@page import="java.util.ArrayList"%>
+<%-- <%@page import="org.apache.jasper.tagplugins.jstl.core.ForEach"%> --%>
 <%@page import="javafx.util.Pair"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="Models.Constants"%>
