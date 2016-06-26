@@ -515,7 +515,8 @@ public class DBObject {
 
 	public User getUserByUserName(String passed_username) {
 		Connection conn = getConnection();
-		String query = "Select * from " + TABLE_USERS + " where user_name = '" + passed_username + "';";
+		System.out.println(passed_username);
+		String query = "Select * from " + TABLE_USERS + " where user_name ='" + passed_username + "' ;";
 		ResultSet rs = getResultSet(query, conn);
 		User result = null;
 		try {
