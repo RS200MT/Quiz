@@ -86,28 +86,25 @@ public class Constants {
 	public static final String INDEX_DO_INBOX = "inbox";
 	public static final String INDEX_DO_INBOX_TITLE = "Inbox";
 
-
-
-
 	public static final String INDEX_DO_MY_QUIZES = "myQuizes";
 	public static final String INDEX_DO_MY_QUIZES_TITLE = "my Quizes";
 
 	public static final String INDEX_DO_QUIZ_PAGE = "QuizPage";
 	public static final String INDEX_DO_QUIZ_PAGE_TITLE = "Quiz page";
-	
+
 	public static final String INDEX_DO_QUIZ_QUESTION_ANSWER = "qstAnswer";
 	public static final String INDEX_DO_QUIZ_ATTR_RESULT_MESSAGE = "resultMessage";
 	public static final String INDEX_DO_QUIZ_ATTR_FINISHED = "finished";
 
 	public static final String INDEX_DO_GET_PROFILE = "getProfile";
 	public static final String INDEX_DO_GET_PROFILE_TITLE = "Profile info";
-	
+
 	public static final String INDEX_DO_QUIZ_RESULT = "QuizResult";
 	public static final String INDEX_DO_QUIZ_RESULT_TITLE = "Result";
-	
+
 	public static final String INDEX_DO_FRIEND_REQUESTS = "friendRequests";
-	public static final String INDEX_DO_FRIEND_REQUESTS_TITILE = "Friend Requests"; 
-	
+	public static final String INDEX_DO_FRIEND_REQUESTS_TITILE = "Friend Requests";
+
 	public static String getAction(String action) {
 		return INDEX + "?" + INDEX_DO + "=" + action;
 	}
@@ -115,24 +112,39 @@ public class Constants {
 	public static String getQuizURL(int id) {
 		return INDEX + "?" + INDEX_DO + "=" + INDEX_DO_QUIZ_PAGE + "&" + ATTR_QUIZ_ID_FOR_QUESTION + "=" + id;
 	}
-	
+
 	public static String getMessageURL(int id) {
 		return INDEX + "?" + INDEX_DO + "=" + INDEX_DO_QUIZ_PAGE + "&" + ATTR_QUIZ_ID_FOR_QUESTION + "=" + id;
 	}
 
-		
 	public static String getUserProfileURL(String userName) {
-		return INDEX + "?" + INDEX_DO + "=" + INDEX_DO_GET_PROFILE + "&" + ATTR_USER_NAME_FOR_GET_PROFILE + "=" + userName;
+		return INDEX + "?" + INDEX_DO + "=" + INDEX_DO_GET_PROFILE + "&" + ATTR_USER_NAME_FOR_GET_PROFILE + "="
+				+ userName;
 	}
-	
+
+	public static String getTimeFromSecs(int seconds) {
+		String result = "";
+		int minutes = (seconds / 60) % 60;
+		int hours = (seconds / 60 / 60) % 24;
+		int days = seconds / 60 / 60 / 24;
+		seconds = seconds % 60;
+		if (days != 0)
+			result += days + " Day(s), ";
+		if (hours != 0)
+			result += hours + " Hr(s), ";
+		if (minutes != 0)
+			result += minutes + " Min(s), ";
+		result += seconds + " Sec(s)";
+		return result;
+	}
+
 	public static final int QUESTION_TYPES_LENGTH = 4;
-	
-	
+
 	public static final String QUIZINIG_DONE = "doneQuiz";
 	public static final String QUIZINIG_NEXT = "nextQuestion";
 	public static final String QUIZINIG_CHECK = "checkAnswer";
 	public static final String QUIZINIG_CHECK_RESULT_NEXT_QUESTION = "checkResult";
-	
+
 	public static final String GET_PROFILE_ADD_FRIEND = "addFriend";
 	public static final String GET_PROFILE_UNFRIEND = "unfriend";
 	public static final String GET_PROFILE_SEND_MESSAGE = "sendMessage";

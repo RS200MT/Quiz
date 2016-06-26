@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 
 import Questions.FillInBlankQuestion;
@@ -729,7 +730,79 @@ public class DBObject {
 		closeConnection(conn);
 	}
 
-	public String getSummaryForQuiz(int quizId) {
-		return "summary from DB quizId=" + quizId;
+	public String getSummaryForQuiz(int quizId) throws SQLException {
+		Connection conn = getConnection();
+		Quiz quiz = getQuizById(quizId, 1);
+		String result = "Title: <B>" + quiz.getTitle() + "</B><BR>Description: " + quiz.getDescription();
+		result += "<BR>Author: " + getQuizAuthorHTML(quizId);
+		result += "<BR>Last 5 best quizers: " + getLastBestQuizers(quizId, 5, conn);
+		result += "<BR>Last 10 quizers: " + getLastQuizers(quizId, 10, conn);
+		closeConnection(conn);
+		return result;
+	}
+
+	private String getLastBestQuizers(int quizId, int numberOfUsers, Connection conn) {
+		String result = "";
+		String query = "select u.user_name user_name, q.score score, q.start_time stime, q.quizTime msecs from "
+				+ TABLE_QUIZ_LOGS + " q join " + TABLE_USERS + " u on q.user_id = u.id where quiz_id = " + quizId
+				+ " order by score desc, quizTime asc limit " + numberOfUsers;
+		ResultSet rs = getResultSet(query, conn);
+		try {
+			while (rs.next()) {
+				Date d = new Date();
+				int score = rs.getInt("score");
+				int time = (int) rs.getLong("msecs") / 1000;
+				int afterStart = (int) (d.getTime() - rs.getLong("stime")) / 1000;
+				String username = rs.getString("user_name");
+				result += "<li><b>User: </b><a href='" + Constants.getUserProfileURL(username) + "' target='_blank'><b>" + username
+						+ "</b></a>(<b>Score</b>: " + score + "; <b>Time</b>: " + Constants.getTimeFromSecs(time)
+						+ ", <b>Started</b>: " + Constants.getTimeFromSecs(afterStart) + " ago)</li>";
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+
+	private String getLastQuizers(int quizId, int numberOfUsers, Connection conn) {
+		String result = "";
+		String query = "select u.user_name user_name, q.score score, q.start_time stime, q.quizTime msecs from "
+				+ TABLE_QUIZ_LOGS + " q join " + TABLE_USERS + " u on q.user_id = u.id where quiz_id = " + quizId
+				+ " order by start_time desc limit " + numberOfUsers;
+		ResultSet rs = getResultSet(query, conn);
+		try {
+			while (rs.next()) {
+				Date d = new Date();
+				int score = rs.getInt("score");
+				int time = (int) rs.getLong("msecs") / 1000;
+				int afterStart = (int) (d.getTime() - rs.getLong("stime")) / 1000;
+				String username = rs.getString("user_name");
+				result += "<li><b>User: </b><a href='" + Constants.getUserProfileURL(username) + "' target='_blank'><b>" + username
+						+ "</b></a>(<b>Score</b>: " + score + "; <b>Time</b>: " + Constants.getTimeFromSecs(time)
+						+ ", <b>Started</b>: " + Constants.getTimeFromSecs(afterStart) + " ago)</li>";
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+
+	public String getQuizAuthorHTML(int quizId) {
+		Connection conn = getConnection();
+		String result = "There is no quiz for id:" + quizId;
+		String query = "SELECT u.user_name user_name FROM " + TABLE_QUIZES + " q join " + TABLE_USERS
+				+ " u on q.author = u.id where q.id=" + quizId + " limit 1;";
+		ResultSet rs = getResultSet(query, conn);
+		try {
+			if (rs.next()) {
+				String username = rs.getString("user_name");
+				result = "<a href='" + Constants.getUserProfileURL(username) + "' title='username' target='_blank'><b>"
+						+ username + "</b></a>";
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		closeConnection(conn);
+		return result;
 	}
 }
