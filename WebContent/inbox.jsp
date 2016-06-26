@@ -15,7 +15,9 @@
    	 	ArrayList<Pair<Integer,Integer>> messages = obj.getMessages(user.getId());
     	 	if(messages != null){
  			for(Pair<Integer,Integer> m : messages){
- 				out.print("<br>From : <a href = message.jsp?messageId=" +m.getKey()+ "> "+obj.getUserNameById(m.getValue()) +"</a>");
+ 				String senderName = obj.getUserNameById(m.getValue());
+//  				out.print("<br>From : <a href = message.jsp?messageId=" +m.getKey()+ "> "+obj.getUserNameById(m.getValue()) +"</a>");
+				out.print("<br>From: <a href ="+Constants.getMessageURL(m.getKey())+"> "+senderName+"</a>");
  			}
  		} 
     %>

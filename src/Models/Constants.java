@@ -18,6 +18,7 @@ public class Constants {
 	public static final String S_GET_PROFILE = "GetProfile";
 	public static final String S_SEND_MESSAGE = "SendMessage";
 	public static final String S_ADD_FRIEND = "AddFriend";
+	public static final String S_REPLY_MESSAGE = "ReplyMessage";
 
 	//
 
@@ -61,6 +62,8 @@ public class Constants {
 	public static final String ATTR_QUIZ_ID_FOR_QUESTION = "quizId";
 	public static final String ATTR_SESSION_QUIZ = "quizAttr";
 	public static final String ATTR_USER_NAME_FOR_GET_PROFILE = "userNameAttr";
+	public static final String ATTR_MESSAGE_ID = "messageId";
+	public static final String ATTR_MESSAGE_SENDER_NAME = "senderName";
 
 	// WASKA's constants new;
 	public static final String SITE_URL = "http://localhost:8080/QuizWebsite";
@@ -82,7 +85,7 @@ public class Constants {
 	public static final String INDEX_DO_ADD_QUESTION = "addQuestion";
 	public static final String INDEX_DO_ADD_QUESTION_TITLE = "Add question";
 	public static final String INDEX_DO_MESSAGE = "message";
-	public static final String INDEX_DO_MESSAGE_TITLE = "Messages";
+	public static final String INDEX_DO_MESSAGE_TITLE = "Message";
 	public static final String INDEX_DO_INBOX = "inbox";
 	public static final String INDEX_DO_INBOX_TITLE = "Inbox";
 
@@ -114,7 +117,7 @@ public class Constants {
 	}
 
 	public static String getMessageURL(int id) {
-		return INDEX + "?" + INDEX_DO + "=" + INDEX_DO_QUIZ_PAGE + "&" + ATTR_QUIZ_ID_FOR_QUESTION + "=" + id;
+		return INDEX +"?"+INDEX_DO+"="+INDEX_DO_MESSAGE+"&"+ATTR_MESSAGE_ID+"="+id;
 	}
 
 	public static String getUserProfileURL(String userName) {
@@ -153,4 +156,6 @@ public class Constants {
 	public static final String GET_PROFILE_ACCEPT_FRIEND_REQUEST = "acceptFriendRequest";
 	public static final String GET_PROFILE_DECLINE_FRIEND_REQUEST = "declineFriendRequest";
 	public static final String MESSAGE_REPLY = "reply";
+	public static final String MESSAGE_REPLY_TEXT = "replyText";
+	public static final String MESSAGE_REPLY_TO = "replyTo";
 }

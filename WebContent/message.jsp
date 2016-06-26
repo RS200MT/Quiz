@@ -14,18 +14,22 @@
 <title>Insert title here</title>
 </head>
 <body>
-<form action= "<%=Constants.S_SEND_MESSAGE%>" method="post">
+<form action= "ReplyMessage" method="post">
 <%
 // 	out.print("<input type='hidden' name='"+Constants.GET_PROFILE_USER_NAME_HIDDEN+"' value='"+userName+"'/>");
 	DBObject obj = (DBObject)request.getServletContext().getAttribute(DBObject.ATTR_DB);
 	User user = (User)request.getSession().getAttribute(Constants.ATTR_USER);
-	Message m = obj.getMessageById(Integer.parseInt(request.getParameter("messageId")));
+	int messageId=Integer.parseInt(request.getParameter("messageId"));
+	Message m = obj.getMessageById(messageId);
 	if(m!=null){
 		String senderUserName = obj.getUserNameById(m.getSenderId());
 		out.print("From: " + "<a href = '" + Constants.getUserProfileURL(senderUserName)+"'>"+senderUserName+"</a>");				
 		out.print("<br>Time: "+m.getReceiveTime()+"<br>");
-		out.print("<br>"+m.getMessageText());
+		out.print("<br> <H4>"+m.getMessageText()+"</H4>");
+		out.print("<br> <input type='text' name='"+Constants.MESSAGE_REPLY_TEXT+"' value ='' />");
 		out.print("<br> <input type='submit' name='"+Constants.MESSAGE_REPLY+"' value='Reply'/>");
+		out.print("<input type='hidden' name='"+Constants.MESSAGE_REPLY_TO+"' value = '"+m.getSenderId()+"'/>");
+		out.print("<input type='hidden' name='messageId' value = '"+messageId+"'/>");
 	}
 	
 %>
