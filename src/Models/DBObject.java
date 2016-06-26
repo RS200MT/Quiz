@@ -688,15 +688,13 @@ public class DBObject {
 	 * 
 	 * @param sender
 	 * @param recipient
+	 * @throws SQLException 
 	 */
-	public void addFriendRequest(String sender, String recipient) {
+	public void addFriendRequest(String sender, String recipient) throws SQLException {
 		Connection conn = getConnection();
-		User u1 = this.getUserByUserName(sender);
-		int senderId = u1.getId();
-		User u2 = this.getUserByUserName(recipient);
-		int recipientId = u2.getId();
-		String query = "INSERT INTO friends (user1_id, user2_id, status) VALUES (" + senderId + ", " + recipientId
-				+ ", " + FRIEND_STATUS_PENDING + ");";
+		int senderId = this.getUserIdByUserName(sender);
+		int recipientId = this.getUserIdByUserName(recipient);
+		String query="INSERT INTO friends (user1_id, user2_id, status) VALUES ("+senderId+", "+recipientId+", "+FRIEND_STATUS_PENDING+");";
 		this.executeUpdate(query, conn);
 		closeConnection(conn);
 	}
@@ -706,8 +704,9 @@ public class DBObject {
 		String query = "SELECT * FROM " + TABLE_FRIENDS + " WHERE (user1_id=" + userId1 + " AND user2_id=" + userId2
 				+ ") OR (user1_id=" + userId2 + " AND user2_id=" + userId2 + ");";
 		ResultSet rs = getResultSet(query, conn);
-		if (!rs.isBeforeFirst())
+		if(!rs.isBeforeFirst()) {
 			return false;
+		}
 		closeConnection(conn);
 		return true;
 	}
@@ -717,15 +716,14 @@ public class DBObject {
 	 * 
 	 * @param userName1
 	 * @param userName2
+	 * @throws SQLException 
 	 */
-	public void removeFriend(String userName1, String userName2) {
+	public void removeFriend(String userName1, String userName2) throws SQLException {
 		Connection conn = getConnection();
-		User u1 = this.getUserByUserName(userName1);
-		int id1 = u1.getId();
-		User u2 = this.getUserByUserName(userName2);
-		int id2 = u2.getId();
-		String query = "DELETE FROM friends WHERE (user1_id=" + id1 + " and user2_id=" + id2 + ") or (user1_id=" + id2
-				+ " and user2_id=" + id1 + ");";
+		int id1 = this.getUserIdByUserName(userName1);
+		int id2 = this.getUserIdByUserName(userName2);
+		String query="DELETE FROM friends WHERE (user1_id="+id1+" and user2_id="+id2+") or (user1_id="+id2+" and user2_id="+id1+");";
+
 		this.executeUpdate(query, conn);
 		closeConnection(conn);
 	}

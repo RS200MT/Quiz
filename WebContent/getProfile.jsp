@@ -28,16 +28,15 @@
 				out.print("<a href = '" + Constants.getQuizURL(q.getValue()) + "'>" + q.getKey() + "</a> <br>");
 			}
 		}
-		
 	}
 		
 %>
 
 
-<form action= "<%=Constants.S_ADD_FRIEND%>" method="post">
-<% 
+<form action= "AddFriend" method="post">
+<% out.print("<input type='hidden' name='"+Constants.GET_PROFILE_USER_NAME_HIDDEN+"' value='"+userName+"'/>");
 	if(currUser == null) {
-		out.print("<H3>Log in to countinue</H3>");
+		out.print("<H3> Log in to countinue </H3>");
 	} else {
 		if(!currUser.getUserName().equals(userName)) {
 			if(!db.usersAreFriends(currUser.getId(), toDisplay.getId())) {
