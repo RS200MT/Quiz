@@ -140,4 +140,5 @@ public class Constants {
 	public static final String GET_PROFILE_USER_NAME_HIDDEN = "userNameHidden";
 	public static final String GET_PROFILE_ACCEPT_FRIEND_REQUEST = "acceptFriendRequest";
 	public static final String GET_PROFILE_DECLINE_FRIEND_REQUEST = "declineFriendRequest";
+	public static final String MESSAGE_REPLY = "reply";
 }

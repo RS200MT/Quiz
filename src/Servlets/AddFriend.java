@@ -52,12 +52,20 @@ public class AddFriend extends HttpServlet {
 			String declineFriendRequest = request.getParameter(Constants.GET_PROFILE_DECLINE_FRIEND_REQUEST);
 			//If "Add Friend" was pushed
 			if(addFriend!=null) {
-				db.addFriendRequest(sessionUser.getUserName(), userName);
+				try {
+					db.addFriendRequest(sessionUser.getUserName(), userName);
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
 				sessionUser.addFriend(userName);
 			}
 			//If unfriend was pushed
 			if(unfriend != null) {
-				db.removeFriend(sessionUser.getUserName(), userName);
+				try {
+					db.removeFriend(sessionUser.getUserName(), userName);
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
 				sessionUser.removeFriend(userName);
 				
 			}
@@ -72,7 +80,11 @@ public class AddFriend extends HttpServlet {
 			}
 			//If "decline friend request" was pushed
 			if(declineFriendRequest != null) {
-				db.removeFriend(sessionUser.getUserName(), userName);
+				try {
+					db.removeFriend(sessionUser.getUserName(), userName);
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
 			}
 			request.getRequestDispatcher(Constants.getUserProfileURL(userName)).forward(request, response);
 		}
