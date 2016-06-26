@@ -27,10 +27,21 @@
 			document.getElementById("summaryForQuiz").style.display = "none";
 			return false;
 		}
+
+		function newSort() {
+			var select = document.getElementById("sortingUserQuizes");
+			var sortVal = select.options[select.selectedIndex].value;
+			for (var i = 1; i <= 3; i++) {
+				if (sortVal == i)
+					document.getElementById("sorted" + i).style.display = "block";
+				else
+					document.getElementById("sorted" + i).style.display = "none";
+			}
+		}
 	</script>
 	<div id="summaryForQuiz" id="summaryForQuiz">
 		<%
-			out.print(obj.getSummaryForQuiz(quizId));
+			out.print(obj.getSummaryForQuiz(quizId, curUser.getId()));
 		%>
 		<BR>
 		<button onClick="return startQuiz();">Start Quiz</button>

@@ -149,6 +149,10 @@ input[type=button]:hover, button:hover {
 	border-radius: 10px;
 }
 
+select#sortingUserQuizes {
+	width: 150px !important;
+}
+
 button#addFieldButton, input[type=button]#addFieldButton {
 	background-color: #2a932e;
 }

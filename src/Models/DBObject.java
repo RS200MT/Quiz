@@ -688,13 +688,14 @@ public class DBObject {
 	 * 
 	 * @param sender
 	 * @param recipient
-	 * @throws SQLException 
+	 * @throws SQLException
 	 */
 	public void addFriendRequest(String sender, String recipient) throws SQLException {
 		Connection conn = getConnection();
 		int senderId = this.getUserIdByUserName(sender);
 		int recipientId = this.getUserIdByUserName(recipient);
-		String query="INSERT INTO friends (user1_id, user2_id, status) VALUES ("+senderId+", "+recipientId+", "+FRIEND_STATUS_PENDING+");";
+		String query = "INSERT INTO friends (user1_id, user2_id, status) VALUES (" + senderId + ", " + recipientId
+				+ ", " + FRIEND_STATUS_PENDING + ");";
 		this.executeUpdate(query, conn);
 		closeConnection(conn);
 	}
@@ -704,7 +705,7 @@ public class DBObject {
 		String query = "SELECT * FROM " + TABLE_FRIENDS + " WHERE (user1_id=" + userId1 + " AND user2_id=" + userId2
 				+ ") OR (user1_id=" + userId2 + " AND user2_id=" + userId2 + ");";
 		ResultSet rs = getResultSet(query, conn);
-		if(!rs.isBeforeFirst()) {
+		if (!rs.isBeforeFirst()) {
 			return false;
 		}
 		closeConnection(conn);
@@ -716,25 +717,70 @@ public class DBObject {
 	 * 
 	 * @param userName1
 	 * @param userName2
-	 * @throws SQLException 
+	 * @throws SQLException
 	 */
 	public void removeFriend(String userName1, String userName2) throws SQLException {
 		Connection conn = getConnection();
 		int id1 = this.getUserIdByUserName(userName1);
 		int id2 = this.getUserIdByUserName(userName2);
-		String query="DELETE FROM friends WHERE (user1_id="+id1+" and user2_id="+id2+") or (user1_id="+id2+" and user2_id="+id1+");";
+		String query = "DELETE FROM friends WHERE (user1_id=" + id1 + " and user2_id=" + id2 + ") or (user1_id=" + id2
+				+ " and user2_id=" + id1 + ");";
 
 		this.executeUpdate(query, conn);
 		closeConnection(conn);
 	}
 
-	public String getSummaryForQuiz(int quizId) throws SQLException {
+	public String getSummaryForQuiz(int quizId, int userId) throws SQLException {
 		Connection conn = getConnection();
 		Quiz quiz = getQuizById(quizId, 1);
 		String result = "Title: <B>" + quiz.getTitle() + "</B><BR>Description: " + quiz.getDescription();
 		result += "<BR>Author: " + getQuizAuthorHTML(quizId);
 		result += "<BR>Last 5 best quizers: " + getLastBestQuizers(quizId, 5, conn);
 		result += "<BR>Last 10 quizers: " + getLastQuizers(quizId, 10, conn);
+		result += "<BR>Your recent scores for this quiz: " + getRecentScore(quizId, userId, conn);
+		closeConnection(conn);
+		return result;
+	}
+
+	private String getRecentScore(int quizId, int userId, Connection conn) {
+		String result = "<BR>Order by: <select onchange='newSort()' id='sortingUserQuizes'><option value='1' selected>Date</option><option value='2'>Score</option><option value='3'>Quiz Time</option></select>";
+		result += "<div id='sorted1'>";
+		result += getUsersRecentResultsForQuiz(quizId, userId, 1);
+		result += "</div>";
+		result += "<div id='sorted2' style='display: none'>";
+		result += getUsersRecentResultsForQuiz(quizId, userId, 2);
+		result += "</div>";
+		result += "<div id='sorted3' style='display: none'>";
+		result += getUsersRecentResultsForQuiz(quizId, userId, 3);
+		result += "</div>";
+		return result;
+	}
+
+	public String getUsersRecentResultsForQuiz(int quizId, int userId, int sort) {
+		Connection conn = getConnection();
+		String sorting = "start_time desc";
+		if (sort == 2)
+			sorting = "score desc";
+		if (sort == 3)
+			sorting = "quizTime asc";
+		String result = "";
+		String query = "SELECT * from " + TABLE_QUIZ_LOGS + " where user_id=" + userId + " and quiz_id=" + quizId
+				+ " order by " + sorting + ";";
+		ResultSet rs = getResultSet(query, conn);
+		try {
+			while (rs.next()) {
+				Date d = new Date();
+				int score = rs.getInt("score");
+				int time = (int) rs.getLong("quizTime") / 1000;
+				int afterStart = (int) (d.getTime() - rs.getLong("start_time")) / 1000;
+				result += "<li>Score: " + score + " | Time: " + Constants.getTimeFromSecs(time) + " | Started: "
+						+ Constants.getTimeFromSecs(afterStart) + " ago</li>";
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		if (result.length() == 0)
+			result = "You have not written this quiz yet!";
 		closeConnection(conn);
 		return result;
 	}
@@ -752,13 +798,15 @@ public class DBObject {
 				int time = (int) rs.getLong("msecs") / 1000;
 				int afterStart = (int) (d.getTime() - rs.getLong("stime")) / 1000;
 				String username = rs.getString("user_name");
-				result += "<li><b>User: </b><a href='" + Constants.getUserProfileURL(username) + "' target='_blank'><b>" + username
-						+ "</b></a>(<b>Score</b>: " + score + "; <b>Time</b>: " + Constants.getTimeFromSecs(time)
-						+ ", <b>Started</b>: " + Constants.getTimeFromSecs(afterStart) + " ago)</li>";
+				result += "<li><a href='" + Constants.getUserProfileURL(username) + "' target='_blank' title='Time: "
+						+ Constants.getTimeFromSecs(time) + ", Started: " + Constants.getTimeFromSecs(afterStart)
+						+ " ago'><b>" + username + "</b></a>(" + score + " pts)</li>";
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		if (result.length() == 0)
+			result = "Nobody has written this quiz yet!";
 		return result;
 	}
 
@@ -775,13 +823,15 @@ public class DBObject {
 				int time = (int) rs.getLong("msecs") / 1000;
 				int afterStart = (int) (d.getTime() - rs.getLong("stime")) / 1000;
 				String username = rs.getString("user_name");
-				result += "<li><b>User: </b><a href='" + Constants.getUserProfileURL(username) + "' target='_blank'><b>" + username
-						+ "</b></a>(<b>Score</b>: " + score + "; <b>Time</b>: " + Constants.getTimeFromSecs(time)
-						+ ", <b>Started</b>: " + Constants.getTimeFromSecs(afterStart) + " ago)</li>";
+				result += "<li><a href='" + Constants.getUserProfileURL(username) + "' target='_blank' title='Time: "
+						+ Constants.getTimeFromSecs(time) + " | Started: " + Constants.getTimeFromSecs(afterStart)
+						+ " ago'><b>" + username + "</b></a> (" + score + " pts)</li>";
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		if (result.length() == 0)
+			result = "Nobody has written this quiz yet!";
 		return result;
 	}
 
