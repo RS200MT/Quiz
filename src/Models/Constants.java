@@ -107,6 +107,9 @@ public class Constants {
 
 	public static final String INDEX_DO_FRIEND_REQUESTS = "friendRequests";
 	public static final String INDEX_DO_FRIEND_REQUESTS_TITILE = "Friend Requests";
+	public static final String INDEX_DO_FRIEND = "friends";
+	public static final String INDEX_DO_FRIEND_TITLE = "Friends";
+
 
 	public static String getAction(String action) {
 		return INDEX + "?" + INDEX_DO + "=" + action;

@@ -857,6 +857,22 @@ public class DBObject {
 			result = "Nobody has written this quiz yet!";
 		return result;
 	}
+	
+	public ArrayList<String> getUserFriendsById(int id) throws SQLException{
+		Connection conn = getConnection();
+		String query = "Select * from " + TABLE_FRIENDS +" where (user1_id =" +id +" or user2_id ="+id+") and status =1";
+		ResultSet rs = getResultSet(query, conn);
+		ArrayList<String> friends = new ArrayList<String>();
+		if(!rs.isBeforeFirst())
+			return null;
+		while(rs.next()){
+			int user1_id = rs.getInt("user1_id");
+			int friend = user1_id == id ? rs.getInt("user2_id") : user1_id;
+			friends.add(getUserNameById(friend));
+		}
+		closeConnection(conn);
+		return friends;
+	}
 
 	public String getQuizAuthorHTML(int quizId) {
 		Connection conn = getConnection();

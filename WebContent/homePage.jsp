@@ -14,6 +14,7 @@
 <%
 
 	DBObject obj = (DBObject) request.getServletContext().getAttribute(DBObject.ATTR_DB);
+	User user = (User)request.getSession().getAttribute(Constants.ATTR_USER);
 	ArrayList<Pair<String, Integer>> popQuizes = obj.getPopularQuizes(5);
 	for (int i = 0; i < popQuizes.size(); i++) {
 		Pair<String, Integer> q = popQuizes.get(i);
@@ -43,7 +44,6 @@ if(recentQuizes != null){
 </H3>
 <%
 
-User user = (User)request.getSession().getAttribute(Constants.ATTR_USER);
 ArrayList<Pair<String,Integer>> recentQuizesForUser = obj.getRecentQuizesForUser(user.getId(), 3);
 if(recentQuizesForUser != null){
 	for(Pair<String,Integer> q : recentQuizesForUser){
@@ -52,6 +52,7 @@ if(recentQuizesForUser != null){
 out.print("<H3>");
 out.print("<a href =" + Constants.getAction("inbox") + ">INBOX</a>" );
 out.print("<br><a href ="+Constants.getAction(Constants.INDEX_DO_FRIEND_REQUESTS)+">Friend Requests</a>");
+out.print("<br><a href ="+Constants.getAction(Constants.INDEX_DO_FRIEND)+">Friends</a>");
 out.print("</H3>");
 %>
 
