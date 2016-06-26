@@ -37,7 +37,7 @@
 		<tr>
 			<td class="leftSidebar"><jsp:include page="Left.jsp" /></td>
 			<td class="content">
-				<div class="block-header" id="content">content title</div>
+				<div class="block-header" id="content"><%=pageTitle%></div>
 				<div class="block" id="content">
 					<jsp:include page="<%=toInclude%>" />
 				</div>

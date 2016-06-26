@@ -16,7 +16,7 @@
 <body>
 <form action= "<%=Constants.S_SEND_MESSAGE%>" method="post">
 <%
-	out.print("<input type='hidden' name='"+Constants.GET_PROFILE_USER_NAME_HIDDEN+"' value='"+userName+"'/>");
+// 	out.print("<input type='hidden' name='"+Constants.GET_PROFILE_USER_NAME_HIDDEN+"' value='"+userName+"'/>");
 	DBObject obj = (DBObject)request.getServletContext().getAttribute(DBObject.ATTR_DB);
 	User user = (User)request.getSession().getAttribute(Constants.ATTR_USER);
 	Message m = obj.getMessageById(Integer.parseInt(request.getParameter("messageId")));
