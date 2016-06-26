@@ -174,7 +174,7 @@ public class DBObject {
 	public String getPasswordHash(String userName) {
 		String result = null;
 		Connection conn = getConnection();
-		String query = "Select * from " + TABLE_USERS + " where user_name = '" + userName + "';";
+		String query = "Select * from " + TABLE_USERS + " where user_name ='" + userName + "';";
 		ResultSet rs = getResultSet(query, conn);
 		try {
 			if (rs.next())
@@ -526,7 +526,7 @@ public class DBObject {
 
 	public int getUserIdByUserName(String userName) throws SQLException {
 		Connection conn = getConnection();
-		String query = "Select * from " + TABLE_USERS + " where user_name = '" + userName + "';";
+		String query = "Select * from " + TABLE_USERS + " where user_name ='" + userName + "';";
 		ResultSet rs = getResultSet(query, conn);
 		if (!rs.isBeforeFirst())
 			return -1;
