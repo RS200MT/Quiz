@@ -87,7 +87,7 @@ create table if not exists quiz_logs (
     quiz_id int not null,
     score int,
     start_time long,
-    quizTime long,
+    quizTime BIGINT,
     
     key (user_id),
     key (quiz_id)

@@ -128,11 +128,11 @@ public class Constants {
 				+ userName;
 	}
 
-	public static String getTimeFromSecs(int seconds) {
+	public static String getTimeFromSecs(long seconds) {
 		String result = "";
-		int minutes = (seconds / 60) % 60;
-		int hours = (seconds / 60 / 60) % 24;
-		int days = seconds / 60 / 60 / 24;
+		long minutes = (seconds / 60) % 60;
+		long hours = (seconds / 60 / 60) % 24;
+		long days = seconds / 60 / 60 / 24;
 		seconds = seconds % 60;
 		if (days != 0)
 			result += days + " Day(s), ";

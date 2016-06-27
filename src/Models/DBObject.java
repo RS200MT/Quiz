@@ -583,6 +583,7 @@ public class DBObject {
 
 	/**
 	 * Returns true if one of the users has sent friend request to another;
+	 * 
 	 * @param id1
 	 * @param id2
 	 * @return
@@ -590,17 +591,16 @@ public class DBObject {
 	 */
 	public boolean arePendingFriends(int id1, int id2) throws SQLException {
 		Connection conn = getConnection();
-		String query = "SELECT * FROM "+TABLE_FRIENDS+" WHERE (user1_id="+id1+" AND user2_id="+id2+
-													") OR (user1_id="+id2+" AND user2_id="+id1+") AND status="+FRIEND_STATUS_PENDING;
+		String query = "SELECT * FROM " + TABLE_FRIENDS + " WHERE (user1_id=" + id1 + " AND user2_id=" + id2
+				+ ") OR (user1_id=" + id2 + " AND user2_id=" + id1 + ") AND status=" + FRIEND_STATUS_PENDING;
 		ResultSet rs = getResultSet(query, conn);
-		if(!rs.isBeforeFirst()) {
+		if (!rs.isBeforeFirst()) {
 			return false;
 		}
 		closeConnection(conn);
 		return true;
 	}
-	
-	
+
 	public void logQuiz(int user_id, int quiz_id, int score, long startTime, long thisQuizTime) {
 		Connection conn = getConnection();
 		String query = "INSERT INTO " + TABLE_QUIZ_LOGS + " (user_id, quiz_id, score, start_time, quizTime) VALUES ("
@@ -629,7 +629,8 @@ public class DBObject {
 	 */
 	public ArrayList<Pair<Integer, Integer>> getMessages(int userId) throws SQLException {
 		Connection conn = getConnection();
-		String query = "select * from " + TABLE_MESSAGES + " where recipient = " + userId+" order by receive_time desc;";
+		String query = "select * from " + TABLE_MESSAGES + " where recipient = " + userId
+				+ " order by receive_time desc;";
 		ArrayList<Pair<Integer, Integer>> messages = new ArrayList<Pair<Integer, Integer>>();
 		ResultSet rs = getResultSet(query, conn);
 		if (!rs.isBeforeFirst())
@@ -726,7 +727,8 @@ public class DBObject {
 	public boolean usersAreFriends(int userId1, int userId2) throws SQLException {
 		Connection conn = getConnection();
 		String query = "SELECT * FROM " + TABLE_FRIENDS + " WHERE (user1_id=" + userId1 + " AND user2_id=" + userId2
-				+ " AND status="+FRIEND_STATUS_ACCEPTED + ") OR (user1_id="+userId2+" AND user2_id="+userId1 + " AND status="+FRIEND_STATUS_ACCEPTED+");";
+				+ " AND status=" + FRIEND_STATUS_ACCEPTED + ") OR (user1_id=" + userId2 + " AND user2_id=" + userId1
+				+ " AND status=" + FRIEND_STATUS_ACCEPTED + ");";
 		ResultSet rs = getResultSet(query, conn);
 		if (!rs.isBeforeFirst()) {
 			return false;
@@ -783,9 +785,9 @@ public class DBObject {
 		Connection conn = getConnection();
 		String sorting = "start_time desc";
 		if (sort == 2)
-			sorting = "score desc";
+			sorting = "score desc, quizTime asc";
 		if (sort == 3)
-			sorting = "quizTime asc";
+			sorting = "quizTime ASC";
 		String result = "";
 		String query = "SELECT * from " + TABLE_QUIZ_LOGS + " where user_id=" + userId + " and quiz_id=" + quizId
 				+ " order by " + sorting + ";";
@@ -794,8 +796,10 @@ public class DBObject {
 			while (rs.next()) {
 				Date d = new Date();
 				int score = rs.getInt("score");
-				int time = (int) rs.getLong("quizTime") / 1000;
-				int afterStart = (int) (d.getTime() - rs.getLong("start_time")) / 1000;
+				long time = rs.getLong("quizTime") / 1000;
+				if (sort == 3)
+					System.out.println(time);
+				long afterStart = (d.getTime() - rs.getLong("start_time")) / 1000;
 				result += "<li>Score: " + score + " | Time: " + Constants.getTimeFromSecs(time) + " | Started: "
 						+ Constants.getTimeFromSecs(afterStart) + " ago</li>";
 			}
@@ -818,8 +822,8 @@ public class DBObject {
 			while (rs.next()) {
 				Date d = new Date();
 				int score = rs.getInt("score");
-				int time = (int) rs.getLong("msecs") / 1000;
-				int afterStart = (int) (d.getTime() - rs.getLong("stime")) / 1000;
+				long time = rs.getLong("msecs") / 1000;
+				long afterStart = (d.getTime() - rs.getLong("stime")) / 1000;
 				String username = rs.getString("user_name");
 				result += "<li><a href='" + Constants.getUserProfileURL(username) + "' target='_blank' title='Time: "
 						+ Constants.getTimeFromSecs(time) + ", Started: " + Constants.getTimeFromSecs(afterStart)
@@ -843,8 +847,8 @@ public class DBObject {
 			while (rs.next()) {
 				Date d = new Date();
 				int score = rs.getInt("score");
-				int time = (int) rs.getLong("msecs") / 1000;
-				int afterStart = (int) (d.getTime() - rs.getLong("stime")) / 1000;
+				long time = rs.getLong("msecs") / 1000;
+				long afterStart = (d.getTime() - rs.getLong("stime")) / 1000;
 				String username = rs.getString("user_name");
 				result += "<li><a href='" + Constants.getUserProfileURL(username) + "' target='_blank' title='Time: "
 						+ Constants.getTimeFromSecs(time) + " | Started: " + Constants.getTimeFromSecs(afterStart)
@@ -857,15 +861,16 @@ public class DBObject {
 			result = "Nobody has written this quiz yet!";
 		return result;
 	}
-	
-	public ArrayList<String> getUserFriendsById(int id) throws SQLException{
+
+	public ArrayList<String> getUserFriendsById(int id) throws SQLException {
 		Connection conn = getConnection();
-		String query = "Select * from " + TABLE_FRIENDS +" where (user1_id =" +id +" or user2_id ="+id+") and status =1";
+		String query = "Select * from " + TABLE_FRIENDS + " where (user1_id =" + id + " or user2_id =" + id
+				+ ") and status =1";
 		ResultSet rs = getResultSet(query, conn);
 		ArrayList<String> friends = new ArrayList<String>();
-		if(!rs.isBeforeFirst())
+		if (!rs.isBeforeFirst())
 			return null;
-		while(rs.next()){
+		while (rs.next()) {
 			int user1_id = rs.getInt("user1_id");
 			int friend = user1_id == id ? rs.getInt("user2_id") : user1_id;
 			friends.add(getUserNameById(friend));

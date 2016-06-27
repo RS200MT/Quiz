@@ -114,7 +114,7 @@ public class Quizing extends HttpServlet {
 		String quizTime = logQuiz(curQuiz, score, request);
 		request.setAttribute(Constants.INDEX_DO_QUIZ_ATTR_FINISHED, 1);
 		request.setAttribute(Constants.INDEX_DO_QUIZ_ATTR_RESULT_MESSAGE,
-				"You're done. your score is: " + score + " | time: " + quizTime);
+				"<a href='http://myvideo.ge'>myvideo.ge</a>You're done. your score is: " + score + " | time: " + quizTime);
 		request.getSession().setAttribute(Constants.ATTR_SESSION_QUIZ, null);
 		request.getRequestDispatcher(Constants.getAction(Constants.INDEX_DO_QUIZ_RESULT)).forward(request, response);
 	}
