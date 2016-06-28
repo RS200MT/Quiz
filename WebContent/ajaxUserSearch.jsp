@@ -9,7 +9,7 @@
 		out.print("Invalid arguments!");
 	else {
 		DBObject db = (DBObject) request.getServletContext().getAttribute(DBObject.ATTR_DB);
-		ArrayList<String> usernames = db.getUsersStartedWith(username, 10);
+		ArrayList<String> usernames = db.getUsersStartedWith(username, 5);
 		if (usernames.size() == 0)
 			out.print("There are no usernames started by: <b>" + username + "</b>");
 		for (int i = 0; i < usernames.size(); i++) {

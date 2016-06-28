@@ -914,4 +914,22 @@ public class DBObject {
 		closeConnection(conn);
 		return res;
 	}
+	
+	public ArrayList<Pair<Integer, String>> getQuizesStartedWith (String quizname, int limit) {
+		ArrayList<Pair<Integer, String>> res = new ArrayList<Pair<Integer, String>>();
+		Connection conn = getConnection();
+		String query = "SELECT * from " + TABLE_QUIZES + " where title like '" + quizname + "%' limit " + limit;
+		ResultSet rs = getResultSet(query, conn);
+		try {
+			while (rs.next()) {
+				String qName = rs.getString("title");
+				int id = rs.getInt("id");
+				res.add(new Pair<Integer, String>(id, qName));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		closeConnection(conn);
+		return res;
+	}
 }
