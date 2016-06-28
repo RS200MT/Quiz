@@ -175,3 +175,22 @@ a:link, a:visited {
 	text-decoration: none;
 	cursor: auto;
 }
+
+div.ajaxSearchResult {
+	transition: all 0.2s ease-in-out;
+	border: 1px dashed rgba(0,0,0, 0.5);
+	background-color: #a9d6fd;
+	color: #000;
+	height: 35px;
+	padding:3px;
+	padding-left: 7px;
+	line-height:35px;
+	margin-bottom: 5px;
+	border-radius: 7px 0px 7px 0px;
+}
+
+div.ajaxSearchResult:hover {
+	border: 1px dashed rgba(0,0,0, 0.6);
+	background-color: #72b9f7;
+	border-radius: 0px 7px 0px 7px;
+}
