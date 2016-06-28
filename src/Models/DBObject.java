@@ -901,4 +901,21 @@ public class DBObject {
 		closeConnection(conn);
 		return result;
 	}
+	
+	public ArrayList<String> getUsersStartedWith(String username, int limit) {
+		ArrayList<String> res = new ArrayList<>();
+		Connection conn = getConnection();
+		String query = "SELECT * from " + TABLE_USERS + " where user_name like '" + username + "%' limit " + limit;
+		ResultSet rs = getResultSet(query, conn);
+		try {
+			while (rs.next()) {
+				String uName = rs.getString("user_name");
+				res.add(uName);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		closeConnection(conn);
+		return res;
+	}
 }
