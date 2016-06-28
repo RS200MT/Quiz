@@ -901,7 +901,7 @@ public class DBObject {
 	public ArrayList<String> getUsersStartedWith(String username, int limit) {
 		ArrayList<String> res = new ArrayList<>();
 		Connection conn = getConnection();
-		String query = "SELECT * from " + TABLE_USERS + " where user_name like '" + username + "%' limit " + limit;
+		String query = "SELECT * from " + TABLE_USERS + " where user_name like '%" + username + "%' limit " + limit;
 		ResultSet rs = getResultSet(query, conn);
 		try {
 			while (rs.next()) {
@@ -918,7 +918,7 @@ public class DBObject {
 	public ArrayList<Pair<Integer, String>> getQuizesStartedWith (String quizname, int limit) {
 		ArrayList<Pair<Integer, String>> res = new ArrayList<Pair<Integer, String>>();
 		Connection conn = getConnection();
-		String query = "SELECT * from " + TABLE_QUIZES + " where title like '" + quizname + "%' limit " + limit;
+		String query = "SELECT * from " + TABLE_QUIZES + " where title like '%" + quizname + "%' limit " + limit;
 		ResultSet rs = getResultSet(query, conn);
 		try {
 			while (rs.next()) {
