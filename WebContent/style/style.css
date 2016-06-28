@@ -194,3 +194,8 @@ div.ajaxSearchResult:hover {
 	background-color: #72b9f7;
 	border-radius: 0px 7px 0px 7px;
 }
+
+input[type=text]#ajaxUserSearch, input[type=text]#ajaxQuizSearch {
+	margin:2px;
+	width: calc(50% - 6px);
+}

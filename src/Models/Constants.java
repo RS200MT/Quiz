@@ -163,4 +163,5 @@ public class Constants {
 	public static final String MESSAGE_REPLY_TO = "replyTo";
 	
 	public static final String AJAX_USER_SEARCH = "username";
+	public static final String AJAX_QUIZ_SEARCH = "quizname";
 }
