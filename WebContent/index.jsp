@@ -27,11 +27,13 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title><%=pageTitle%></title>
-<link rel="stylesheet" type="text/css" href='style.css'>
+<link rel="stylesheet" type="text/css" href='style/style.css'>
 </head>
 <body>
 	<div class="header">
-		<a href="./"><b>Homepage</b></a>header content<BR> header content<BR>
+		<center>
+			<a href="./"><img src="images/logo.png"></a>
+		</center>
 	</div>
 	<table style="width: 100%">
 		<tr>
@@ -46,8 +48,20 @@
 		</tr>
 	</table>
 	<div class="footer">
-		footer content<BR> footer content<BR> footer content<BR>
-		footer content<BR> footer content<BR> footer content<BR>
+		<center><table>
+			<tr>
+				<th>©</th>
+				<th>Tornike Jijiashvili |</th>
+				<th>Mery Chonishvili |</th>
+				<th>Waska Chaduneli</th>
+			</tr>
+			<tr>
+				<td></td>
+				<td><center><a href="https://fb.com/100006717485500" target="_blank"><img src="http://graph.facebook.com/100006717485500/picture?width=200&height=200" width="85px" height="85px" style="border: 1px solid rgba(255, 255, 255, 0.5)"></a></center></td>
+				<td><center><a href="https://fb.com/100000706686861" target="_blank"><img src="http://graph.facebook.com/100000706686861/picture?width=200&height=200" width="85px" height="85px" style="border: 1px solid rgba(255, 255, 255, 0.5)"></a></center></td>
+				<td><center><a href="https://fb.com/100001024236488" target="_blank"><img src="http://graph.facebook.com/100001024236488/picture?width=200&height=200" width="85px" height="85px" style="border: 1px solid rgba(255, 255, 255, 0.5)"></a></center></td>
+			</tr>
+		</table></center>
 	</div>
 </body>
 </html>
