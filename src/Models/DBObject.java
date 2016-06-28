@@ -57,6 +57,7 @@ public class DBObject {
 			String connect = "jdbc:mysql://" + MYSQL_DATABASE_SERVER + "/" + MYSQL_DATABASE_NAME;
 			return DriverManager.getConnection(connect, MYSQL_USERNAME, MYSQL_PASSWORD);
 		} catch (SQLException e) {
+			System.out.println("a");
 			e.printStackTrace();
 			System.err.println("MySQL user password server or db name is incorrect!");
 			return null;
@@ -238,10 +239,12 @@ public class DBObject {
 			boolean immediateCorrection = rs.getInt("immediate_correction") == 1;
 			ArrayList<Question> questions = getQuestionsForQuiz(id, conn);
 			boolean displaySingleQuestion = singleQuestion == 1;
+			closeConnection(conn);
 			return new Quiz(id, title, description, author, createTime, timesWritten, randomized, immediateCorrection,
 					questions, displaySingleQuestion);
 		} else {
 			System.out.println("Quiz not found!");
+			closeConnection(conn);
 			return null;
 		}
 	}
@@ -671,6 +674,7 @@ public class DBObject {
 			String receiveTime = rs.getTimestamp("receive_time").toString();
 			m = new Message(message, senderId, recipientId, seen, messageId, receiveTime);
 		}
+		closeConnection(conn);
 		return m;
 
 	}

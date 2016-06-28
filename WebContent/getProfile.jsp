@@ -44,15 +44,15 @@
 				if(friendRequests != null && friendRequests.contains(userName)) {
 					out.print("<input type='submit' name='"+Constants.GET_PROFILE_ACCEPT_FRIEND_REQUEST+"' value = 'Accept Friend Request'/>");
 					out.print("<input type='submit' name='"+Constants.GET_PROFILE_DECLINE_FRIEND_REQUEST+"' value = 'Decline Friend Request'/>");
-					System.out.println(userName+" has sent request to "+currUser.getUserName());
+					//System.out.println(userName+" has sent request to "+currUser.getUserName());
 				} else {
 					ArrayList<String> friendRequestsForToDisplay = db.getFriendRequestsForUser(toDisplay.getId());
 					if(friendRequestsForToDisplay!= null && friendRequestsForToDisplay.contains(currUser.getUserName())) {
 						out.print("<input type='submit' name='"+Constants.GET_PROFILE_UNFRIEND+"' value = 'Unfriend'/>");
-						System.out.println(currUser.getUserName()+" has sent request to "+ userName);
+						//System.out.println(currUser.getUserName()+" has sent request to "+ userName);
 					} else {
 						out.print("<input type='submit' name='"+Constants.GET_PROFILE_ADD_FRIEND+"' value = 'Add Friend'/>");
-						System.out.println(currUser.getUserName()+" and "+userName+" have not sent requests to each other.");
+						//System.out.println(currUser.getUserName()+" and "+userName+" have not sent requests to each other.");
 					}
 				}
 			} else {
@@ -73,7 +73,8 @@
 		out.print("<H3>Log in to countinue</H3>");
 	} else {
 		if(!currUser.getUserName().equals(userName)) {
-			out.print("<br><input type='text' name='"+Constants.GET_PROFILE_MESSAGE_TEXT+"' value = 'Message Text'/>");
+			out.print("<br>Message Text here");
+			out.print("<br><input type='text' name='"+Constants.GET_PROFILE_MESSAGE_TEXT+"'/>");
 			out.print("<input type='submit' name='"+Constants.GET_PROFILE_SEND_MESSAGE+"' value = 'Send Message'/>");
 		}
 	}
