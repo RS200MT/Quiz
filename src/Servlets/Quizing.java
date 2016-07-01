@@ -47,6 +47,10 @@ public class Quizing extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		Quiz curQuiz = getCurrentQuiz(request, response);
+		if (curQuiz == null)
+			errorRedirect(request, response, "Cuiz object not found. Error!");
+		if (!curQuiz.hasMoreQuestions())
+			redirectToResultPageAndDoneQuiz(request, response, curQuiz);
 		if (request.getParameter(Constants.QUIZINIG_DONE) != null) {
 			doneQuiz(request, response, curQuiz);
 		} else if (request.getParameter(Constants.QUIZINIG_NEXT) != null) {
@@ -159,6 +163,12 @@ public class Quizing extends HttpServlet {
 		} catch (ServletException | IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	private void errorRedirect(HttpServletRequest request, HttpServletResponse response, String message) throws ServletException, IOException {
+		request.setAttribute(Constants.INDEX_DO_QUIZ_ATTR_FINISHED, 1);
+		request.setAttribute(Constants.INDEX_DO_QUIZ_ATTR_RESULT_MESSAGE, message);
+		request.getRequestDispatcher(Constants.getAction(Constants.INDEX_DO_QUIZ_RESULT)).forward(request, response);
 	}
 
 }
