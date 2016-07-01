@@ -14,10 +14,14 @@
    	 	User user = (User)request.getSession().getAttribute(Constants.ATTR_USER);
    	 	ArrayList<Pair<Integer,Integer>> messages = obj.getMessages(user.getId());
     	 	if(messages != null){
- 			for(Pair<Integer,Integer> m : messages){
- 				String senderName = obj.getUserNameById(m.getValue());
-//  				out.print("<br>From : <a href = message.jsp?messageId=" +m.getKey()+ "> "+obj.getUserNameById(m.getValue()) +"</a>");
-				out.print("<br>From: <a href ="+Constants.getMessageURL(m.getKey())+"> "+senderName+"</a>");
- 			}
+    	 		ArrayList<Integer> unseen = obj.getUnseenMessages(user.getId());
+	 			for(Pair<Integer,Integer> m : messages){
+	 				String senderName = obj.getUserNameById(m.getValue());
+	 				if(unseen != null && unseen.contains(m.getKey())) {
+	 					out.print("<br>From: <a href ="+Constants.getMessageURL(m.getKey())+"> <b>"+senderName+"</b> </a>");
+	 				} else {
+						out.print("<br>From: <a href ="+Constants.getMessageURL(m.getKey())+"> "+senderName+"</a>");
+	 				}
+	 			}
  		} 
     %>

@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 
+import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader.Array;
+
 import Questions.FillInBlankQuestion;
 import Questions.MultipleChoiceQuestion;
 import Questions.PictureQuestion;
@@ -35,8 +37,8 @@ public class DBObject {
 
 	public static final int MESSAGE_TYPE_CHALLENGE = 0;
 	public static final int MESSAGE_TYPE_TEXT_MESSAGE = 1;
-	public static final int MESSAGE_SEEN = 0;
-	public static final int MESSAGE_NOT_SEEN = 1;
+	public static final int MESSAGE_SEEN = 1;
+	public static final int MESSAGE_NOT_SEEN = 0;
 	public static final int FRIEND_STATUS_PENDING = 0;
 	public static final int FRIEND_STATUS_ACCEPTED = 1;
 
@@ -584,6 +586,27 @@ public class DBObject {
 		closeConnection(conn);
 		return friendRequests;
 	}
+	
+	
+	/**
+	 * 
+	 * @param id
+	 * @return
+	 * @throws SQLException
+	 */
+	public int getNumberOfFriendRequests(int id) throws SQLException {
+		Connection conn = getConnection();
+		int res = 0;
+		String query = "SELECT COUNT(id) AS count FROM "+TABLE_FRIENDS+ " WHERE (user2_id="+id+" AND status="+FRIEND_STATUS_PENDING+");";
+		ResultSet rs = getResultSet(query, conn);
+		if(!rs.isBeforeFirst()) {
+			return res;
+		}
+		rs.next();
+		res = rs.getInt(1);
+		closeConnection(conn);
+		return res;
+	}
 
 	/**
 	 * Returns true if one of the users has sent friend request to another;
@@ -938,6 +961,41 @@ public class DBObject {
 		return res;
 	}
 	
+	
+	
+	
+	/**
+	 * Returns a list of id-s of unseen messages;
+	 * @param userId
+	 * @return
+	 * @throws SQLException
+	 */
+	public ArrayList<Integer> getUnseenMessages(int userId) throws SQLException {
+		Connection conn = getConnection();
+		String query = "SELECT * FROM "+TABLE_MESSAGES+" WHERE (recipient="+userId+" AND seen="+MESSAGE_NOT_SEEN+");";
+		ResultSet rs = getResultSet(query, conn);
+		if(!rs.isBeforeFirst()) {
+			return null;
+		}
+		ArrayList<Integer> res = new ArrayList<Integer>();
+		while(rs.next()) {
+			res.add(rs.getInt("id"));
+		}
+		closeConnection(conn);
+		return res;
+	}
+	
+	
+	
+	public void markMessageAsSeen(int messageId) {
+		Connection conn = getConnection();
+		String query = "UPDATE "+TABLE_MESSAGES+" SET seen="+MESSAGE_SEEN+" WHERE id="+messageId+";";
+		executeUpdate(query, conn);
+		closeConnection(conn);
+	}
+	
+	
+	
 	/**
 	 * 
 	 * @param userId
@@ -965,6 +1023,23 @@ public class DBObject {
 		closeConnection(conn);
 		return challenges;
 	}
+	
+	
+	
+	public int getNumberOfUnseenChallenges(int id) throws SQLException {
+		int res = 0;
+		Connection conn = getConnection();
+		String query = "SELECT COUNT(*) FROM "+TABLE_CHALLENGES+" WHERE (recipient_id="+id+" AND seen="+MESSAGE_NOT_SEEN+");";
+		ResultSet rs = getResultSet(query, conn);
+		if(rs.isBeforeFirst()) {
+			rs.next();
+			res = rs.getInt(1);
+		}
+		closeConnection(conn);
+		return res;
+	}
+	
+	
 	
 	
 	/**

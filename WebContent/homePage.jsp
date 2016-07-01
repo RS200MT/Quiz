@@ -1,4 +1,5 @@
 <%@page import="Models.Constants"%>
+<%@page import="Models.Message"%>
 <%@page import="Models.DBObject"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="Models.Quiz"%>
@@ -50,10 +51,25 @@ if(recentQuizesForUser != null){
 		out.print("<a href = '" + Constants.getQuizURL(q.getValue()) + "'>" + q.getKey() + "</a> <br>");	}
 }
 out.print("<H3>");
-out.print("<a href =" + Constants.getAction("inbox") + ">INBOX</a>" );
-out.print("<br><a href ="+Constants.getAction(Constants.INDEX_DO_FRIEND_REQUESTS)+">Friend Requests</a>");
+String newMessages = "";
+ArrayList<Integer> unseenMessages = obj.getUnseenMessages(user.getId());
+if(unseenMessages!=null) {
+	newMessages+="("+unseenMessages.size()+")";
+}
+out.print("<a href =" + Constants.getAction("inbox") + ">INBOX "+newMessages+"</a>" );
+String newFriendRequests = "";
+int numRequests = obj.getNumberOfFriendRequests(user.getId());
+if(numRequests > 0) {
+	newFriendRequests += "("+numRequests+")";
+	out.print("<br><a href ="+Constants.getAction(Constants.INDEX_DO_FRIEND_REQUESTS)+">Friend Requests"+newFriendRequests+"</a>");
+}
 out.print("<br><a href ="+Constants.getAction(Constants.INDEX_DO_FRIEND)+">Friends</a>");
-out.print("<br><a href="+Constants.getAction(Constants.INDEX_DO_CHALLENGES)+"> Challenges </a>");
+
+int numChallenges = obj.getNumberOfUnseenChallenges(user.getId());
+if(numChallenges > 0) {
+	String newChallenges = "("+numChallenges+")";
+	out.print("<br><a href="+Constants.getAction(Constants.INDEX_DO_CHALLENGES)+"> Challenges"+newChallenges+"</a>");
+}
 out.print("</H3>");
 %>
 
