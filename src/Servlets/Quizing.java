@@ -47,15 +47,22 @@ public class Quizing extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		Quiz curQuiz = getCurrentQuiz(request, response);
-		if (request.getParameter(Constants.QUIZINIG_DONE) != null) {
-			doneQuiz(request, response, curQuiz);
-		} else if (request.getParameter(Constants.QUIZINIG_NEXT) != null) {
-			nextQuestion(request, response, curQuiz);
-		} else if (request.getParameter(Constants.QUIZINIG_CHECK) != null) {
-			checkAnswer(request, response, curQuiz);
-		} else if (request.getParameter(Constants.QUIZINIG_CHECK_RESULT_NEXT_QUESTION) != null) {
-			nextQuestionAfterCheck(response, request, curQuiz);
+		if (curQuiz == null) {
+			errorRedirect(request, response, "Quiz object not found. Error!");
+		} else {
+			if (!curQuiz.hasMoreQuestions())
+				redirectToResultPageAndDoneQuiz(request, response, curQuiz);
+			if (request.getParameter(Constants.QUIZINIG_DONE) != null) {
+				doneQuiz(request, response, curQuiz);
+			} else if (request.getParameter(Constants.QUIZINIG_NEXT) != null) {
+				nextQuestion(request, response, curQuiz);
+			} else if (request.getParameter(Constants.QUIZINIG_CHECK) != null) {
+				checkAnswer(request, response, curQuiz);
+			} else if (request.getParameter(Constants.QUIZINIG_CHECK_RESULT_NEXT_QUESTION) != null) {
+				nextQuestionAfterCheck(response, request, curQuiz);
+			}
 		}
+		
 	}
 
 	private void nextQuestionAfterCheck(HttpServletResponse response, HttpServletRequest request, Quiz curQuiz)
@@ -114,7 +121,7 @@ public class Quizing extends HttpServlet {
 		String quizTime = logQuiz(curQuiz, score, request);
 		request.setAttribute(Constants.INDEX_DO_QUIZ_ATTR_FINISHED, 1);
 		request.setAttribute(Constants.INDEX_DO_QUIZ_ATTR_RESULT_MESSAGE,
-				"<a href='http://myvideo.ge'>myvideo.ge</a>You're done. your score is: " + score + " | time: " + quizTime);
+				"You're done. your score is: " + score + " | time: " + quizTime);
 		request.getSession().setAttribute(Constants.ATTR_SESSION_QUIZ, null);
 		request.getRequestDispatcher(Constants.getAction(Constants.INDEX_DO_QUIZ_RESULT)).forward(request, response);
 	}
@@ -159,6 +166,12 @@ public class Quizing extends HttpServlet {
 		} catch (ServletException | IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	private void errorRedirect(HttpServletRequest request, HttpServletResponse response, String message) throws ServletException, IOException {
+		request.setAttribute(Constants.INDEX_DO_QUIZ_ATTR_FINISHED, 1);
+		request.setAttribute(Constants.INDEX_DO_QUIZ_ATTR_RESULT_MESSAGE, message);
+		request.getRequestDispatcher(Constants.getAction(Constants.INDEX_DO_QUIZ_RESULT)).forward(request, response);
 	}
 
 }

@@ -53,6 +53,7 @@ out.print("<H3>");
 out.print("<a href =" + Constants.getAction("inbox") + ">INBOX</a>" );
 out.print("<br><a href ="+Constants.getAction(Constants.INDEX_DO_FRIEND_REQUESTS)+">Friend Requests</a>");
 out.print("<br><a href ="+Constants.getAction(Constants.INDEX_DO_FRIEND)+">Friends</a>");
+out.print("<br><a href="+Constants.getAction(Constants.INDEX_DO_CHALLENGES)+"> Challenges </a>");
 out.print("</H3>");
 %>
 

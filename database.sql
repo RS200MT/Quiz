@@ -104,3 +104,12 @@ create table if not exists messages (
     receive_time timestamp not null default now()
 );
 
+drop table if exists challenges;
+create table if not exists challenges(
+	id int primary key auto_increment,
+    sender_id int not null, 
+    recipient_id int not null, 
+    quiz_id int not null,
+    seen int default 0,
+    receive_time timestamp not null default now()
+);

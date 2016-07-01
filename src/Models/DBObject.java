@@ -31,6 +31,7 @@ public class DBObject {
 	public static final String TABLE_MULTIPLE_CHOICES = "multiple_choices";
 	public static final String TABLE_FRIENDS = "friends";
 	public static final String TABLE_MESSAGES = "messages";
+	public static final String TABLE_CHALLENGES = "challenges";
 
 	public static final int MESSAGE_TYPE_CHALLENGE = 0;
 	public static final int MESSAGE_TYPE_TEXT_MESSAGE = 1;
@@ -928,6 +929,58 @@ public class DBObject {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
+		}
+		closeConnection(conn);
+		return res;
+	}
+	
+	/**
+	 * 
+	 * @param userId
+	 * @return
+	 * @throws SQLException 
+	 */
+	public ArrayList<Challenge> getChallengesForUser(int userId) throws SQLException {
+		Connection conn = getConnection();
+		String query = "SELECT * FROM "+TABLE_CHALLENGES+" WHERE recipient_id = "+userId+" ORDER BY id DESC;";
+		ResultSet rs = getResultSet(query, conn);
+		if(!rs.isBeforeFirst()) {
+			return null;
+		}
+		ArrayList<Challenge> challenges = new ArrayList<Challenge>();
+		while(rs.next()) {
+			int id = rs.getInt("id");
+			int sender = rs.getInt("sender_id");
+			int recipient = rs.getInt("recipient_id");
+			int quiz = rs.getInt("quiz_id");
+			int seen = rs.getInt("seen");
+			String receiveTime = rs.getTimestamp("receive_time").toString();
+			Challenge c = new Challenge(id, sender, recipient, quiz, seen, receiveTime);
+			challenges.add(c);
+		}
+		closeConnection(conn);
+		return challenges;
+	}
+	
+	
+	/**
+	 * Gets best score that given user has achieved in given quiz; 
+	 * If the user hasn't taken this quiz, returns -1;
+	 * @param userId
+	 * @param quizId
+	 * @return
+	 * @throws SQLException
+	 */
+	public int getBestScoreForUserInQuiz(int userId, int quizId) throws SQLException {
+		int res = -1;
+		Connection conn = getConnection();
+		String query = "SELECT * FROM "+TABLE_QUIZ_LOGS+" WHERE user_id="+userId+" AND quiz_id="+quizId+" ORDER BY score DESC LIMIT 1;";
+		ResultSet rs = getResultSet(query, conn);
+		if(!rs.isBeforeFirst()) {
+			return res;
+		}
+		while(rs.next()) {
+			res = rs.getInt("score");
 		}
 		closeConnection(conn);
 		return res;

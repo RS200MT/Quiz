@@ -64,6 +64,7 @@ public class Constants {
 	public static final String ATTR_USER_NAME_FOR_GET_PROFILE = "userNameAttr";
 	public static final String ATTR_MESSAGE_ID = "messageId";
 	public static final String ATTR_MESSAGE_SENDER_NAME = "senderName";
+	public static final String ATTR_CHALLENGE_QUIZ = "challengeQuiz";
 
 	// WASKA's constants new;
 	public static final String SITE_URL = "http://localhost:8080/QuizWebsite";
@@ -88,6 +89,8 @@ public class Constants {
 	public static final String INDEX_DO_MESSAGE_TITLE = "Message";
 	public static final String INDEX_DO_INBOX = "inbox";
 	public static final String INDEX_DO_INBOX_TITLE = "Inbox";
+	public static final String INDEX_DO_CHALLENGES = "challenges";
+	public static final String INDEX_DO_CHALLENGES_TITLE = "Challenges";
 
 	public static final String INDEX_DO_MY_QUIZES = "myQuizes";
 	public static final String INDEX_DO_MY_QUIZES_TITLE = "my Quizes";
@@ -109,6 +112,7 @@ public class Constants {
 	public static final String INDEX_DO_FRIEND_REQUESTS_TITILE = "Friend Requests";
 	public static final String INDEX_DO_FRIEND = "friends";
 	public static final String INDEX_DO_FRIEND_TITLE = "Friends";
+	
 
 
 	public static String getAction(String action) {
