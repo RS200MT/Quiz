@@ -47,20 +47,18 @@ public class Quizing extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		Quiz curQuiz = getCurrentQuiz(request, response);
-		if (curQuiz == null) {
+		if (curQuiz == null)
 			errorRedirect(request, response, "Quiz object not found. Error!");
-		} else {
-			if (!curQuiz.hasMoreQuestions())
-				redirectToResultPageAndDoneQuiz(request, response, curQuiz);
-			if (request.getParameter(Constants.QUIZINIG_DONE) != null) {
-				doneQuiz(request, response, curQuiz);
-			} else if (request.getParameter(Constants.QUIZINIG_NEXT) != null) {
-				nextQuestion(request, response, curQuiz);
-			} else if (request.getParameter(Constants.QUIZINIG_CHECK) != null) {
-				checkAnswer(request, response, curQuiz);
-			} else if (request.getParameter(Constants.QUIZINIG_CHECK_RESULT_NEXT_QUESTION) != null) {
-				nextQuestionAfterCheck(response, request, curQuiz);
-			}
+		if (!curQuiz.hasMoreQuestions())
+			redirectToResultPageAndDoneQuiz(request, response, curQuiz);
+		if (request.getParameter(Constants.QUIZINIG_DONE) != null) {
+			doneQuiz(request, response, curQuiz);
+		} else if (request.getParameter(Constants.QUIZINIG_NEXT) != null) {
+			nextQuestion(request, response, curQuiz);
+		} else if (request.getParameter(Constants.QUIZINIG_CHECK) != null) {
+			checkAnswer(request, response, curQuiz);
+		} else if (request.getParameter(Constants.QUIZINIG_CHECK_RESULT_NEXT_QUESTION) != null) {
+			nextQuestionAfterCheck(response, request, curQuiz);
 		}
 		
 	}
