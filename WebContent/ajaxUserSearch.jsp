@@ -11,7 +11,7 @@
 		DBObject db = (DBObject) request.getServletContext().getAttribute(DBObject.ATTR_DB);
 		ArrayList<String> usernames = db.getUsersStartedWith(username, 5);
 		if (usernames.size() == 0)
-			out.print("There are no usernames started by: <b>" + username + "</b>");
+			out.print("There is no username containing: <b>" + username + "</b>");
 		for (int i = 0; i < usernames.size(); i++) {
 			String curUserName = usernames.get(i);
 			out.print("<a href='" + Constants.getUserProfileURL(curUserName)

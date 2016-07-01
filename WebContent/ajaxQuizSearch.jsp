@@ -12,7 +12,7 @@
 		DBObject db = (DBObject) request.getServletContext().getAttribute(DBObject.ATTR_DB);
 		ArrayList<Pair<Integer, String>> quizes = db.getQuizesStartedWith(quizname, 5);
 		if (quizes.size() == 0)
-			out.print("There are no Quizes started by: <b>" + quizname + "</b>");
+			out.print("There is no Quiz containing: <b>" + quizname + "</b>");
 		for (int i = 0; i < quizes.size(); i++) {
 			String curQuizTitle = quizes.get(i).getValue();
 			int id = quizes.get(i).getKey();
