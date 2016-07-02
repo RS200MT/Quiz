@@ -23,6 +23,7 @@ public class Quiz {
 	private ArrayList<String> userAnswers;
 	private int score;
 	private long startTime;
+	private int maxScore;
 
 	public Quiz(int id, String title, String description, String author, String createTime, int timesWritten,
 			boolean randomized, boolean immediateCorrection, ArrayList<Question> questions,
@@ -43,6 +44,7 @@ public class Quiz {
 		this.score = 0;
 		this.userAnswers = new ArrayList<String>();
 		this.startTime = 0;
+		this.maxScore = questions.size();
 	}
 
 	private void randomizeQuestions() {
@@ -150,5 +152,22 @@ public class Quiz {
 
 	public int getScore() {
 		return this.score;
+	}
+	
+	public int getMaxScore() {
+		return this.maxScore;
+	}
+	
+	public String getUserAnswer(int index) {
+		return this.userAnswers.get(index);
+	}
+	
+	public ArrayList<String> getCorrectAnswer(int index) {
+		return this.questions.get(index).getAnswers();
+	}
+	
+	
+	public int getNumQuestions() {
+		return this.questions.size();
 	}
 }

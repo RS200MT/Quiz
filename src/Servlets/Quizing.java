@@ -118,12 +118,34 @@ public class Quizing extends HttpServlet {
 		int score = curQuiz.getScore();
 		String quizTime = logQuiz(curQuiz, score, request);
 		request.setAttribute(Constants.INDEX_DO_QUIZ_ATTR_FINISHED, 1);
-		request.setAttribute(Constants.INDEX_DO_QUIZ_ATTR_RESULT_MESSAGE,
-				"You're done. your score is: " + score + " | time: " + quizTime);
+		String toPrint = "You're done. Your score is: " + score + " out of "+curQuiz.getMaxScore()+ " | Time: " + quizTime;
+		toPrint += toPrintAnswersHTML(curQuiz);
+		request.setAttribute(Constants.INDEX_DO_QUIZ_ATTR_RESULT_MESSAGE,toPrint);
 		request.getSession().setAttribute(Constants.ATTR_SESSION_QUIZ, null);
 		request.getRequestDispatcher(Constants.getAction(Constants.INDEX_DO_QUIZ_RESULT)).forward(request, response);
 	}
 
+	
+	private String toPrintAnswersHTML(Quiz q) {
+		String res = "<ol type='1'>";
+		for(int i=0; i<q.getNumQuestions(); i++) {
+			String userAnswer = q.getUserAnswer(i);
+			if(q.getQuestions().get(i).isCorrect(userAnswer) == 1) {
+				res += "<font color = 'green'><li>"+userAnswer+"</font>";
+			} else {
+				res += "<font color = 'red'> <li>"+userAnswer+" </font> || Correct : ";
+				for(String a: q.getQuestions().get(i).getAnswers()) {
+					res += a + "; ";
+				}
+				res+="</li>";
+			}
+			
+		}
+		res+="</ol>";
+		return res;
+	}
+	
+	
 	private String logQuiz(Quiz curQuiz, int score, HttpServletRequest request) {
 		DBObject obj = (DBObject) getServletContext().getAttribute(DBObject.ATTR_DB);
 		java.util.Date date = new java.util.Date();

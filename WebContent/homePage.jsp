@@ -9,7 +9,7 @@
 	pageEncoding="ISO-8859-1"%>
 
 <H3>
-	Popular 5 Quizes: <br>
+	Popular 5 quizzes: <br>
 </H3>
 
 <%
@@ -26,7 +26,7 @@
 	
 %>
 
-<H3>Recent Quizes : <br> </H3>
+<H3>Recent quizzes : <br> </H3>
 
 	<%
 
@@ -41,7 +41,7 @@ if(recentQuizes != null){
 
 
 <H3>
-	Recent Quizes For user : <br>
+	Recent quizzes taken by you : <br>
 </H3>
 <%
 

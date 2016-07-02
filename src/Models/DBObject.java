@@ -276,6 +276,13 @@ public class DBObject {
 		return result;
 	}
 
+	/**
+	 * Returns a question with given id and null if no such question was found;
+	 * @param id
+	 * @param conn
+	 * @return
+	 * @throws SQLException
+	 */
 	private Question getQuestionById(int id, Connection conn) throws SQLException {
 		String query = "SELECT * FROM " + TABLE_QUESTIONS + " WHERE id = " + id + " limit 1;";
 		ResultSet rs = getResultSet(query, conn);
@@ -295,6 +302,15 @@ public class DBObject {
 		return null;
 	}
 
+	
+	/**
+	 * Returns the URL for a question with given id or empty string
+	 * if no such URL was found;
+	 * @param id
+	 * @param conn
+	 * @return
+	 * @throws SQLException
+	 */
 	private String getImageURL(int id, Connection conn) throws SQLException {
 		String imageURL = "SELECT * FROM " + TABLE_QUESTION_IMAGES + " WHERE question_id = " + id + ";";
 		ResultSet rs = getResultSet(imageURL, conn);
@@ -303,6 +319,14 @@ public class DBObject {
 		return "";
 	}
 
+	/**
+	 * Get possible answers for question with given id
+	 * TODO return null if no such question was found and check wherever we're calling this method;
+	 * @param id
+	 * @param conn
+	 * @return
+	 * @throws SQLException
+	 */
 	private ArrayList<String> getPossibleAnswers(int id, Connection conn) throws SQLException {
 		String getPossibleAnswers = "SELECT * FROM " + TABLE_MULTIPLE_CHOICES + " WHERE question_id = " + id + ";";
 		ResultSet possibleAnswers = getResultSet(getPossibleAnswers, conn);
@@ -315,7 +339,8 @@ public class DBObject {
 	}
 
 	/**
-	 * 
+	 * Returns a list of correct answers for given question;
+	 * TODO null check???
 	 * @param id
 	 * @param conn2
 	 * @return
@@ -390,11 +415,20 @@ public class DBObject {
 		return popularQuizes;
 	}
 
+	/**
+	 * Get n most recent quizzes in the database; If there are not as
+	 * many quizzes in database as n, returns all the quizzes sorted 
+	 * from most recent to older ones;
+	 * @param userID
+	 * @param n
+	 * @return
+	 * @throws SQLException
+	 */
 	public ArrayList<Pair<String, Integer>> getRecentQuizesForUser(int userID, int n) throws SQLException {
 		ArrayList<Pair<String, Integer>> recentQuizesForUser = new ArrayList<Pair<String, Integer>>();
 		Connection conn = getConnection();
 		String query = "select quiz_id from " + TABLE_QUIZ_LOGS + " where user_id = " + userID
-				+ " order by start_time limit " + n + ";";
+				+ " order by start_time desc limit " + n + ";";
 		ResultSet rs = getResultSet(query, conn);
 		if (!rs.isBeforeFirst())
 			return null;
@@ -432,7 +466,7 @@ public class DBObject {
 		return recentQuizes;
 	}
 
-	// This function insert quiz in database
+	// This function inserts quiz in database
 	public int addQuiz(String title, String description, boolean isRandomized, boolean isImmediateCorrection,
 			int authorId) {
 		int random = isRandomized ? 1 : 0;
@@ -473,7 +507,12 @@ public class DBObject {
 		closeConnection(conn);
 		return questionId;
 	}
-
+	
+	/**
+	 * Gets list of quizes by given author; TODO null check?????
+	 * @param userId
+	 * @return
+	 */
 	public ArrayList<Pair<String, Integer>> getQuizesListForUser(int userId) {
 		ArrayList<Pair<String, Integer>> res = new ArrayList<Pair<String, Integer>>();
 		Connection conn = getConnection();
@@ -486,13 +525,17 @@ public class DBObject {
 				res.add(new Pair<String, Integer>(quizTitle, quizId));
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		closeConnection(conn);
 		return res;
 	}
 
+	/**
+	 * Get user with given name;
+	 * @param passed_username
+	 * @return
+	 */
 	public User getUserByUserName(String passed_username) {
 		Connection conn = getConnection();
 		String query = "Select * from " + TABLE_USERS + " where user_name ='" + passed_username + "' ;";
@@ -517,6 +560,12 @@ public class DBObject {
 		return result;
 	}
 
+	/**
+	 * Get user with given id;
+	 * @param userId
+	 * @return
+	 * @throws SQLException
+	 */
 	public String getUserNameById(int userId) throws SQLException {
 		Connection conn = getConnection();
 		String query = "Select * from " + TABLE_USERS + " where id = " + userId;
@@ -530,6 +579,12 @@ public class DBObject {
 		return userName;
 	}
 
+	/**
+	 * Get user id for user with given name;
+	 * @param userName
+	 * @return
+	 * @throws SQLException
+	 */
 	public int getUserIdByUserName(String userName) throws SQLException {
 		Connection conn = getConnection();
 		String query = "Select * from " + TABLE_USERS + " where user_name ='" + userName + "';";
@@ -543,6 +598,12 @@ public class DBObject {
 		return id;
 	}
 
+	/**
+	 * Update friends table, mark that recipient has accepted sender's 
+	 * friend request;
+	 * @param recipient
+	 * @param sender
+	 */
 	public void acceptFriendRequest(int recipient, int sender) {
 		Connection conn = getConnection();
 		String query1 = "UPDATE " + TABLE_FRIENDS + " SET status = " + FRIEND_STATUS_ACCEPTED + " WHERE (user1_id="
@@ -855,7 +916,7 @@ public class DBObject {
 				String username = rs.getString("user_name");
 				result += "<li><a href='" + Constants.getUserProfileURL(username) + "' target='_blank' title='Time: "
 						+ Constants.getTimeFromSecs(time) + ", Started: " + Constants.getTimeFromSecs(afterStart)
-						+ " ago'><b>" + username + "</b></a>(" + score + " pts)</li>";
+						+ " ago'><b>" + username + "</b></a>(" + score + " pts. "+(int)time+"sec)</li>";
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
