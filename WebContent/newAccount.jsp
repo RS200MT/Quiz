@@ -11,7 +11,8 @@
 %>
 <form action="<%=Constants.S_REGISTER%>" method="post">
 	<p>
-		UserName: <input type="text" required="required"
+		UserName: <br> <small>*Use only letters and/or numbers</small>
+			<input type="text" required="required"
 			name="<%=Constants.REGISTER_USERNAME%>"
 			id="<%=Constants.REGISTER_USERNAME%>" />
 	<p>

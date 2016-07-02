@@ -1,4 +1,8 @@
 <%@page import="Models.Constants"%>
+<%@page import="Models.DBObject"%>
+<%@page import="Models.User"%>
+<%@page import="java.util.ArrayList"%>
+
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <script>
@@ -38,11 +42,61 @@
 	<div id="ajaxResult"></div>
 </div>
 
-<div class="block-header" id="">block2</div>
-<div class="block" id="">block content 2 right</div>
+<%
+DBObject obj = (DBObject) request.getServletContext().getAttribute(DBObject.ATTR_DB);
+User user = (User)request.getSession().getAttribute(Constants.ATTR_USER);
+%>
 
-<div class="block-header" id="">block3</div>
-<div class="block" id="">block content 3 right</div>
+<div class="block-header" id="">
+<%
+if(user != null) {
+	out.print("<H3>");
+	String newMessages = "";
+	ArrayList<Integer> unseenMessages = obj.getUnseenMessages(user.getId());
+	if(unseenMessages!=null) {
+		newMessages+="("+unseenMessages.size()+")";
+}
+out.print("<a href =" + Constants.getAction("inbox") + ">INBOX "+newMessages+"</a> </H3>" );
+} else {
+	out.print("<H3>Check your knoledge!</H3>");
+}
 
-<div class="block-header" id="">block4</div>
-<div class="block" id="">block content 4 right</div>
+%>
+</div>
+
+<%
+if(user != null) {
+	String newFriendRequests = "";
+	int numRequests = obj.getNumberOfFriendRequests(user.getId());
+	if(numRequests > 0) {
+		out.print("<div class='block-header' id = ''");
+		newFriendRequests += "("+numRequests+")";
+		out.print("<br><a href ="+Constants.getAction(Constants.INDEX_DO_FRIEND_REQUESTS)+">Friend Requests"+newFriendRequests+"</a>");
+		out.print("</div>");
+	}
+} 
+
+%>
+
+<%
+if(user != null) {
+	out.print("<div class='block-header' id = ''");
+	out.print("<br><a href ="+Constants.getAction(Constants.INDEX_DO_FRIEND)+"><H3>Friends</H3></a>");
+	out.print("</div>");
+} 
+%>
+
+
+<%
+if(user != null) {
+	int numChallenges = obj.getNumberOfUnseenChallenges(user.getId());
+	if(numChallenges > 0) {
+		out.print("<div class='block-header' id = ''");
+		String newChallenges = "("+numChallenges+")";
+		out.print("<br><a href="+Constants.getAction(Constants.INDEX_DO_CHALLENGES)+"><H3>Challenges</H3>"+newChallenges+"</a>");
+		out.print("</div>");	
+	}
+}
+
+%>
+
