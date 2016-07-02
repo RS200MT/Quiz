@@ -615,11 +615,20 @@ public class DBObject {
 		closeConnection(conn);
 	}
 
-	private ArrayList<String> getUserFriends(Connection conn, int id) {
+	private ArrayList<String> getUserFriends(Connection conn, int id) throws SQLException {
 		ArrayList<String> friends = new ArrayList<String>();
-		// String query = "Select * from " + TABLE_FRIENDS + " where user1_id =
-		// " + id + " or user2_id = " + id + ";";
-		// TODO
+		String query = "SELECT * FROM "+TABLE_FRIENDS + " WHERE (user1_id="+id+" OR user2_id="+id+") AND status="+FRIEND_STATUS_ACCEPTED+";";
+		ResultSet rs = getResultSet(query, conn);
+		if(!rs.isBeforeFirst()) {
+			return null;
+		}
+		while(rs.next()) {
+			int n1 = rs.getInt("user1_id");
+			int n2 = rs.getInt("user2_id");
+			int friendId = n1==id ? n2:n1;
+			String friendName = this.getUserNameById(friendId);
+			friends.add(friendName);
+		}
 		return friends;
 	}
 
@@ -1121,6 +1130,23 @@ public class DBObject {
 		}
 		while(rs.next()) {
 			res = rs.getInt("score");
+		}
+		closeConnection(conn);
+		return res;
+	}
+	
+	
+	public ArrayList<Pair<Integer, String>> getRecentQuizesCreatedBy(String userName, int n) throws SQLException {
+		Connection conn = getConnection();
+		String query = "SELECT * FROM "+TABLE_QUIZES+" WHERE author='"+this.getUserIdByUserName(userName)+
+													"' ORDER BY create_time DESC LIMIT "+n+";";
+		ResultSet rs = getResultSet(query, conn);
+		if(!rs.isBeforeFirst()) {
+			return null;
+		}
+		ArrayList<Pair<Integer, String>> res = new ArrayList<Pair<Integer, String>>();
+		while(rs.next()) {
+			res.add(new Pair<Integer, String>(rs.getInt("id"), rs.getString("title")));
 		}
 		closeConnection(conn);
 		return res;

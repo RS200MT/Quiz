@@ -47,9 +47,10 @@ DBObject obj = (DBObject) request.getServletContext().getAttribute(DBObject.ATTR
 User user = (User)request.getSession().getAttribute(Constants.ATTR_USER);
 %>
 
-<div class="block-header" id="">
+
 <%
 if(user != null) {
+	out.print("<div class='block-header' id=''>");
 	out.print("<H3>");
 	String newMessages = "";
 	ArrayList<Integer> unseenMessages = obj.getUnseenMessages(user.getId());
@@ -57,12 +58,10 @@ if(user != null) {
 		newMessages+="("+unseenMessages.size()+")";
 }
 out.print("<a href =" + Constants.getAction("inbox") + ">INBOX "+newMessages+"</a> </H3>" );
-} else {
-	out.print("<H3>Check your knoledge!</H3>");
-}
+out.print("</div>");
+} 
 
 %>
-</div>
 
 <%
 if(user != null) {

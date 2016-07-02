@@ -15,7 +15,7 @@
 	ArrayList<String> friends = obj.getUserFriendsById(user.getId());
 	if(friends != null){
 		for(String s : friends){
-			out.print("<a href =" + Constants.getUserProfileURL(s) + ">" + s +"</a><br>");
+			out.print("<a href ='" + Constants.getUserProfileURL(s) + "'>" + s +"</a><br>");
 		}
 	}
 %>
