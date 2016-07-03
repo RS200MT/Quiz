@@ -84,5 +84,9 @@ public class User {
 	public void removeFriend(String userName) {
 		this.friends.remove(userName);		
 	}
+	
+	public ArrayList<String> getFriends() {
+		return this.friends;
+	}
 
 }

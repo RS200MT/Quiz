@@ -19,15 +19,20 @@
 	} else {
 		userName = request.getParameter(Constants.ATTR_USER_NAME_FOR_GET_PROFILE);
 		toDisplay = db.getUserByUserName(userName);
-		out.print(userName);
-		out.print("<br>"+toDisplay.getEmail()+"<br>");
-		ArrayList<Pair<String, Integer>> quizesByUser = db.getQuizesListForUser(toDisplay.getId());
-		if(quizesByUser != null) {
-			out.print("Number of quizes created :" + quizesByUser.size()+"<br>");
-			for(Pair<String, Integer> q : quizesByUser) {
-				out.print("<a href = '" + Constants.getQuizURL(q.getValue()) + "'>" + q.getKey() + "</a> <br>");
+		if(toDisplay!=null) {
+			out.print(userName);
+			out.print("<br>"+toDisplay.getEmail()+"<br>");
+			ArrayList<Pair<String, Integer>> quizesByUser = db.getQuizesListForUser(toDisplay.getId());
+			if(quizesByUser != null) {
+				out.print("Number of quizes created :" + quizesByUser.size()+"<br>");
+				for(Pair<String, Integer> q : quizesByUser) {
+					out.print("<a href = '" + Constants.getQuizURL(q.getValue()) + "'>" + q.getKey() + "</a> <br>");
+				}
 			}
+		} else {
+			out.print("<H3> Oops. No user with given name was found. </H3>");
 		}
+		
 	}
 		
 %>
@@ -38,27 +43,30 @@
 	if(currUser == null) {
 		out.print("<H3> Log in to countinue </H3>");
 	} else {
-		if(!currUser.getUserName().equals(userName)) {
-			if(!db.usersAreFriends(currUser.getId(), toDisplay.getId())) {
-				ArrayList<String> friendRequests = db.getFriendRequestsForUser(currUser.getId());
-				if(friendRequests != null && friendRequests.contains(userName)) {
-					out.print("<input type='submit' name='"+Constants.GET_PROFILE_ACCEPT_FRIEND_REQUEST+"' value = 'Accept Friend Request'/>");
-					out.print("<input type='submit' name='"+Constants.GET_PROFILE_DECLINE_FRIEND_REQUEST+"' value = 'Decline Friend Request'/>");
-					//System.out.println(userName+" has sent request to "+currUser.getUserName());
-				} else {
-					ArrayList<String> friendRequestsForToDisplay = db.getFriendRequestsForUser(toDisplay.getId());
-					if(friendRequestsForToDisplay!= null && friendRequestsForToDisplay.contains(currUser.getUserName())) {
-						out.print("<input type='submit' name='"+Constants.GET_PROFILE_UNFRIEND+"' value = 'Unfriend'/>");
-						//System.out.println(currUser.getUserName()+" has sent request to "+ userName);
+		if(toDisplay != null) {
+			if(!currUser.getUserName().equals(userName)) {
+				if(!db.usersAreFriends(currUser.getId(), toDisplay.getId())) {
+					ArrayList<String> friendRequests = db.getFriendRequestsForUser(currUser.getId());
+					if(friendRequests != null && friendRequests.contains(userName)) {
+						out.print("<center><input style='width:250px' type='submit' name='"+Constants.GET_PROFILE_ACCEPT_FRIEND_REQUEST+"' value = 'Accept Friend Request'/>&nbsp;");
+						out.print("<input style='width:250px' type='submit' name='"+Constants.GET_PROFILE_DECLINE_FRIEND_REQUEST+"' value = 'Decline Friend Request'/></center>");
+						//System.out.println(userName+" has sent request to "+currUser.getUserName());
 					} else {
-						out.print("<input type='submit' name='"+Constants.GET_PROFILE_ADD_FRIEND+"' value = 'Add Friend'/>");
-						//System.out.println(currUser.getUserName()+" and "+userName+" have not sent requests to each other.");
+						ArrayList<String> friendRequestsForToDisplay = db.getFriendRequestsForUser(toDisplay.getId());
+						if(friendRequestsForToDisplay!= null && friendRequestsForToDisplay.contains(currUser.getUserName())) {
+							out.print("<input type='submit' name='"+Constants.GET_PROFILE_UNFRIEND+"' value = 'Unfriend'/>");
+							//System.out.println(currUser.getUserName()+" has sent request to "+ userName);
+						} else {
+							out.print("<input type='submit' name='"+Constants.GET_PROFILE_ADD_FRIEND+"' value = 'Add Friend'/>");
+							//System.out.println(currUser.getUserName()+" and "+userName+" have not sent requests to each other.");
+						}
 					}
+				} else {
+					out.print("<input type='submit' name='"+Constants.GET_PROFILE_UNFRIEND+"' value = 'Unfriend'/>");
 				}
-			} else {
-				out.print("<input type='submit' name='"+Constants.GET_PROFILE_UNFRIEND+"' value = 'Unfriend'/>");
 			}
 		}
+		
 	}
 
 
@@ -68,7 +76,9 @@
 
 
 <form action= "<%=Constants.S_SEND_MESSAGE%>" method="post">
-<% out.print("<input type='hidden' name='"+Constants.GET_PROFILE_USER_NAME_HIDDEN+"' value='"+userName+"'/>");
+<% 
+if(toDisplay != null) {
+	out.print("<input type='hidden' name='"+Constants.GET_PROFILE_USER_NAME_HIDDEN+"' value='"+userName+"'/>");
 	if(currUser == null) {
 		out.print("<H3>Log in to countinue</H3>");
 	} else {
@@ -78,7 +88,7 @@
 			out.print("<input type='submit' name='"+Constants.GET_PROFILE_SEND_MESSAGE+"' value = 'Send Message'/>");
 		}
 	}
-	 
+}	 
 %>
 </form>
 

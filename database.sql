@@ -39,7 +39,8 @@ create table if not exists friends(
     user2_id int,
     status int not null,
     key(user1_id),
-    key(user2_id)
+    key(user2_id),
+    unique key friends (user1_id, user2_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 
@@ -104,3 +105,12 @@ create table if not exists messages (
     receive_time timestamp not null default now()
 );
 
+drop table if exists challenges;
+create table if not exists challenges(
+	id int primary key auto_increment,
+    sender_id int not null, 
+    recipient_id int not null, 
+    quiz_id int not null,
+    seen int default 0,
+    receive_time timestamp not null default now()
+);

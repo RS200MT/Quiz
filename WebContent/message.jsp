@@ -22,6 +22,7 @@
 	int messageId=Integer.parseInt(request.getParameter("messageId"));
 	Message m = obj.getMessageById(messageId);
 	if(m!=null){
+		obj.markMessageAsSeen(messageId);
 		String senderUserName = obj.getUserNameById(m.getSenderId());
 		out.print("From: " + "<a href = '" + Constants.getUserProfileURL(senderUserName)+"'>"+senderUserName+"</a>");				
 		out.print("<br>Time: "+m.getReceiveTime()+"<br>");

@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 
+import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader.Array;
+
 import Questions.FillInBlankQuestion;
 import Questions.MultipleChoiceQuestion;
 import Questions.PictureQuestion;
@@ -35,8 +37,8 @@ public class DBObject {
 
 	public static final int MESSAGE_TYPE_CHALLENGE = 0;
 	public static final int MESSAGE_TYPE_TEXT_MESSAGE = 1;
-	public static final int MESSAGE_SEEN = 0;
-	public static final int MESSAGE_NOT_SEEN = 1;
+	public static final int MESSAGE_SEEN = 1;
+	public static final int MESSAGE_NOT_SEEN = 0;
 	public static final int FRIEND_STATUS_PENDING = 0;
 	public static final int FRIEND_STATUS_ACCEPTED = 1;
 
@@ -274,6 +276,13 @@ public class DBObject {
 		return result;
 	}
 
+	/**
+	 * Returns a question with given id and null if no such question was found;
+	 * @param id
+	 * @param conn
+	 * @return
+	 * @throws SQLException
+	 */
 	private Question getQuestionById(int id, Connection conn) throws SQLException {
 		String query = "SELECT * FROM " + TABLE_QUESTIONS + " WHERE id = " + id + " limit 1;";
 		ResultSet rs = getResultSet(query, conn);
@@ -293,6 +302,15 @@ public class DBObject {
 		return null;
 	}
 
+	
+	/**
+	 * Returns the URL for a question with given id or empty string
+	 * if no such URL was found;
+	 * @param id
+	 * @param conn
+	 * @return
+	 * @throws SQLException
+	 */
 	private String getImageURL(int id, Connection conn) throws SQLException {
 		String imageURL = "SELECT * FROM " + TABLE_QUESTION_IMAGES + " WHERE question_id = " + id + ";";
 		ResultSet rs = getResultSet(imageURL, conn);
@@ -301,6 +319,14 @@ public class DBObject {
 		return "";
 	}
 
+	/**
+	 * Get possible answers for question with given id
+	 * TODO return null if no such question was found and check wherever we're calling this method;
+	 * @param id
+	 * @param conn
+	 * @return
+	 * @throws SQLException
+	 */
 	private ArrayList<String> getPossibleAnswers(int id, Connection conn) throws SQLException {
 		String getPossibleAnswers = "SELECT * FROM " + TABLE_MULTIPLE_CHOICES + " WHERE question_id = " + id + ";";
 		ResultSet possibleAnswers = getResultSet(getPossibleAnswers, conn);
@@ -313,7 +339,8 @@ public class DBObject {
 	}
 
 	/**
-	 * 
+	 * Returns a list of correct answers for given question;
+	 * TODO null check???
 	 * @param id
 	 * @param conn2
 	 * @return
@@ -388,11 +415,20 @@ public class DBObject {
 		return popularQuizes;
 	}
 
+	/**
+	 * Get n most recent quizzes in the database; If there are not as
+	 * many quizzes in database as n, returns all the quizzes sorted 
+	 * from most recent to older ones;
+	 * @param userID
+	 * @param n
+	 * @return
+	 * @throws SQLException
+	 */
 	public ArrayList<Pair<String, Integer>> getRecentQuizesForUser(int userID, int n) throws SQLException {
 		ArrayList<Pair<String, Integer>> recentQuizesForUser = new ArrayList<Pair<String, Integer>>();
 		Connection conn = getConnection();
 		String query = "select quiz_id from " + TABLE_QUIZ_LOGS + " where user_id = " + userID
-				+ " order by start_time limit " + n + ";";
+				+ " order by start_time desc limit " + n + ";";
 		ResultSet rs = getResultSet(query, conn);
 		if (!rs.isBeforeFirst())
 			return null;
@@ -430,7 +466,7 @@ public class DBObject {
 		return recentQuizes;
 	}
 
-	// This function insert quiz in database
+	// This function inserts quiz in database
 	public int addQuiz(String title, String description, boolean isRandomized, boolean isImmediateCorrection,
 			int authorId) {
 		int random = isRandomized ? 1 : 0;
@@ -471,7 +507,12 @@ public class DBObject {
 		closeConnection(conn);
 		return questionId;
 	}
-
+	
+	/**
+	 * Gets list of quizes by given author; TODO null check?????
+	 * @param userId
+	 * @return
+	 */
 	public ArrayList<Pair<String, Integer>> getQuizesListForUser(int userId) {
 		ArrayList<Pair<String, Integer>> res = new ArrayList<Pair<String, Integer>>();
 		Connection conn = getConnection();
@@ -484,13 +525,17 @@ public class DBObject {
 				res.add(new Pair<String, Integer>(quizTitle, quizId));
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		closeConnection(conn);
 		return res;
 	}
 
+	/**
+	 * Get user with given name;
+	 * @param passed_username
+	 * @return
+	 */
 	public User getUserByUserName(String passed_username) {
 		Connection conn = getConnection();
 		String query = "Select * from " + TABLE_USERS + " where user_name ='" + passed_username + "' ;";
@@ -515,6 +560,12 @@ public class DBObject {
 		return result;
 	}
 
+	/**
+	 * Get user with given id;
+	 * @param userId
+	 * @return
+	 * @throws SQLException
+	 */
 	public String getUserNameById(int userId) throws SQLException {
 		Connection conn = getConnection();
 		String query = "Select * from " + TABLE_USERS + " where id = " + userId;
@@ -528,6 +579,12 @@ public class DBObject {
 		return userName;
 	}
 
+	/**
+	 * Get user id for user with given name;
+	 * @param userName
+	 * @return
+	 * @throws SQLException
+	 */
 	public int getUserIdByUserName(String userName) throws SQLException {
 		Connection conn = getConnection();
 		String query = "Select * from " + TABLE_USERS + " where user_name ='" + userName + "';";
@@ -541,6 +598,12 @@ public class DBObject {
 		return id;
 	}
 
+	/**
+	 * Update friends table, mark that recipient has accepted sender's 
+	 * friend request;
+	 * @param recipient
+	 * @param sender
+	 */
 	public void acceptFriendRequest(int recipient, int sender) {
 		Connection conn = getConnection();
 		String query1 = "UPDATE " + TABLE_FRIENDS + " SET status = " + FRIEND_STATUS_ACCEPTED + " WHERE (user1_id="
@@ -552,11 +615,20 @@ public class DBObject {
 		closeConnection(conn);
 	}
 
-	private ArrayList<String> getUserFriends(Connection conn, int id) {
+	private ArrayList<String> getUserFriends(Connection conn, int id) throws SQLException {
 		ArrayList<String> friends = new ArrayList<String>();
-		// String query = "Select * from " + TABLE_FRIENDS + " where user1_id =
-		// " + id + " or user2_id = " + id + ";";
-		// TODO
+		String query = "SELECT * FROM "+TABLE_FRIENDS + " WHERE (user1_id="+id+" OR user2_id="+id+") AND status="+FRIEND_STATUS_ACCEPTED+";";
+		ResultSet rs = getResultSet(query, conn);
+		if(!rs.isBeforeFirst()) {
+			return null;
+		}
+		while(rs.next()) {
+			int n1 = rs.getInt("user1_id");
+			int n2 = rs.getInt("user2_id");
+			int friendId = n1==id ? n2:n1;
+			String friendName = this.getUserNameById(friendId);
+			friends.add(friendName);
+		}
 		return friends;
 	}
 
@@ -583,6 +655,27 @@ public class DBObject {
 		}
 		closeConnection(conn);
 		return friendRequests;
+	}
+	
+	
+	/**
+	 * 
+	 * @param id
+	 * @return
+	 * @throws SQLException
+	 */
+	public int getNumberOfFriendRequests(int id) throws SQLException {
+		Connection conn = getConnection();
+		int res = 0;
+		String query = "SELECT COUNT(id) AS count FROM "+TABLE_FRIENDS+ " WHERE (user2_id="+id+" AND status="+FRIEND_STATUS_PENDING+");";
+		ResultSet rs = getResultSet(query, conn);
+		if(!rs.isBeforeFirst()) {
+			return res;
+		}
+		rs.next();
+		res = rs.getInt(1);
+		closeConnection(conn);
+		return res;
 	}
 
 	/**
@@ -832,7 +925,7 @@ public class DBObject {
 				String username = rs.getString("user_name");
 				result += "<li><a href='" + Constants.getUserProfileURL(username) + "' target='_blank' title='Time: "
 						+ Constants.getTimeFromSecs(time) + ", Started: " + Constants.getTimeFromSecs(afterStart)
-						+ " ago'><b>" + username + "</b></a>(" + score + " pts)</li>";
+						+ " ago'><b>" + username + "</b></a>(" + score + " pts. "+(int)time+"sec)</li>";
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -955,6 +1048,127 @@ public class DBObject {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
+		}
+		closeConnection(conn);
+		return res;
+	}
+	
+	
+	
+	
+	/**
+	 * Returns a list of id-s of unseen messages;
+	 * @param userId
+	 * @return
+	 * @throws SQLException
+	 */
+	public ArrayList<Integer> getUnseenMessages(int userId) throws SQLException {
+		Connection conn = getConnection();
+		String query = "SELECT * FROM "+TABLE_MESSAGES+" WHERE (recipient="+userId+" AND seen="+MESSAGE_NOT_SEEN+");";
+		ResultSet rs = getResultSet(query, conn);
+		if(!rs.isBeforeFirst()) {
+			return null;
+		}
+		ArrayList<Integer> res = new ArrayList<Integer>();
+		while(rs.next()) {
+			res.add(rs.getInt("id"));
+		}
+		closeConnection(conn);
+		return res;
+	}
+	
+	
+	
+	public void markMessageAsSeen(int messageId) {
+		Connection conn = getConnection();
+		String query = "UPDATE "+TABLE_MESSAGES+" SET seen="+MESSAGE_SEEN+" WHERE id="+messageId+";";
+		executeUpdate(query, conn);
+		closeConnection(conn);
+	}
+	
+	
+	
+	/**
+	 * 
+	 * @param userId
+	 * @return
+	 * @throws SQLException 
+	 */
+	public ArrayList<Challenge> getChallengesForUser(int userId) throws SQLException {
+		Connection conn = getConnection();
+		String query = "SELECT * FROM "+TABLE_CHALLENGES+" WHERE recipient_id = "+userId+" ORDER BY id DESC;";
+		ResultSet rs = getResultSet(query, conn);
+		if(!rs.isBeforeFirst()) {
+			return null;
+		}
+		ArrayList<Challenge> challenges = new ArrayList<Challenge>();
+		while(rs.next()) {
+			int id = rs.getInt("id");
+			int sender = rs.getInt("sender_id");
+			int recipient = rs.getInt("recipient_id");
+			int quiz = rs.getInt("quiz_id");
+			int seen = rs.getInt("seen");
+			String receiveTime = rs.getTimestamp("receive_time").toString();
+			Challenge c = new Challenge(id, sender, recipient, quiz, seen, receiveTime);
+			challenges.add(c);
+		}
+		closeConnection(conn);
+		return challenges;
+	}
+	
+	
+	
+	public int getNumberOfUnseenChallenges(int id) throws SQLException {
+		int res = 0;
+		Connection conn = getConnection();
+		String query = "SELECT COUNT(*) FROM "+TABLE_CHALLENGES+" WHERE (recipient_id="+id+" AND seen="+MESSAGE_NOT_SEEN+");";
+		ResultSet rs = getResultSet(query, conn);
+		if(rs.isBeforeFirst()) {
+			rs.next();
+			res = rs.getInt(1);
+		}
+		closeConnection(conn);
+		return res;
+	}
+	
+	
+	
+	
+	/**
+	 * Gets best score that given user has achieved in given quiz; 
+	 * If the user hasn't taken this quiz, returns -1;
+	 * @param userId
+	 * @param quizId
+	 * @return
+	 * @throws SQLException
+	 */
+	public int getBestScoreForUserInQuiz(int userId, int quizId) throws SQLException {
+		int res = -1;
+		Connection conn = getConnection();
+		String query = "SELECT * FROM "+TABLE_QUIZ_LOGS+" WHERE user_id="+userId+" AND quiz_id="+quizId+" ORDER BY score DESC LIMIT 1;";
+		ResultSet rs = getResultSet(query, conn);
+		if(!rs.isBeforeFirst()) {
+			return res;
+		}
+		while(rs.next()) {
+			res = rs.getInt("score");
+		}
+		closeConnection(conn);
+		return res;
+	}
+	
+	
+	public ArrayList<Pair<Integer, String>> getRecentQuizesCreatedBy(String userName, int n) throws SQLException {
+		Connection conn = getConnection();
+		String query = "SELECT * FROM "+TABLE_QUIZES+" WHERE author='"+this.getUserIdByUserName(userName)+
+													"' ORDER BY create_time DESC LIMIT "+n+";";
+		ResultSet rs = getResultSet(query, conn);
+		if(!rs.isBeforeFirst()) {
+			return null;
+		}
+		ArrayList<Pair<Integer, String>> res = new ArrayList<Pair<Integer, String>>();
+		while(rs.next()) {
+			res.add(new Pair<Integer, String>(rs.getInt("id"), rs.getString("title")));
 		}
 		closeConnection(conn);
 		return res;
