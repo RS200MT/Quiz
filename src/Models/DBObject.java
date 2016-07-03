@@ -31,6 +31,7 @@ public class DBObject {
 	public static final String TABLE_MULTIPLE_CHOICES = "multiple_choices";
 	public static final String TABLE_FRIENDS = "friends";
 	public static final String TABLE_MESSAGES = "messages";
+	public static final String TABLE_CHALLENGES = "challenges";
 
 	public static final int MESSAGE_TYPE_CHALLENGE = 0;
 	public static final int MESSAGE_TYPE_TEXT_MESSAGE = 1;
@@ -917,6 +918,28 @@ public class DBObject {
 		}
 		closeConnection(conn);
 		return res;
+	}
+	
+	public ArrayList<String> getFriendsStartedWith(String username, int limit,int id) throws SQLException {
+		ArrayList<String> res = new ArrayList<>();
+		ArrayList<String> friends = getUserFriendsById(id);
+		int i = 0;
+		for(String friend : friends){
+			if(i >= limit) break;
+			if(friend.contains(username)){
+				res.add(friend);
+				i++;
+			}
+		}
+		return res;
+	}
+	
+	public boolean addChallenge(String sender,String recipient,int quizID){
+		Connection conn = getConnection();
+		String query = "insert into " + TABLE_CHALLENGES + " (sender,recipient,quiz_id) values ('" + sender + "', '" + recipient +"', " + quizID +")";
+		executeUpdate(query, conn);
+		closeConnection(conn);
+		return true;
 	}
 	
 	public ArrayList<Pair<Integer, String>> getQuizesStartedWith (String quizname, int limit) {

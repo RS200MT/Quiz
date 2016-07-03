@@ -109,6 +109,9 @@ public class Constants {
 	public static final String INDEX_DO_FRIEND_REQUESTS_TITILE = "Friend Requests";
 	public static final String INDEX_DO_FRIEND = "friends";
 	public static final String INDEX_DO_FRIEND_TITLE = "Friends";
+	public static final String INDEX_DO_GET_CHALLENGE = "challenge";
+	public static final String INDEX_DO_GET_CHALLENGE_TITLE = "Send Challenge";
+
 
 
 	public static String getAction(String action) {
@@ -128,6 +131,11 @@ public class Constants {
 				+ userName;
 	}
 
+	public static String getChallengeURL(String username, int quizId,int sender_ID){
+		return INDEX + "?" + INDEX_DO + "=" + INDEX_DO_GET_CHALLENGE + "&" +"username=" + username +"&quizID=" +quizId +"&senderID=" + sender_ID;
+		
+	}
+	
 	public static String getTimeFromSecs(long seconds) {
 		String result = "";
 		long minutes = (seconds / 60) % 60;
@@ -164,4 +172,5 @@ public class Constants {
 	
 	public static final String AJAX_USER_SEARCH = "username";
 	public static final String AJAX_QUIZ_SEARCH = "quizname";
+	public static final String AJAX_USER_ID = "id";
 }
