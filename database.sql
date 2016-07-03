@@ -39,7 +39,8 @@ create table if not exists friends(
     user2_id int,
     status int not null,
     key(user1_id),
-    key(user2_id)
+    key(user2_id),
+    unique key friends (user1_id, user2_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 

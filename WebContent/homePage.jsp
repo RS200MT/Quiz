@@ -13,6 +13,7 @@
 
 	DBObject obj = (DBObject) request.getServletContext().getAttribute(DBObject.ATTR_DB);
 	User user = (User)request.getSession().getAttribute(Constants.ATTR_USER);
+	System.out.println(user.getFriends().size());
 	for(String f: user.getFriends()) {
 		ArrayList<Pair<Integer, String>> quizesCreatedByFriends = obj.getRecentQuizesCreatedBy(f,4);
 		if(quizesCreatedByFriends!=null) {

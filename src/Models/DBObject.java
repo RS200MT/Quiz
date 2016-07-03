@@ -549,7 +549,7 @@ public class DBObject {
 				int quizesWritten = rs.getInt("quizes_written");
 				int type = rs.getInt("type");
 				result = new User(id, passed_username, email, regDate, quizesWritten, type, null);
-				result.addFriends(getUserFriends(conn, result.getId()));
+				result.addFriends(getUserFriendsById(result.getId()));
 			} else {
 				System.out.println("User was not found in database!");
 			}
@@ -615,6 +615,13 @@ public class DBObject {
 		closeConnection(conn);
 	}
 
+	/**
+	 * 
+	 * @param conn
+	 * @param id
+	 * @return
+	 * @throws SQLException
+	 */
 	private ArrayList<String> getUserFriends(Connection conn, int id) throws SQLException {
 		ArrayList<String> friends = new ArrayList<String>();
 		String query = "SELECT * FROM "+TABLE_FRIENDS + " WHERE (user1_id="+id+" OR user2_id="+id+") AND status="+FRIEND_STATUS_ACCEPTED+";";
@@ -963,7 +970,7 @@ public class DBObject {
 	public ArrayList<String> getUserFriendsById(int id) throws SQLException {
 		Connection conn = getConnection();
 		String query = "Select * from " + TABLE_FRIENDS + " where (user1_id =" + id + " or user2_id =" + id
-				+ ") and status =1";
+				+ ") and status ="+FRIEND_STATUS_ACCEPTED;
 		ResultSet rs = getResultSet(query, conn);
 		ArrayList<String> friends = new ArrayList<String>();
 		if (!rs.isBeforeFirst())

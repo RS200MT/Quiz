@@ -48,8 +48,8 @@
 				if(!db.usersAreFriends(currUser.getId(), toDisplay.getId())) {
 					ArrayList<String> friendRequests = db.getFriendRequestsForUser(currUser.getId());
 					if(friendRequests != null && friendRequests.contains(userName)) {
-						out.print("<input type='submit' name='"+Constants.GET_PROFILE_ACCEPT_FRIEND_REQUEST+"' value = 'Accept Friend Request'/>");
-						out.print("<input type='submit' name='"+Constants.GET_PROFILE_DECLINE_FRIEND_REQUEST+"' value = 'Decline Friend Request'/>");
+						out.print("<center><input style='width:250px' type='submit' name='"+Constants.GET_PROFILE_ACCEPT_FRIEND_REQUEST+"' value = 'Accept Friend Request'/>&nbsp;");
+						out.print("<input style='width:250px' type='submit' name='"+Constants.GET_PROFILE_DECLINE_FRIEND_REQUEST+"' value = 'Decline Friend Request'/></center>");
 						//System.out.println(userName+" has sent request to "+currUser.getUserName());
 					} else {
 						ArrayList<String> friendRequestsForToDisplay = db.getFriendRequestsForUser(toDisplay.getId());
