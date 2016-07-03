@@ -29,9 +29,7 @@
 			return false;
 		}
 		
-		function show(){
-			document.getElementById("challenge").style.display = 'block';
-		}
+		
 
 		function newSort() {
 			var select = document.getElementById("sortingUserQuizes");
@@ -44,24 +42,7 @@
 			}
 		}
 		
-		function ajaxSearch1(type) {
-    		var url = "";
-    		if (type == 1) {
-    			var val = document.getElementById("challenge").value;
-    			if (val == "") {
-    				document.getElementById("challenge").innerHTML = "";
-    				return;
-    			}
-    			url = 'ajaxChallenge.jsp?<%=Constants.AJAX_USER_SEARCH%>='+ val + '&id=' +<%=curUser.getId()%> + '&quizId=' + <%=quizId%>;
-    		} 
-    		var xhttp = new XMLHttpRequest();
-    		xhttp.onreadystatechange = function() {
-    			if (xhttp.readyState == 4 && xhttp.status == 200) 
-    	    		document.getElementById("ajaxResul").innerHTML = xhttp.responseText;
-    		};
-    		xhttp.open('GET', url, true);
-		xhttp.send();
-	}
+		
 	</script>
 	<div id="summaryForQuiz" id="summaryForQuiz">
 		<%
@@ -105,9 +86,3 @@
 		value="<%=quizId%>" />
 </form>
 		
-<div class="block" id="">
-	<input type="text" id="challenge" placeholder="enter username of your friend" 
-				onkeyup="ajaxSearch1(1)" style="display:none">
-				<button onClick="show();">Challenge Friend</button>
-	<div id="ajaxResul"></div>
-</div>
