@@ -1118,10 +1118,10 @@ public class DBObject {
 	
 	
 	
-	public int getNumberOfUnseenChallenges(int id) throws SQLException {
+	public int getNumberOfUnseenChallenges(String userName) throws SQLException {
 		int res = 0;
 		Connection conn = getConnection();
-		String query = "SELECT COUNT(*) FROM "+TABLE_CHALLENGES+" WHERE (recipient_id="+id+" AND seen="+MESSAGE_NOT_SEEN+");";
+		String query = "SELECT COUNT(*) FROM "+TABLE_CHALLENGES+" WHERE (recipient='"+userName+"' AND seen="+MESSAGE_NOT_SEEN+");";
 		ResultSet rs = getResultSet(query, conn);
 		if(rs.isBeforeFirst()) {
 			rs.next();

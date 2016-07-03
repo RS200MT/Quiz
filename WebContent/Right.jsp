@@ -88,7 +88,7 @@ if(user != null) {
 
 <%
 if(user != null) {
-	int numChallenges = obj.getNumberOfUnseenChallenges(user.getId());
+	int numChallenges = obj.getNumberOfUnseenChallenges(user.getUserName());
 	if(numChallenges > 0) {
 		out.print("<div class='block-header' id = ''");
 		String newChallenges = "("+numChallenges+")";
