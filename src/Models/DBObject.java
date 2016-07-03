@@ -1020,6 +1020,28 @@ public class DBObject {
 		return res;
 	}
 	
+	public ArrayList<String> getFriendsStartedWith(String username, int limit,int id) throws SQLException {
+		ArrayList<String> res = new ArrayList<>();
+		ArrayList<String> friends = getUserFriendsById(id);
+		int i = 0;
+		for(String friend : friends){
+			if(i >= limit) break;
+			if(friend.contains(username)){
+				res.add(friend);
+				i++;
+			}
+		}
+		return res;
+	}
+	
+	public boolean addChallenge(String sender,String recipient,int quizID){
+		Connection conn = getConnection();
+		String query = "insert into " + TABLE_CHALLENGES + " (sender,recipient,quiz_id) values ('" + sender + "', '" + recipient +"', " + quizID +")";
+		executeUpdate(query, conn);
+		closeConnection(conn);
+		return true;
+	}
+	
 	public ArrayList<Pair<Integer, String>> getQuizesStartedWith (String quizname, int limit) {
 		ArrayList<Pair<Integer, String>> res = new ArrayList<Pair<Integer, String>>();
 		Connection conn = getConnection();
@@ -1079,9 +1101,9 @@ public class DBObject {
 	 * @return
 	 * @throws SQLException 
 	 */
-	public ArrayList<Challenge> getChallengesForUser(int userId) throws SQLException {
+	public ArrayList<Challenge> getChallengesForUser(String userName) throws SQLException {
 		Connection conn = getConnection();
-		String query = "SELECT * FROM "+TABLE_CHALLENGES+" WHERE recipient_id = "+userId+" ORDER BY id DESC;";
+		String query = "SELECT * FROM "+TABLE_CHALLENGES+" WHERE (recipient = '"+userName+"' AND seen="+MESSAGE_NOT_SEEN+") ORDER BY id DESC;";
 		ResultSet rs = getResultSet(query, conn);
 		if(!rs.isBeforeFirst()) {
 			return null;
@@ -1089,8 +1111,8 @@ public class DBObject {
 		ArrayList<Challenge> challenges = new ArrayList<Challenge>();
 		while(rs.next()) {
 			int id = rs.getInt("id");
-			int sender = rs.getInt("sender_id");
-			int recipient = rs.getInt("recipient_id");
+			String sender = rs.getString("sender");
+			String recipient = rs.getString("recipient");
 			int quiz = rs.getInt("quiz_id");
 			int seen = rs.getInt("seen");
 			String receiveTime = rs.getTimestamp("receive_time").toString();
@@ -1103,10 +1125,10 @@ public class DBObject {
 	
 	
 	
-	public int getNumberOfUnseenChallenges(int id) throws SQLException {
+	public int getNumberOfUnseenChallenges(String userName) throws SQLException {
 		int res = 0;
 		Connection conn = getConnection();
-		String query = "SELECT COUNT(*) FROM "+TABLE_CHALLENGES+" WHERE (recipient_id="+id+" AND seen="+MESSAGE_NOT_SEEN+");";
+		String query = "SELECT COUNT(*) FROM "+TABLE_CHALLENGES+" WHERE (recipient='"+userName+"' AND seen="+MESSAGE_NOT_SEEN+");";
 		ResultSet rs = getResultSet(query, conn);
 		if(rs.isBeforeFirst()) {
 			rs.next();
@@ -1117,6 +1139,17 @@ public class DBObject {
 	}
 	
 	
+	/**
+	 * Marks challenge received by given user for given quiz as seen;
+	 * @param recipientName
+	 * @param quizId
+	 */
+	public void markChallengeAsSeen(String recipientName, int quizId) {
+		Connection conn = getConnection();
+		String query="UPDATE "+TABLE_CHALLENGES+" SET seen="+MESSAGE_SEEN+" WHERE (recipient='"+recipientName+"' AND quiz_id="+quizId+");";
+		executeUpdate(query, conn);
+		closeConnection(conn);
+	}
 	
 	
 	/**

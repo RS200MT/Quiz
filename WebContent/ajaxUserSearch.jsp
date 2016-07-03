@@ -15,7 +15,7 @@
 		for (int i = 0; i < usernames.size(); i++) {
 			String curUserName = usernames.get(i);
 			out.print("<a href='" + Constants.getUserProfileURL(curUserName)
-					+ "' target='_blank'><div class='ajaxSearchResult'>" + curUserName + "</div></a>");
+					+ "'><div class='ajaxSearchResult'>" + curUserName + "</div></a><br>");
 		}
 	}
 %>

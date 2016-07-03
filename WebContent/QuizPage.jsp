@@ -18,6 +18,7 @@
 	<%
 		DBObject obj = (DBObject) getServletContext().getAttribute(DBObject.ATTR_DB);
 		int quizId = Integer.parseInt(request.getParameter(Constants.ATTR_QUIZ_ID_FOR_QUESTION));
+		obj.markChallengeAsSeen(curUser.getUserName(), quizId);
 		Quiz quiz = (Quiz) request.getSession().getAttribute(Constants.ATTR_SESSION_QUIZ);
 		if (quiz == null || quiz.getID() != quizId) {
 	%>
@@ -26,6 +27,10 @@
 			document.getElementById("singleQuestionForm").style.display = "inline";
 			document.getElementById("summaryForQuiz").style.display = "none";
 			return false;
+		}
+		
+		function show(){
+			document.getElementById("challenge").style.display = 'block';
 		}
 
 		function newSort() {
@@ -38,6 +43,25 @@
 					document.getElementById("sorted" + i).style.display = "none";
 			}
 		}
+		
+		function ajaxSearch1(type) {
+    		var url = "";
+    		if (type == 1) {
+    			var val = document.getElementById("challenge").value;
+    			if (val == "") {
+    				document.getElementById("challenge").innerHTML = "";
+    				return;
+    			}
+    			url = 'ajaxChallenge.jsp?<%=Constants.AJAX_USER_SEARCH%>='+ val + '&id=' +<%=curUser.getId()%> + '&quizId=' + <%=quizId%>;
+    		} 
+    		var xhttp = new XMLHttpRequest();
+    		xhttp.onreadystatechange = function() {
+    			if (xhttp.readyState == 4 && xhttp.status == 200) 
+    	    		document.getElementById("ajaxResul").innerHTML = xhttp.responseText;
+    		};
+    		xhttp.open('GET', url, true);
+		xhttp.send();
+	}
 	</script>
 	<div id="summaryForQuiz" id="summaryForQuiz">
 		<%
@@ -80,3 +104,10 @@
 	<input type="hidden" name="<%=Constants.ATTR_QUIZ_ID_FOR_QUESTION%>"
 		value="<%=quizId%>" />
 </form>
+		
+<div class="block" id="">
+	<input type="text" id="challenge" placeholder="enter username of your friend" 
+				onkeyup="ajaxSearch1(1)" style="display:none">
+				<button onClick="show();">Challenge Friend</button>
+	<div id="ajaxResul"></div>
+</div>

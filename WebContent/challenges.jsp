@@ -11,15 +11,15 @@
 <%  
 	DBObject db = (DBObject)request.getServletContext().getAttribute(DBObject.ATTR_DB);
 	User currUser = (User)request.getSession().getAttribute(Constants.ATTR_USER);
-	ArrayList<Challenge> challenges = db.getChallengesForUser(currUser.getId());
+	ArrayList<Challenge> challenges = db.getChallengesForUser(currUser.getUserName());
 	if(challenges != null) {
 		for(Challenge c: challenges) {
 			if(!c.isSeen()) {
-				String senderName = db.getUserNameById(c.getSenderId());
+				String senderName = c.getSender();
 				String quizTitle = db.getQuizById(c.getQuizId(), 0).getTitle();
-				int bestScore = db.getBestScoreForUserInQuiz(c.getSenderId(), c.getQuizId());
+				int bestScore = db.getBestScoreForUserInQuiz(db.getUserIdByUserName(senderName), c.getQuizId());
 				out.print("<br> <a href ="+Constants.getUserProfileURL(senderName)+"> "+senderName+"</a> challenged you to take quiz "+
-								"<a href ="+Constants.getQuizURL(c.getId())+"> "+quizTitle+"</a> . Their best score is "+bestScore+".");
+								"<a href ="+Constants.getQuizURL(c.getQuizId())+"> "+quizTitle+"</a> . Their best score is "+bestScore+".");
 			}
 		}
 	} else {

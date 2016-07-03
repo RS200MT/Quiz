@@ -49,6 +49,7 @@ public class ContextListener implements ServletContextListener {
         map.put(Constants.INDEX_DO_FRIEND_REQUESTS, Constants.INDEX_DO_FRIEND_REQUESTS_TITILE);
         map.put(Constants.INDEX_DO_MESSAGE, Constants.INDEX_DO_MESSAGE_TITLE);
         map.put(Constants.INDEX_DO_FRIEND, Constants.INDEX_DO_FRIEND_TITLE);
+        map.put(Constants.INDEX_DO_GET_CHALLENGE, Constants.INDEX_DO_GET_CHALLENGE_TITLE);
         map.put(Constants.INDEX_DO_CHALLENGES, Constants.INDEX_DO_CHALLENGES_TITLE);
 
 	}
