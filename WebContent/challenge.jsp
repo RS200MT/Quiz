@@ -12,9 +12,9 @@
 	int sender_ID =  Integer.parseInt(request.getParameter("senderID"));
 	String sender = db.getUserNameById(sender_ID);
 	if(db.addChallenge(sender, recipient, quizId)){
-		out.print("Challenge sent successfully");
+		out.print("Challenge sent successfully.");
 	} else {
-		out.print("Challenge was unable to send");
+		out.print("Could not send challenge.");
 	}
 %>
 

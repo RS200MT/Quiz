@@ -6,7 +6,11 @@
 <%
 	
 User curUser = (User) request.getSession().getAttribute(Constants.ATTR_USER);
-int quizId = Integer.parseInt(request.getParameter("quizId"));
+String id = request.getParameter("quizId");
+int quizId = 0;
+if(id != null){
+	quizId = Integer.parseInt(id);
+}
 if (request.getAttribute(Constants.INDEX_DO_QUIZ_ATTR_RESULT_MESSAGE) != null) {
 	out.print(request.getAttribute(Constants.INDEX_DO_QUIZ_ATTR_RESULT_MESSAGE));
 }
@@ -38,9 +42,13 @@ function ajaxSearch1(type) {
 xhttp.send();
 }
 </script>
-<div class="block" id="">
-	<input type="text" id="challenge" placeholder="enter username of your friend" 
-				onkeyup="ajaxSearch1(1)" style="display:none">
-				<button onClick="show();">Challenge Friend</button>
-	<div id="ajaxResul"></div>
-</div>
+
+<%
+	if(id != null){
+		String toPrint = "<div class='block' id=''> <input type='text' id='challenge' placeholder='enter username of your friend' onkeyup='ajaxSearch1(1)' style='display:none'>";
+		toPrint += "<button onClick='show();'>Challenge Friend</button><div id='ajaxResul'></div></div>";
+		out.print(toPrint);
+	} else {
+		out.print("aq");
+	}
+%>

@@ -108,7 +108,7 @@ create table if not exists messages (
 drop table if exists challenges;
 create table if not exists challenges(
 	id int primary key auto_increment,
-    sender varchar(55) int not null, 
+    sender varchar(55) not null, 
     recipient varchar(55) not null, 
     quiz_id int not null,
     seen int default 0,

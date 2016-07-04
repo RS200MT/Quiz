@@ -18,6 +18,7 @@
 	<%
 		DBObject obj = (DBObject) getServletContext().getAttribute(DBObject.ATTR_DB);
 		int quizId = Integer.parseInt(request.getParameter(Constants.ATTR_QUIZ_ID_FOR_QUESTION));
+		obj.markChallengeAsSeen(curUser.getUserName(), quizId);
 		Quiz quiz = (Quiz) request.getSession().getAttribute(Constants.ATTR_SESSION_QUIZ);
 		if (quiz == null || quiz.getID() != quizId) {
 	%>
