@@ -923,7 +923,7 @@ public class DBObject {
 				long time = rs.getLong("msecs") / 1000;
 				long afterStart = (d.getTime() - rs.getLong("stime")) / 1000;
 				String username = rs.getString("user_name");
-				result += "<li><a href='" + Constants.getUserProfileURL(username) + "' target='_blank' title='Time: "
+				result += "<li><a href='" + Constants.getUserProfileURL(username) + "' title='Time: "
 						+ Constants.getTimeFromSecs(time) + ", Started: " + Constants.getTimeFromSecs(afterStart)
 						+ " ago'><b>" + username + "</b></a>(" + score + " pts. "+(int)time+"sec)</li>";
 			}
@@ -948,7 +948,7 @@ public class DBObject {
 				long time = rs.getLong("msecs") / 1000;
 				long afterStart = (d.getTime() - rs.getLong("stime")) / 1000;
 				String username = rs.getString("user_name");
-				result += "<li><a href='" + Constants.getUserProfileURL(username) + "' target='_blank' title='Time: "
+				result += "<li><a href='" + Constants.getUserProfileURL(username) + "' title='Time: "
 						+ Constants.getTimeFromSecs(time) + " | Started: " + Constants.getTimeFromSecs(afterStart)
 						+ " ago'><b>" + username + "</b></a> (" + score + " pts)</li>";
 			}
@@ -986,7 +986,7 @@ public class DBObject {
 		try {
 			if (rs.next()) {
 				String username = rs.getString("user_name");
-				result = "<a href='" + Constants.getUserProfileURL(username) + "' title='username' target='_blank'><b>"
+				result = "<a href='" + Constants.getUserProfileURL(username) + "' title='username' ><b>"
 						+ username + "</b></a>";
 			}
 		} catch (SQLException e) {

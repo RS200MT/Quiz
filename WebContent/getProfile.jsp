@@ -18,6 +18,7 @@
 		out.print("You must log in to display user's profile.");
 	} else {
 		userName = request.getParameter(Constants.ATTR_USER_NAME_FOR_GET_PROFILE);
+		out.print(userName);
 		toDisplay = db.getUserByUserName(userName);
 		if(toDisplay!=null) {
 			out.print(userName);
