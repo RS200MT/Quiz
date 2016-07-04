@@ -251,6 +251,34 @@ public class DBObject {
 			return null;
 		}
 	}
+	
+	
+	
+	private Quiz getQuizById(int id, int singleQuestion, Connection conn) throws SQLException {
+		String query = "SELECT quizes.*, users.user_name FROM " + TABLE_QUIZES + " quizes left join " + TABLE_USERS
+				+ " users on quizes.author = users.id WHERE quizes.id = " + id + " limit 1;";
+		ResultSet rs = getResultSet(query, conn);
+		if (rs.next()) {
+			String title = rs.getString("title");
+			String description = rs.getString("description");
+			String author = rs.getString("user_name");
+			String createTime = rs.getString("create_time");
+			int timesWritten = rs.getInt("times_written");
+			boolean randomized = rs.getInt("randomize") == 1;
+			boolean immediateCorrection = rs.getInt("immediate_correction") == 1;
+			ArrayList<Question> questions = getQuestionsForQuiz(id, conn);
+			boolean displaySingleQuestion = singleQuestion == 1;
+			closeConnection(conn);
+			return new Quiz(id, title, description, author, createTime, timesWritten, randomized, immediateCorrection,
+					questions, displaySingleQuestion);
+		} else {
+			System.out.println("Quiz not found!");
+			return null;
+		}
+	}
+	
+	
+	
 
 	/**
 	 * Get questions for quiz with given id; Assembles question infos from
@@ -578,11 +606,32 @@ public class DBObject {
 		closeConnection(conn);
 		return userName;
 	}
+	
+	/**
+	 * Get user with given id;
+	 * @param userId
+	 * @param conn
+	 * @return int
+	 * @throws SQLException
+	 */
+	private String getUserNameById(int userId, Connection conn) throws SQLException {
+		String query = "Select * from " + TABLE_USERS + " where id = " + userId;
+		ResultSet rs = getResultSet(query, conn);
+		if (!rs.isBeforeFirst())
+			return null;
+		String userName = "";
+		if (rs.next())
+			userName = rs.getString("user_name");
+		return userName;
+	}
+	
+	
+	
 
 	/**
 	 * Get user id for user with given name;
 	 * @param userName
-	 * @return
+	 * @return int
 	 * @throws SQLException
 	 */
 	public int getUserIdByUserName(String userName) throws SQLException {
@@ -595,6 +644,24 @@ public class DBObject {
 		if (rs.next())
 			id = rs.getInt("id");
 		closeConnection(conn);
+		return id;
+	}
+	
+	/**
+	 * Get user id for user with given name;
+	 * @param userName
+	 * @param conn
+	 * @return int
+	 * @throws SQLException
+	 */
+	private int getUserIdByUserName(String userName, Connection conn) throws SQLException {
+		String query = "Select * from " + TABLE_USERS + " where user_name ='" + userName + "';";
+		ResultSet rs = getResultSet(query, conn);
+		if (!rs.isBeforeFirst())
+			return -1;
+		int id = -1;
+		if (rs.next())
+			id = rs.getInt("id");
 		return id;
 	}
 
@@ -804,8 +871,8 @@ public class DBObject {
 	 */
 	public void addSentMessage(String sender, String recipient, String messageText) throws SQLException {
 		Connection conn = getConnection();
-		int id1 = this.getUserIdByUserName(sender);
-		int id2 = this.getUserIdByUserName(recipient);
+		int id1 = this.getUserIdByUserName(sender, conn); 
+		int id2 = this.getUserIdByUserName(recipient, conn);
 		String query = "INSERT INTO messages (sender, recipient, type, message_text, seen) VALUES (" + id1 + ", " + id2
 				+ ", " + MESSAGE_TYPE_TEXT_MESSAGE + ", '" + messageText + "', " + MESSAGE_NOT_SEEN + ");";
 		this.executeUpdate(query, conn);
@@ -821,8 +888,8 @@ public class DBObject {
 	 */
 	public void addFriendRequest(String sender, String recipient) throws SQLException {
 		Connection conn = getConnection();
-		int senderId = this.getUserIdByUserName(sender);
-		int recipientId = this.getUserIdByUserName(recipient);
+		int senderId = this.getUserIdByUserName(sender, conn); // TODO  could cause error
+		int recipientId = this.getUserIdByUserName(recipient, conn);
 		String query = "INSERT INTO friends (user1_id, user2_id, status) VALUES (" + senderId + ", " + recipientId
 				+ ", " + FRIEND_STATUS_PENDING + ");";
 		this.executeUpdate(query, conn);
@@ -851,8 +918,8 @@ public class DBObject {
 	 */
 	public void removeFriend(String userName1, String userName2) throws SQLException {
 		Connection conn = getConnection();
-		int id1 = this.getUserIdByUserName(userName1);
-		int id2 = this.getUserIdByUserName(userName2);
+		int id1 = this.getUserIdByUserName(userName1, conn);
+		int id2 = this.getUserIdByUserName(userName2, conn);
 		String query = "DELETE FROM friends WHERE (user1_id=" + id1 + " and user2_id=" + id2 + ") or (user1_id=" + id2
 				+ " and user2_id=" + id1 + ");";
 
@@ -1175,10 +1242,16 @@ public class DBObject {
 		return res;
 	}
 	
-	
+	/**
+	 * Returns a list of  id-s and  titles of quizzes recently created by given user;
+	 * @param userName
+	 * @param n
+	 * @return
+	 * @throws SQLException
+	 */
 	public ArrayList<Pair<Integer, String>> getRecentQuizesCreatedBy(String userName, int n) throws SQLException {
 		Connection conn = getConnection();
-		String query = "SELECT * FROM "+TABLE_QUIZES+" WHERE author='"+this.getUserIdByUserName(userName)+
+		String query = "SELECT * FROM "+TABLE_QUIZES+" WHERE author='"+this.getUserIdByUserName(userName, conn)+
 													"' ORDER BY create_time DESC LIMIT "+n+";";
 		ResultSet rs = getResultSet(query, conn);
 		if(!rs.isBeforeFirst()) {
@@ -1187,6 +1260,30 @@ public class DBObject {
 		ArrayList<Pair<Integer, String>> res = new ArrayList<Pair<Integer, String>>();
 		while(rs.next()) {
 			res.add(new Pair<Integer, String>(rs.getInt("id"), rs.getString("title")));
+		}
+		closeConnection(conn);
+		return res;
+	}
+	
+	/**
+	 * Get recent quizzes taken by given user;
+	 * @param userName
+	 * @param num
+	 * @return
+	 * @throws SQLException
+	 */
+	public ArrayList<Pair<Quiz, Integer>> getRecentQuizesTakenBy(String userName, int num) throws SQLException {
+		Connection conn = getConnection();
+		ArrayList<Pair<Quiz, Integer>> res = null;
+		String query="SELECT * FROM "+TABLE_QUIZ_LOGS+" WHERE user_id="+this.getUserIdByUserName(userName, conn)+" ORDER BY start_time DESC LIMIT "+num+";";
+		ResultSet rs = getResultSet(query, conn);
+		if(rs.isBeforeFirst()) {
+			res = new ArrayList<Pair<Quiz, Integer>>();
+			while(rs.next()) {
+				Quiz q = getQuizById(rs.getInt("quiz_id"), 0);
+				int score = rs.getInt("score");
+				res.add(new Pair<Quiz, Integer>(q, score));				
+			}
 		}
 		closeConnection(conn);
 		return res;
