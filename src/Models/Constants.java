@@ -65,7 +65,7 @@ public class Constants {
 	public static final String ATTR_MESSAGE_ID = "messageId";
 	public static final String ATTR_MESSAGE_SENDER_NAME = "senderName";
 	public static final String ATTR_CHALLENGE_QUIZ = "challengeQuiz";
-
+	public static final String QUIZ_ID_FOR_CHALLENGE = "quizID";
 	// WASKA's constants new;
 	public static final String SITE_URL = "http://localhost:8080/QuizWebsite";
 

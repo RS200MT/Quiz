@@ -123,7 +123,7 @@ public class Quizing extends HttpServlet {
 		toPrint += toPrintAnswersHTML(curQuiz);
 		request.setAttribute(Constants.INDEX_DO_QUIZ_ATTR_RESULT_MESSAGE,toPrint);
 		request.getSession().setAttribute(Constants.ATTR_SESSION_QUIZ, null);
-		request.getSession().setAttribute("quizId", curQuiz.getID());
+		request.setAttribute(Constants.QUIZ_ID_FOR_CHALLENGE, curQuiz.getID());
 		request.getRequestDispatcher(Constants.getAction(Constants.INDEX_DO_QUIZ_RESULT)).forward(request, response);
 	}
 

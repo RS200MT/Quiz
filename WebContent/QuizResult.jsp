@@ -6,7 +6,7 @@
 <%
 	
 User curUser = (User) request.getSession().getAttribute(Constants.ATTR_USER);
-String id = request.getParameter("quizId");
+String id = request.getParameter(Constants.QUIZ_ID_FOR_CHALLENGE);
 int quizId = 0;
 if(id != null){
 	quizId = Integer.parseInt(id);
