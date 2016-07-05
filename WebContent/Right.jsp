@@ -2,6 +2,7 @@
 <%@page import="Models.DBObject"%>
 <%@page import="Models.User"%>
 <%@page import="java.util.ArrayList"%>
+<%@page import="javafx.util.Pair"%>
 
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
@@ -47,53 +48,19 @@ DBObject obj = (DBObject) request.getServletContext().getAttribute(DBObject.ATTR
 User user = (User)request.getSession().getAttribute(Constants.ATTR_USER);
 %>
 
-
+<div class="block-header" id="">Recent quizzes : <br></div>
+<div class="block" id="">
 <%
-if(user != null) {
-	String newMessages = "";
-	ArrayList<Integer> unseenMessages = obj.getUnseenMessages(user.getId());
-	if(unseenMessages!=null) {
-		newMessages+="("+unseenMessages.size()+")";
+	ArrayList<Pair<String,Integer>> recentQuizes = obj.getRecentQuizes(5);
+	if(recentQuizes != null){
+		for(Pair<String,Integer> q : recentQuizes){
+			out.print("<a href = '" + Constants.getQuizURL(q.getValue()) + "'>" + q.getKey() + "</a> <br>");
+		}
+	} else {
+		out.print("There are no quizzes yet...");
 	}
-	%>
-	<center><a href="http://localhost:8080/QuizWebsite/index.jsp?do=inbox"><button type="button" style='width:180px'>INBOX</button></a></center>
-<% 
-} 
+
 %>
 
-
-<%
-if(user != null) { %>
-	<center><a href="http://localhost:8080/QuizWebsite/index.jsp?do=friends"><button type="button" style='width:180px'>FRIENDS</button></a></center>
-<%
-} 
-%>
-
-
-
-<%
-if(user != null) {
-	String newFriendRequests = "";
-	int numRequests = obj.getNumberOfFriendRequests(user.getId());
-	if(numRequests > 0) {
-		newFriendRequests += "("+numRequests+")"; %>
-<center><a href="http://localhost:8080/QuizWebsite/index.jsp?do=friendRequests"><button type="button" style='width:180px'>FRIEND REQUESTS<%=newFriendRequests%></button></a></center>
-<%	
-	}
-}
-%>
-
-
-<%
-if(user != null) {
-	int numChallenges = obj.getNumberOfUnseenChallenges(user.getUserName());
-	String newChallenges = "";
-	if(numChallenges>0){
-		newChallenges = "("+numChallenges+")";
-	}%>
-<center><a href="http://localhost:8080/QuizWebsite/index.jsp?do=challenges"><button type="button" style='width:180px'>CHALLENGES<%=newChallenges%></button></a></center>
-
-<%
-}
-%>
+</div>
 
