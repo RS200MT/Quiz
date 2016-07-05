@@ -38,7 +38,20 @@
 
 </div>
 
+<div class="block-header" id="">Recent quizzes : <br></div>
+<div class="block" id="">
+<%
+	ArrayList<Pair<String,Integer>> recentQuizes = obj.getRecentQuizes(5);
+	if(recentQuizes != null){
+		for(Pair<String,Integer> q : recentQuizes){
+			out.print("<a href = '" + Constants.getQuizURL(q.getValue()) + "'>" + q.getKey() + "</a> <br>");
+		}
+	} else {
+		out.print("There are no quizzes yet...");
+	}
 
+%>
+</div>
 
 <%
 if(user != null) {
