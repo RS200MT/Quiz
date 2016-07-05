@@ -6,6 +6,9 @@ drop table if exists multiple_choices;
 drop table if exists question_images;
 drop table if exists friends;
 drop table if exists questions;
+drop table if exists challenges;
+drop table if exists achievements;
+drop table if exists messages;
 
 
 CREATE TABLE IF NOT EXISTS users (
@@ -42,8 +45,6 @@ create table if not exists friends(
     key(user2_id),
     unique key friends (user1_id, user2_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-
-
 
 create table if not exists quizes (
 	id int auto_increment primary key,
@@ -94,7 +95,6 @@ create table if not exists quiz_logs (
     key (quiz_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
-
 create table if not exists messages (
 	id int primary key auto_increment,
     sender int not null, 
@@ -105,7 +105,6 @@ create table if not exists messages (
     receive_time timestamp not null default now()
 );
 
-drop table if exists challenges;
 create table if not exists challenges(
 	id int primary key auto_increment,
     sender varchar(55) not null, 

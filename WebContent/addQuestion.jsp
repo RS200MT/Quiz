@@ -51,6 +51,10 @@
 	int quizId = (int) request.getAttribute(Constants.ATTR_QUIZ_ID_FOR_QUESTION);
 %>
 <script>
+		var isFillInBlank = false;
+		var lastChanged = null;
+		var words;
+		var timeout;
 		function displayForm(object, id) {
 			for (var i = 1; i < <%=Constants.QUESTION_TYPES_LENGTH+1 %>; i++) { 
 				if (i == id) {
@@ -60,6 +64,14 @@
 					document.getElementById("type" + i).style.display = "none";
 			}
 			document.getElementById("question_type").innerHTML = object.innerHTML;
+			if (id == 2){
+				editQuestion();
+				isFillInBlank = true;
+			}
+			else {
+				isFillInBlank = false;
+				document.getElementById("forFillInBlank").innerHTML = "";
+			}
 		}
 		
 		var correctAnswersNum = 1;
@@ -77,6 +89,48 @@
 			correctAnswersNum--;
 			if(correctAnswersNum == 1)
 				document.getElementById("removeFieldButton").style.display = "none";
+		}
+		
+		function checkFillInBlank() {
+			if (isFillInBlank) {
+				if(timeout) {
+			        clearTimeout(timeout);
+			        timeout = null;
+			    }
+				timeout = setTimeout(editQuestion, 0);
+			}
+		}
+		
+		function change(index) {
+			var resDoc = document.getElementById("forFillInBlank");
+			var dashes = "..........";
+			if (lastChanged != null) {
+				words[lastChanged[0]] = lastChanged[1];
+				document.getElementById("qstFIB" + lastChanged[0]).innerHTML = "<b>" + lastChanged[1] + "</b>";
+			}
+			lastChanged = [index, words[index]];
+			words[index] = dashes;
+			document.getElementById("<%=Constants.ADD_QUESTION_QUESTION%>").value = words.join(" ");
+			document.getElementById("qstFIB" + index).innerHTML = dashes;
+			document.getElementById("<%=Constants.ADD_QUESTION_ANSWER%>1").value = lastChanged[1];
+		}	
+			
+		function editQuestion() {
+			lastChanged = null;
+			var resDoc = document.getElementById("forFillInBlank");
+			var qst = document.getElementById("<%=Constants.ADD_QUESTION_QUESTION%>").value;
+			words = qst.split(" ");
+			if (words==qst)
+				words = [words];
+			resDoc.innerHTML = "";
+			if (words != "")
+				resDoc.innerHTML = "<font color='#4c78af'>Choose the correct answer: </font>";
+			for (var i = 0; i < words.length; i++){
+				var word = words[i];
+				var curWordId = "qstFIB" + i;
+				var currentWord = '<FIB style="cursor:pointer" id="' + curWordId + '" onClick="change(' + i + ');"><b>' + word + '</b></FIB> ';
+				resDoc.innerHTML += currentWord;
+			}
 		}
 	</script>
 
@@ -100,8 +154,9 @@
 	<p>
 		Question: <input type="text" required="required"
 			name="<%=Constants.ADD_QUESTION_QUESTION%>"
-			id="<%=Constants.ADD_QUESTION_QUESTION%>" />
+			id="<%=Constants.ADD_QUESTION_QUESTION%>" onkeyup="checkFillInBlank()"/>
 	</p>
+	<div id="forFillInBlank"></div>
 	<div id="type1"></div>
 	<div id="type2" style="display: none"></div>
 	<div id="type3" style="display: none">

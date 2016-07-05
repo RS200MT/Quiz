@@ -19,8 +19,8 @@
 	<p>
 		<input type="submit" value="<%=Constants.B_LOGIN%>">
 </form>
-<a href="<%=Constants.getAction(Constants.INDEX_DO_REGISTER)%>">
-	Create New Account</a>
+<input onClick="window.location.href = '<%=Constants.getAction(Constants.INDEX_DO_REGISTER)%>'" type="submit" value="Register new account" style="width:200px; height:30px; padding:0px; line-height:30px">
+
 <%
 	} else {
 		out.println(curUser.getUserName());
