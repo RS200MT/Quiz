@@ -15,7 +15,7 @@
 		out.print("<h1>   No pending friend requests. </h1>");
 	} else {
 		for(String name:friendRequests) {
-			out.print("<a href = '" + Constants.getUserProfileURL(name)+"'>"+name+"</a>");
+			out.print("<a href = '" + Constants.getUserProfileURL(name)+"'>"+name+"</a><br>");
 		}
 	}
 %>

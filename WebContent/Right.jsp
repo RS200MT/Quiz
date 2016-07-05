@@ -50,25 +50,22 @@ User user = (User)request.getSession().getAttribute(Constants.ATTR_USER);
 
 <%
 if(user != null) {
-	out.print("<div class='btn-group'>");
-	out.print("<center><button style='width:150px' type='button' class='btn btn-primary'>");//"<div class='block-header' id=''>");
-	out.print("<H3>");
 	String newMessages = "";
 	ArrayList<Integer> unseenMessages = obj.getUnseenMessages(user.getId());
 	if(unseenMessages!=null) {
 		newMessages+="("+unseenMessages.size()+")";
-}
-out.print("<a href ='" + Constants.getAction("inbox") + "'><font color = '#12273b'>INBOX "+newMessages+"</a> </H3>" );
-out.print("</button>");
+	}
+	%>
+	<center><a href="http://localhost:8080/QuizWebsite/index.jsp?do=inbox"><button type="button" style='width:180px'>INBOX</button></a></center>
+<% 
 } 
-
 %>
 
+
 <%
-if(user != null) {
-	out.print("<center><button style='width:150px' type='button' class='btn btn-primary'>");
-	out.print("<a href ="+Constants.getAction(Constants.INDEX_DO_FRIEND)+"><font color = '#12273b'><H3>Friends</H3></a>");
-	out.print("</button>");
+if(user != null) { %>
+	<center><a href="http://localhost:8080/QuizWebsite/index.jsp?do=friends"><button type="button" style='width:180px'>FRIENDS</button></a></center>
+<%
 } 
 %>
 
@@ -79,14 +76,11 @@ if(user != null) {
 	String newFriendRequests = "";
 	int numRequests = obj.getNumberOfFriendRequests(user.getId());
 	if(numRequests > 0) {
-		out.print("<center><button style='width:150px' type='button' class='btn btn-primary'>");
-		out.print("<H3>");
-		newFriendRequests += "("+numRequests+")";
-		out.print("<br><a href ="+Constants.getAction(Constants.INDEX_DO_FRIEND_REQUESTS)+"><font color = '#12273b'>Friend Requests"+newFriendRequests+"</a></H3>");
-		out.print("</button>");
+		newFriendRequests += "("+numRequests+")"; %>
+<center><a href="http://localhost:8080/QuizWebsite/index.jsp?do=friendRequests"><button type="button" style='width:180px'>FRIEND REQUESTS<%=newFriendRequests%></button></a></center>
+<%	
 	}
-} 
-
+}
 %>
 
 
@@ -94,12 +88,11 @@ if(user != null) {
 if(user != null) {
 	int numChallenges = obj.getNumberOfUnseenChallenges(user.getUserName());
 	if(numChallenges > 0) {
-		out.print("<center><button style='width:150px' type='button' class='btn btn-primary'>");
-		String newChallenges = "("+numChallenges+")";
-		out.print("<br><a href="+Constants.getAction(Constants.INDEX_DO_CHALLENGES)+"><font color = '#12273b'><H3>Challenges"+newChallenges+"</H3></a>");
-		out.print("</button>");
+		String newChallenges = "("+numChallenges+")"; %>
+<center><a href="http://localhost:8080/QuizWebsite/index.jsp?do=challenges"><button type="button" style='width:180px'>CHALLENGES<%=newChallenges%></button></a></center>
+
+<%
 	}
 }
-out.print("</div>");
 %>
 

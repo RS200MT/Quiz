@@ -43,7 +43,7 @@
 <div class="block-header" id="">Recent quizzes : <br></div>
 <div class="block" id="">
 <%
-	ArrayList<Pair<String,Integer>> recentQuizes = obj.getRecentQuizes(3);
+	ArrayList<Pair<String,Integer>> recentQuizes = obj.getRecentQuizes(5);
 	if(recentQuizes != null){
 		for(Pair<String,Integer> q : recentQuizes){
 			out.print("<a href = '" + Constants.getQuizURL(q.getValue()) + "'>" + q.getKey() + "</a> <br>");
@@ -57,7 +57,7 @@
 
 <%
 if(user != null) {
-	ArrayList<Pair<String,Integer>> recentQuizesForUser = obj.getRecentQuizesForUser(user.getId(), 3);
+	ArrayList<Pair<String,Integer>> recentQuizesForUser = obj.getRecentQuizesForUser(user.getId(), 5);
 	if(recentQuizesForUser != null){
 		out.print("<div class='block-header' id=''>Recent quizzes taken by you : <br></div>");
 		out.print("<div class='block' id=''>");
