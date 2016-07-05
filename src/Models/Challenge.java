@@ -35,7 +35,7 @@ public class Challenge {
 	}
 	
 	public boolean isSeen() {
-		boolean seen = this.seen==1 ? true : false;
+		boolean seen = (this.seen==1) ? true : false;
 		return seen;
 	}
 	

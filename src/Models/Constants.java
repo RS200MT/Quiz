@@ -93,7 +93,7 @@ public class Constants {
 	public static final String INDEX_DO_CHALLENGES_TITLE = "Challenges";
 
 	public static final String INDEX_DO_MY_QUIZES = "myQuizes";
-	public static final String INDEX_DO_MY_QUIZES_TITLE = "my Quizes";
+	public static final String INDEX_DO_MY_QUIZES_TITLE = "My Quizes";
 
 	public static final String INDEX_DO_QUIZ_PAGE = "QuizPage";
 	public static final String INDEX_DO_QUIZ_PAGE_TITLE = "Quiz page";

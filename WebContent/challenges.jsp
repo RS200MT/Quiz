@@ -14,16 +14,20 @@
 	ArrayList<Challenge> challenges = db.getChallengesForUser(currUser.getUserName());
 	if(challenges != null) {
 		for(Challenge c: challenges) {
+			String senderName = c.getSender(); 
+			String quizTitle = db.getQuizById(c.getQuizId(), 0).getTitle();
+			int bestScore = db.getBestScoreForUserInQuiz(db.getUserIdByUserName(senderName), c.getQuizId());
+			String bold = "";
+			String boldClose="";
 			if(!c.isSeen()) {
-				String senderName = c.getSender(); 
-				String quizTitle = db.getQuizById(c.getQuizId(), 0).getTitle();
-				int bestScore = db.getBestScoreForUserInQuiz(db.getUserIdByUserName(senderName), c.getQuizId());
-				out.print("<br> <a href ="+Constants.getUserProfileURL(senderName)+"> "+senderName+"</a> challenged you to take quiz "+
-								"<a href ="+Constants.getQuizURL(c.getQuizId())+"> "+quizTitle+"</a> . Their best score is "+bestScore+".");
+				bold = "<b>";
+				boldClose = "</b>";
 			}
+			out.print("<br> "+bold+"<a href ="+Constants.getUserProfileURL(senderName)+"> "+senderName+"</a> challenged you to take quiz "+
+							"<a href ="+Constants.getQuizURL(c.getQuizId())+"> "+quizTitle+"</a> . Their best score is "+bestScore+"."+boldClose);
 		}
 	} else {
-		out.print("<H3> You have no new challenges.</H3>");
+		out.print("<H3> You have no challenges.</H3>");
 	}
 	
 %>

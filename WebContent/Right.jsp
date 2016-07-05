@@ -87,12 +87,13 @@ if(user != null) {
 <%
 if(user != null) {
 	int numChallenges = obj.getNumberOfUnseenChallenges(user.getUserName());
-	if(numChallenges > 0) {
-		String newChallenges = "("+numChallenges+")"; %>
+	String newChallenges = "";
+	if(numChallenges>0){
+		newChallenges = "("+numChallenges+")";
+	}%>
 <center><a href="http://localhost:8080/QuizWebsite/index.jsp?do=challenges"><button type="button" style='width:180px'>CHALLENGES<%=newChallenges%></button></a></center>
 
 <%
-	}
 }
 %>
 

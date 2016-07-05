@@ -25,17 +25,15 @@
 
 	DBObject obj = (DBObject) request.getServletContext().getAttribute(DBObject.ATTR_DB);
 	User user = (User)request.getSession().getAttribute(Constants.ATTR_USER);
-// 	if(user != null) {
 		ArrayList<Pair<String, Integer>> popQuizes = obj.getPopularQuizes(5);
-		for (int i = 0; i < popQuizes.size(); i++) {
-			Pair<String, Integer> q = popQuizes.get(i);
-			out.print("<a href = '" + Constants.getQuizURL(q.getValue()) + "'>" + q.getKey() + "</a> <br>");
+		if(popQuizes != null) {
+			for (int i = 0; i < popQuizes.size(); i++) {
+				Pair<String, Integer> q = popQuizes.get(i);
+				out.print("<a href = '" + Constants.getQuizURL(q.getValue()) + "'>" + q.getKey() + "</a> <br>");
+			}
+		} else {
+			out.print("There are no quizzes yet...");
 		}
-		if (popQuizes.size() == 0)
-			out.print("There are no quizes..");
-// 	}
-	
-	
 %>
 
 </div>
@@ -48,6 +46,8 @@
 		for(Pair<String,Integer> q : recentQuizes){
 			out.print("<a href = '" + Constants.getQuizURL(q.getValue()) + "'>" + q.getKey() + "</a> <br>");
 		}
+	} else {
+		out.print("There are no quizzes yet...");
 	}
 
 %>

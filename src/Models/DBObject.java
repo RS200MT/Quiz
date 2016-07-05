@@ -60,7 +60,6 @@ public class DBObject {
 			String connect = "jdbc:mysql://" + MYSQL_DATABASE_SERVER + "/" + MYSQL_DATABASE_NAME;
 			return DriverManager.getConnection(connect, MYSQL_USERNAME, MYSQL_PASSWORD);
 		} catch (SQLException e) {
-			System.out.println("a");
 			e.printStackTrace();
 			System.err.println("MySQL user password server or db name is incorrect!");
 			return null;
@@ -121,6 +120,7 @@ public class DBObject {
 		return id;
 	}
 
+	
 	/**
 	 * 
 	 * Checks if user with given name or email already exists; If so, returns
@@ -147,6 +147,7 @@ public class DBObject {
 			return true;
 		}
 	}
+	
 
 	/**
 	 * Checks if user with given name or email already exists;
@@ -250,33 +251,7 @@ public class DBObject {
 			closeConnection(conn);
 			return null;
 		}
-	}
-	
-	
-	
-	private Quiz getQuizById(int id, int singleQuestion, Connection conn) throws SQLException {
-		String query = "SELECT quizes.*, users.user_name FROM " + TABLE_QUIZES + " quizes left join " + TABLE_USERS
-				+ " users on quizes.author = users.id WHERE quizes.id = " + id + " limit 1;";
-		ResultSet rs = getResultSet(query, conn);
-		if (rs.next()) {
-			String title = rs.getString("title");
-			String description = rs.getString("description");
-			String author = rs.getString("user_name");
-			String createTime = rs.getString("create_time");
-			int timesWritten = rs.getInt("times_written");
-			boolean randomized = rs.getInt("randomize") == 1;
-			boolean immediateCorrection = rs.getInt("immediate_correction") == 1;
-			ArrayList<Question> questions = getQuestionsForQuiz(id, conn);
-			boolean displaySingleQuestion = singleQuestion == 1;
-			closeConnection(conn);
-			return new Quiz(id, title, description, author, createTime, timesWritten, randomized, immediateCorrection,
-					questions, displaySingleQuestion);
-		} else {
-			System.out.println("Quiz not found!");
-			return null;
-		}
-	}
-	
+	}	
 	
 	
 
@@ -368,7 +343,6 @@ public class DBObject {
 
 	/**
 	 * Returns a list of correct answers for given question;
-	 * TODO null check???
 	 * @param id
 	 * @param conn2
 	 * @return
@@ -388,37 +362,6 @@ public class DBObject {
 		return result;
 	}
 
-	/**
-	 * Gets specific info for different types of questions;
-	 * 
-	 * @param info
-	 * @param qId
-	 * @param qType
-	 * @throws SQLException
-	 */
-	// private void getSpecificQuestionInfo(ArrayList<Object> info, int qId, int
-	// qType) throws SQLException {
-	// Connection conn = getConnection();
-	// if (qType == QuestionType.MultipleChoice.ordinal()) {
-	// String getPossibleAnswers = "SELECT * FROM " + TABLE_MULTIPLE_CHOICES + "
-	// WHERE question_id = " + qId + ";";
-	// ResultSet possibleAnswers = getResultSet(getPossibleAnswers, conn);
-	// ArrayList<String> possibleAnswersList = new ArrayList<String>();
-	// while (possibleAnswers.next()) {
-	// String nextPossAnswer = possibleAnswers.getString("answer");
-	// possibleAnswersList.add(nextPossAnswer);
-	// }
-	// info.add(2, possibleAnswersList);
-	// } else if (qType == QuestionType.PictureResponse.ordinal()) {
-	// String imageURL = "SELECT * FROM " + TABLE_QUESTION_IMAGES + " WHERE
-	// question_id = " + qId + ";";
-	// ResultSet url = getResultSet(imageURL, conn);
-	// if (url.next()) {
-	// info.add(2, url.getString("image_url"));
-	// }
-	// }
-	// conn.close();
-	// }
 
 	/**
 	 * Get several most popular quizzes in the database; If there are not as
@@ -537,7 +480,7 @@ public class DBObject {
 	}
 	
 	/**
-	 * Gets list of quizes by given author; TODO null check?????
+	 * Gets list of quizzes by given author; 
 	 * @param userId
 	 * @return
 	 */
@@ -607,26 +550,6 @@ public class DBObject {
 		return userName;
 	}
 	
-	/**
-	 * Get user with given id;
-	 * @param userId
-	 * @param conn
-	 * @return int
-	 * @throws SQLException
-	 */
-	private String getUserNameById(int userId, Connection conn) throws SQLException {
-		String query = "Select * from " + TABLE_USERS + " where id = " + userId;
-		ResultSet rs = getResultSet(query, conn);
-		if (!rs.isBeforeFirst())
-			return null;
-		String userName = "";
-		if (rs.next())
-			userName = rs.getString("user_name");
-		return userName;
-	}
-	
-	
-	
 
 	/**
 	 * Get user id for user with given name;
@@ -682,29 +605,6 @@ public class DBObject {
 		closeConnection(conn);
 	}
 
-	/**
-	 * 
-	 * @param conn
-	 * @param id
-	 * @return
-	 * @throws SQLException
-	 */
-	private ArrayList<String> getUserFriends(Connection conn, int id) throws SQLException {
-		ArrayList<String> friends = new ArrayList<String>();
-		String query = "SELECT * FROM "+TABLE_FRIENDS + " WHERE (user1_id="+id+" OR user2_id="+id+") AND status="+FRIEND_STATUS_ACCEPTED+";";
-		ResultSet rs = getResultSet(query, conn);
-		if(!rs.isBeforeFirst()) {
-			return null;
-		}
-		while(rs.next()) {
-			int n1 = rs.getInt("user1_id");
-			int n2 = rs.getInt("user2_id");
-			int friendId = n1==id ? n2:n1;
-			String friendName = this.getUserNameById(friendId);
-			friends.add(friendName);
-		}
-		return friends;
-	}
 
 	/**
 	 * Gets the list of pending friend requests for given user;
@@ -733,7 +633,7 @@ public class DBObject {
 	
 	
 	/**
-	 * 
+	 * Get number of unseen friend requests;
 	 * @param id
 	 * @return
 	 * @throws SQLException
@@ -757,7 +657,7 @@ public class DBObject {
 	 * 
 	 * @param id1
 	 * @param id2
-	 * @return
+	 * @return boolean
 	 * @throws SQLException
 	 */
 	public boolean arePendingFriends(int id1, int id2) throws SQLException {
@@ -772,6 +672,14 @@ public class DBObject {
 		return true;
 	}
 
+	/**
+	 * Inserts quiz-taking info into the table quiz_logs;
+	 * @param user_id
+	 * @param quiz_id
+	 * @param score
+	 * @param startTime
+	 * @param thisQuizTime
+	 */
 	public void logQuiz(int user_id, int quiz_id, int score, long startTime, long thisQuizTime) {
 		Connection conn = getConnection();
 		String query = "INSERT INTO " + TABLE_QUIZ_LOGS + " (user_id, quiz_id, score, start_time, quizTime) VALUES ("
@@ -780,6 +688,10 @@ public class DBObject {
 		closeConnection(conn);
 	}
 
+	/**
+	 * Increments times_written field in table quizes;
+	 * @param id
+	 */
 	public void increaseQuizesWritten(int id) {
 		Connection conn = getConnection();
 		int timesWritten = getQuizTimesWritten(id, conn);
@@ -847,6 +759,12 @@ public class DBObject {
 
 	}
 
+	/**
+	 * Finds how many times quiz with given id was written;
+	 * @param id
+	 * @param conn
+	 * @return int
+	 */
 	private int getQuizTimesWritten(int id, Connection conn) {
 		String query = "SELECT * from " + TABLE_QUIZES + " WHERE id = " + id + " LIMIT 1;";
 		ResultSet rs = getResultSet(query, conn);
@@ -896,6 +814,13 @@ public class DBObject {
 		closeConnection(conn);
 	}
 
+	/**
+	 * Returns true if users with given id-s are friends,false in other cases;
+	 * @param userId1
+	 * @param userId2
+	 * @return
+	 * @throws SQLException
+	 */
 	public boolean usersAreFriends(int userId1, int userId2) throws SQLException {
 		Connection conn = getConnection();
 		String query = "SELECT * FROM " + TABLE_FRIENDS + " WHERE (user1_id=" + userId1 + " AND user2_id=" + userId2
@@ -927,6 +852,13 @@ public class DBObject {
 		closeConnection(conn);
 	}
 
+	/**
+	 * Gets summary for quiz with given id;
+	 * @param quizId
+	 * @param userId
+	 * @return
+	 * @throws SQLException
+	 */
 	public String getSummaryForQuiz(int quizId, int userId) throws SQLException {
 		Connection conn = getConnection();
 		Quiz quiz = getQuizById(quizId, 1);
@@ -1101,6 +1033,13 @@ public class DBObject {
 		return res;
 	}
 	
+	/**
+	 * Add new challenge into table challenges;
+	 * @param sender
+	 * @param recipient
+	 * @param quizID
+	 * @return
+	 */
 	public boolean addChallenge(String sender,String recipient,int quizID){
 		Connection conn = getConnection();
 		String query = "insert into " + TABLE_CHALLENGES + " (sender,recipient,quiz_id) values ('" + sender + "', '" + recipient +"', " + quizID +")";
@@ -1109,6 +1048,13 @@ public class DBObject {
 		return true;
 	}
 	
+	/**
+	 * Return a list of quiz id-s and names for quizzes titles of 
+	 * which start with given string
+	 * @param quizname
+	 * @param limit
+	 * @return
+	 */
 	public ArrayList<Pair<Integer, String>> getQuizesStartedWith (String quizname, int limit) {
 		ArrayList<Pair<Integer, String>> res = new ArrayList<Pair<Integer, String>>();
 		Connection conn = getConnection();
@@ -1170,7 +1116,7 @@ public class DBObject {
 	 */
 	public ArrayList<Challenge> getChallengesForUser(String userName) throws SQLException {
 		Connection conn = getConnection();
-		String query = "SELECT * FROM "+TABLE_CHALLENGES+" WHERE (recipient = '"+userName+"' AND seen="+MESSAGE_NOT_SEEN+") ORDER BY id DESC;";
+		String query = "SELECT * FROM "+TABLE_CHALLENGES+" WHERE recipient = '"+userName+"' ORDER BY id DESC;";
 		ResultSet rs = getResultSet(query, conn);
 		if(!rs.isBeforeFirst()) {
 			return null;
@@ -1213,7 +1159,7 @@ public class DBObject {
 	 */
 	public void markChallengeAsSeen(String recipientName, int quizId) {
 		Connection conn = getConnection();
-		String query="UPDATE "+TABLE_CHALLENGES+" SET seen="+MESSAGE_SEEN+" WHERE (recipient='"+recipientName+"' AND quiz_id="+quizId+");";
+		String query="UPDATE "+TABLE_CHALLENGES+" SET seen="+MESSAGE_SEEN+" WHERE (recipient='"+recipientName+"') AND (quiz_id="+quizId+");";
 		executeUpdate(query, conn);
 		closeConnection(conn);
 	}

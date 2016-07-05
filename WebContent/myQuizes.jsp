@@ -19,6 +19,6 @@
 	}
 	for (int i = 0; i < quizes.size(); i++) {
 		Pair<String, Integer> curQuiz = quizes.get(i);
-		out.println("<a href='"+ Constants.getQuizURL(curQuiz.getValue()) +"'>QUIZ: " + curQuiz.getKey() + " | ID:" + curQuiz.getValue() + "</a><HR>");
+		out.println("<a href='"+ Constants.getQuizURL(curQuiz.getValue()) +"'>" + curQuiz.getKey()+"</a><HR>");
 	}
 %>
