@@ -1,10 +1,6 @@
 package Models;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-
-
-import javafx.util.Pair;
 
 public class User {
 	private int id;
@@ -28,7 +24,8 @@ public class User {
 		else
 			this.friends = new ArrayList<String>();
 	}
-
+	
+	
 	public int getId() {
 		return this.id;
 	}
@@ -77,6 +74,9 @@ public class User {
 		return false;
 	}
 
+	/*
+	 * Returns true if user has a friend with given user name;
+	 */
 	public boolean hasFriendByUserName(String friendUserName) {
 		return this.friends.contains(friendUserName);
 	}
@@ -85,6 +85,9 @@ public class User {
 		this.friends.remove(userName);		
 	}
 	
+	/*
+	 * Returns a list of friends of this user;
+	 */
 	public ArrayList<String> getFriends() {
 		return this.friends;
 	}

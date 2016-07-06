@@ -244,6 +244,8 @@ public class DBObject {
 			ArrayList<Question> questions = getQuestionsForQuiz(id, conn);
 			boolean displaySingleQuestion = singleQuestion == 1;
 			closeConnection(conn);
+			if (questions == null || questions.size() == 0)
+				return null;
 			return new Quiz(id, title, description, author, createTime, timesWritten, randomized, immediateCorrection,
 					questions, displaySingleQuestion);
 		} else {
@@ -276,7 +278,7 @@ public class DBObject {
 			int qId = rs.getInt("id");
 			result.add(getQuestionById(qId, conn));
 		}
-		return result;
+		return result; 
 	}
 
 	/**
@@ -862,13 +864,18 @@ public class DBObject {
 	public String getSummaryForQuiz(int quizId, int userId) throws SQLException {
 		Connection conn = getConnection();
 		Quiz quiz = getQuizById(quizId, 1);
-		String result = "Title: <B>" + quiz.getTitle() + "</B><BR>Description: " + quiz.getDescription();
-		result += "<BR>Author: " + getQuizAuthorHTML(quizId);
-		result += "<BR>Last 5 best quizers: " + getLastBestQuizers(quizId, 5, conn);
-		result += "<BR>Last 10 quizers: " + getLastQuizers(quizId, 10, conn);
-		result += "<BR>Your recent scores for this quiz: " + getRecentScore(quizId, userId, conn);
-		closeConnection(conn);
-		return result;
+		if(quiz!=null) {
+			String result = "Title: <B>" + quiz.getTitle() + "</B><BR>Description: " + quiz.getDescription();
+			result += "<BR>Author: " + getQuizAuthorHTML(quizId);
+			result += "<BR>Last 5 best quizers: " + getLastBestQuizers(quizId, 5, conn);
+			result += "<BR>Last 10 quizers: " + getLastQuizers(quizId, 10, conn);
+			result += "<BR>Your recent scores for this quiz: " + getRecentScore(quizId, userId, conn);
+			closeConnection(conn);
+			return result;
+		} else {
+			return "<H2>Oops! Quiz with given id could not be found.</H2>";
+		}
+		
 	}
 
 	private String getRecentScore(int quizId, int userId, Connection conn) {

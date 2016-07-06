@@ -24,8 +24,9 @@ CREATE TABLE IF NOT EXISTS users (
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8 COLLATE=utf8_bin;
 
 create table if not exists achievements(
+	id int auto_increment primary key,
     user_id int not null, 
-    type int    
+    achievement varchar(55)    
 );
 
 CREATE TABLE IF NOT EXISTS correct_answers(

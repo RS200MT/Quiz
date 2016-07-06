@@ -57,7 +57,7 @@ if(user != null) {
 		newMessages+="("+unseenMessages.size()+")";
 	}
 	%>
-	<a href="http://localhost:8080/QuizWebsite/index.jsp?do=inbox"><button type="button" style='width:180px'>INBOX<%=newMessages%></button></a>
+	<button onClick="window.location.href = 'index.jsp?do=inbox';" type="button" style='width:180px'>INBOX<%=newMessages%></button>
 <% 
 } 
 %>
@@ -65,7 +65,7 @@ if(user != null) {
 
 <%
 if(user != null) { %>
-	<a href="http://localhost:8080/QuizWebsite/index.jsp?do=friends"><button type="button" style='width:180px'>FRIENDS</button></a>
+	<button onClick="window.location.href = 'index.jsp?do=friends';" type="button" style='margin-top:10px; width:180px'>FRIENDS</button>
 <%
 } 
 %>
@@ -77,7 +77,7 @@ if(user != null) {
 	int numRequests = obj.getNumberOfFriendRequests(user.getId());
 	if(numRequests > 0) {
 		newFriendRequests += "("+numRequests+")"; %>
-	<a href="http://localhost:8080/QuizWebsite/index.jsp?do=friendRequests"><button type="button" style='width:180px'>FRIEND REQUESTS<%=newFriendRequests%></button></a>
+	<button onClick="window.location.href = 'index.jsp?do=friendRequests';" type="button" style='margin-top:10px; width:180px'>FRIEND REQUESTS<%=newFriendRequests%></button>
 <%	
 	}
 }
@@ -91,7 +91,7 @@ if(user != null) {
 	if(numChallenges>0){
 		newChallenges = "("+numChallenges+")";
 	}%>
-	<a href="http://localhost:8080/QuizWebsite/index.jsp?do=challenges"><button type="button" style='width:180px'>CHALLENGES<%=newChallenges%></button></a>
+	<button onClick="window.location.href = 'index.jsp?do=challenges';" type="button" style='margin-top:10px; width:180px'>CHALLENGES<%=newChallenges%></button>
 
 <%
 }

@@ -20,7 +20,8 @@
 		int quizId = Integer.parseInt(request.getParameter(Constants.ATTR_QUIZ_ID_FOR_QUESTION));
 		obj.markChallengeAsSeen(curUser.getUserName(), quizId);
 		Quiz quiz = (Quiz) request.getSession().getAttribute(Constants.ATTR_SESSION_QUIZ);
-		if (quiz == null || quiz.getID() != quizId) {
+		boolean start = quiz == null || quiz.getID() != quizId;
+		if (start) {
 	%>
 	<script>
 		function startQuiz() {
@@ -28,8 +29,6 @@
 			document.getElementById("summaryForQuiz").style.display = "none";
 			return false;
 		}
-		
-		
 
 		function newSort() {
 			var select = document.getElementById("sortingUserQuizes");
@@ -41,15 +40,21 @@
 					document.getElementById("sorted" + i).style.display = "none";
 			}
 		}
-		
-		
 	</script>
 	<div id="summaryForQuiz" id="summaryForQuiz">
 		<%
-			out.print(obj.getSummaryForQuiz(quizId, curUser.getId()));
+			String summary = obj.getSummaryForQuiz(quizId, curUser.getId());
+				out.print(summary);
 		%>
 		<BR>
+		<%
+			String error = "<H2>Oops!";
+			if (!summary.substring(0, error.length()).equals(error)) {
+		%>
 		<button onClick="return startQuiz();">Start Quiz</button>
+		<%
+			}
+		%>
 	</div>
 	<div id="singleQuestionForm" style="display: none">
 		<p>
@@ -85,4 +90,4 @@
 	<input type="hidden" name="<%=Constants.ATTR_QUIZ_ID_FOR_QUESTION%>"
 		value="<%=quizId%>" />
 </form>
-		
+

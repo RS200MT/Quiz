@@ -57,9 +57,9 @@
 			</tr>
 			<tr>
 				<td></td>
-				<td><center><a href="https://fb.com/100006717485500"><img src="http://graph.facebook.com/100006717485500/picture?width=200&height=200" width="85px" height="85px" style="border: 1px solid rgba(255, 255, 255, 0.5)"></a></center></td>
-				<td><center><a href="https://fb.com/100000706686861" ><img src="http://graph.facebook.com/100000706686861/picture?width=200&height=200" width="85px" height="85px" style="border: 1px solid rgba(255, 255, 255, 0.5)"></a></center></td>
-				<td><center><a href="https://fb.com/100001024236488" ><img src="http://graph.facebook.com/100001024236488/picture?width=200&height=200" width="85px" height="85px" style="border: 1px solid rgba(255, 255, 255, 0.5)"></a></center></td>
+				<td><center><a href="https://fb.com/100006717485500" target="_blank"><img src="http://graph.facebook.com/100006717485500/picture?width=200&height=200" width="85px" height="85px" style="border: 1px solid rgba(255, 255, 255, 0.5)"></a></center></td>
+				<td><center><a href="https://fb.com/100000706686861" target="_blank"><img src="http://graph.facebook.com/100000706686861/picture?width=200&height=200" width="85px" height="85px" style="border: 1px solid rgba(255, 255, 255, 0.5)"></a></center></td>
+				<td><center><a href="https://fb.com/100001024236488" target="_blank"><img src="http://graph.facebook.com/100001024236488/picture?width=200&height=200" width="85px" height="85px" style="border: 1px solid rgba(255, 255, 255, 0.5)"></a></center></td>
 			</tr>
 		</table></center>
 	</div>
